@@ -141,7 +141,6 @@ body{background:#0f1f0f;color:#e8f5e9;min-height:100vh;overflow-x:hidden}
 
 <div class="container">
 
-<!-- SETUP -->
 <div class="screen active" id="setupScreen">
   <div class="card">
     <h2 id="modeTitle">👥 Game Mode</h2>
@@ -176,7 +175,6 @@ body{background:#0f1f0f;color:#e8f5e9;min-height:100vh;overflow-x:hidden}
   </div>
 </div>
 
-<!-- GAME SCREEN -->
 <div class="screen" id="gameScreen">
   <div class="score-b" id="scoreBoard"></div>
   <div class="hist-sec">
@@ -190,7 +188,6 @@ body{background:#0f1f0f;color:#e8f5e9;min-height:100vh;overflow-x:hidden}
   </div>
 </div>
 
-<!-- SETTINGS -->
 <div class="screen" id="settingsScreen">
   <div class="card">
     <h2 id="settingsTitle">⚙️ Settings</h2>
@@ -218,7 +215,6 @@ body{background:#0f1f0f;color:#e8f5e9;min-height:100vh;overflow-x:hidden}
   <button class="btn-back" id="backBtn" onclick="closeSettings()">⬅️ Back</button>
 </div>
 
-<!-- LANGUAGE SCREEN -->
 <div class="screen" id="langScreen">
   <div class="card">
     <h2 id="langScreenTitle">🌐 Select Language</h2>
@@ -229,7 +225,6 @@ body{background:#0f1f0f;color:#e8f5e9;min-height:100vh;overflow-x:hidden}
 
 </div>
 
-<!-- POINT POPUP -->
 <div class="popup-overlay" id="pointPopup">
   <div class="popup-card">
     <div class="popup-title" id="popupTitle">Add Points</div>
@@ -258,7 +253,6 @@ body{background:#0f1f0f;color:#e8f5e9;min-height:100vh;overflow-x:hidden}
   </div>
 </div>
 
-<!-- GAME OVER -->
 <div class="game-ov" id="gameOver">
   <div class="game-ov-c">
     <div class="tr">🏆</div>
@@ -273,20 +267,502 @@ body{background:#0f1f0f;color:#e8f5e9;min-height:100vh;overflow-x:hidden}
 const T={
   en:{code:'en',flag:'🇺🇸',name:'English',subtitle:'Score Tracker',modeTitle:'👥 Game Mode',playersTitle:'✏️ Player Names',targetTitle:'🎯 Target Score',customLabel:'Custom:',startBtn:'🚀 START GAME',savedTitle:'💾 Saved Games',noSaved:'No saved games',historyTitle:'📜 History',noHistory:'No rounds yet',undoBtn:'↩️ Undo',saveBtn:'💾 Save',newBtn:'🔄 New',gameOverTitle:'Game Over!',newGameBtn:'🎮 New Game',settingsTitle:'⚙️ Settings',langLabel:'🌐 Language',langDesc:'Change language',soundLabel:'🔊 Sound',soundDesc:'Game sounds',vibrateLabel:'📳 Vibration',vibrateDesc:'Haptic feedback',themeLabel:'🎨 Theme',themeDesc:'Color scheme',dataTitle:'🗄️ Data',clearBtn:'🗑️ Clear All Games',backBtn:'⬅️ Back',langScreenTitle:'🌐 Select Language',player:'Player',winner:' Wins! 🎉',soundOn:'🔊',soundOff:'🔇',clearConfirm:'Delete all saved games?',cleared:'All games deleted!',saved:'Game Saved!',popupTitle:'Add Points',popupSub:'Tap numbers to enter',toAllLabel:'Add to ALL players'},
   ar:{code:'ar',flag:'🇸🇦',name:'العربية',subtitle:'متتبع النقاط',modeTitle:'👥 وضع اللعبة',playersTitle:'✏️ الأسماء',targetTitle:'🎯 الهدف',customLabel:'مخصص:',startBtn:'🚀 ابدأ',savedTitle:'💾 المحفوظة',noSaved:'لا توجد ألعاب',historyTitle:'📜 السجل',noHistory:'لا توجد جولات',undoBtn:'↩️ تراجع',saveBtn:'💾 حفظ',newBtn:'🔄 جديد',gameOverTitle:'انتهت!',newGameBtn:'🎮 جديدة',settingsTitle:'⚙️ الإعدادات',langLabel:'🌐 اللغة',langDesc:'تغيير اللغة',soundLabel:'🔊 الصوت',soundDesc:'أصوات اللعبة',vibrateLabel:'📳 الاهتزاز',vibrateDesc:'ردود فعل لمسية',themeLabel:'🎨 السمة',themeDesc:'نظام الألوان',dataTitle:'🗄️ البيانات',clearBtn:'🗑️ مسح جميع الألعاب',backBtn:'⬅️ رجوع',langScreenTitle:'🌐 اختيار اللغة',player:'اللاعب',winner:' فاز! 🎉',soundOn:'🔊',soundOff:'🔇',clearConfirm:'مسح جميع الألعاب؟',cleared:'تم المسح!',saved:'تم الحفظ!',popupTitle:'إضافة نقاط',popupSub:'اضغط الأرقام',toAllLabel:'لجميع اللاعبين'},
-  ku:{code:'ku',flag:'🇮🇶',name:'کوردی',subtitle:'ژمێریاری نمرە',modeTitle:'👥 شێوازی یاری',playersTitle:'✏️ ناوی یاریزانان',targetTitle:'🎯 ئامانجی نمرە',customLabel:'تایبەت:',startBtn:'🚀 دەستپێکردن',savedTitle:'💾 یاریە پاشەکەوتکراوەکان',noSaved:'هیچ یاریەک پاشەکەوت نەکراوە',historyTitle:'📜 مێژوو',noHistory:'هێشتا هیچ گەڕێک نییە',undoBtn:'↩️ گەڕانەوە',saveBtn:'💾 پاشەکەوت',newBtn:'🔄 یاری نوێ',gameOverTitle:'یاری تەواو بوو!',newGameBtn:'🎮 یاری نوێ',settingsTitle:'⚙️ ڕێکخستنەکان',langLabel:'🌐 زمان',langDesc:'گۆڕینی زمان',soundLabel:'🔊 دەنگ',soundDesc:'دەنگی یاری',vibrateLabel:'📳 هەژان',vibrateDesc:'هەژان لە کاتی کردارەکان',themeLabel:'🎨 ڕەنگ',themeDesc:'ڕەنگی بەرنامە',dataTitle:'🗄️ زانیاری',clearBtn:'🗑️ سڕینەوەی هەموو یاریەکان',backBtn:'⬅️ گەڕانەوە',langScreenTitle:'🌐 هەڵبژاردنی زمان',player:'یاریزان',winner:' بردنەوە! 🎉',soundOn:'🔊',soundOff:'🔇',clearConfirm:'دڵنیای لە سڕینەوەی هەموو یاریەکان؟',cleared:'هەموو یاریەکان سڕانەوە!',saved:'یاری پاشەکەوت کرا!',popupTitle:'زیادکردنی نمرە',popupSub:'ژمارەکان بنووسە',toAllLabel:'بۆ هەموو یاریزانەکان'},
-  es:{code:'es',flag:'🇪🇸',name:'Español',subtitle:'Contador de Puntos',modeTitle:'👥 Modo de Juego',playersTitle:'✏️ Nombres',targetTitle:'🎯 Objetivo',customLabel:'Personalizado:',startBtn:'🚀 INICIAR',savedTitle:'💾 Partidas Guardadas',noSaved:'Sin partidas guardadas',historyTitle:'📜 Historial',noHistory:'Sin rondas aún',undoBtn:'↩️ Deshacer',saveBtn:'💾 Guardar',newBtn:'🔄 Nuevo',gameOverTitle:'¡Juego Terminado!',newGameBtn:'🎮 Nuevo Juego',settingsTitle:'⚙️ Ajustes',langLabel:'🌐 Idioma',langDesc:'Cambiar idioma',soundLabel:'🔊 Sonido',soundDesc:'Sonidos del juego',vibrateLabel:'📳 Vibración',vibrateDesc:'Retroalimentación háptica',themeLabel:'🎨 Tema',themeDesc:'Esquema de colores',dataTitle:'🗄️ Datos',clearBtn:'🗑️ Borrar Todo',backBtn:'⬅️ Atrás',langScreenTitle:'🌐 Seleccionar Idioma',player:'Jugador',winner:' ¡Gana! 🎉',soundOn:'🔊',soundOff:'🔇',clearConfirm:'¿Borrar todas las partidas?',cleared:'¡Todas borradas!',saved:'¡Partida guardada!',popupTitle:'Añadir Puntos',popupSub:'Toca números',toAllLabel:'A todos los jugadores'},
-  fr:{code:'fr',flag:'🇫🇷',name:'Français',subtitle:'Compteur de Points',modeTitle:'👥 Mode de Jeu',playersTitle:'✏️ Noms',targetTitle:'🎯 Objectif',customLabel:'Personnalisé:',startBtn:'🚀 DÉMARRER',savedTitle:'💾 Parties Sauvegardées',noSaved:'Aucune partie sauvegardée',historyTitle:'📜 Historique',noHistory:'Aucun tour encore',undoBtn:'↩️ Annuler',saveBtn:'💾 Sauver',newBtn:'🔄 Nouveau',gameOverTitle:'Partie Terminée!',newGameBtn:'🎮 Nouvelle Partie',settingsTitle:'⚙️ Paramètres',langLabel:'🌐 Langue',langDesc:'Changer la langue',soundLabel:'🔊 Son',soundDesc:'Sons du jeu',vibrateLabel:'📳 Vibration',vibrateDesc:'Retour haptique',themeLabel:'🎨 Thème',themeDesc:'Palette de couleurs',dataTitle:'🗄️ Données',clearBtn:'🗑️ Tout Supprimer',backBtn:'⬅️ Retour',langScreenTitle:'🌐 Choisir la Langue',player:'Joueur',winner:' Gagne! 🎉',soundOn:'🔊',soundOff:'🔇',clearConfirm:'Supprimer toutes les parties?',cleared:'Tout supprimé!',saved:'Partie sauvegardée!',popupTitle:'Ajouter Points',popupSub:'Tapez les chiffres',toAllLabel:'À tous les joueurs'},
-  de:{code:'de',flag:'🇩🇪',name:'Deutsch',subtitle:'Punktezähler',modeTitle:'👥 Spielmodus',playersTitle:'✏️ Spielernamen',targetTitle:'🎯 Zielpunktzahl',customLabel:'Benutzerdefiniert:',startBtn:'🚀 STARTEN',savedTitle:'💾 Gespeicherte Spiele',noSaved:'Keine gespeicherten Spiele',historyTitle:'📜 Verlauf',noHistory:'Noch keine Runden',undoBtn:'↩️ Rückgängig',saveBtn:'💾 Speichern',newBtn:'🔄 Neu',gameOverTitle:'Spiel Vorbei!',newGameBtn:'🎮 Neues Spiel',settingsTitle:'⚙️ Einstellungen',langLabel:'🌐 Sprache',langDesc:'Sprache ändern',soundLabel:'🔊 Ton',soundDesc:'Spielgeräusche',vibrateLabel:'📳 Vibration',vibrateDesc:'Haptisches Feedback',themeLabel:'🎨 Thema',themeDesc:'Farbschema',dataTitle:'🗄️ Daten',clearBtn:'🗑️ Alle Spiele Löschen',backBtn:'⬅️ Zurück',langScreenTitle:'🌐 Sprache Wählen',player:'Spieler',winner:' Gewinnt! 🎉',soundOn:'🔊',soundOff:'🔇',clearConfirm:'Alle Spiele löschen?',cleared:'Alle gelöscht!',saved:'Spiel gespeichert!',popupTitle:'Punkte Hinzufügen',popupSub:'Zahlen tippen',toAllLabel:'Allen Spielern'},
-  pt:{code:'pt',flag:'🇵🇹',name:'Português',subtitle:'Contador de Pontos',modeTitle:'👥 Modo de Jogo',playersTitle:'✏️ Nomes',targetTitle:'🎯 Objetivo',customLabel:'Personalizado:',startBtn:'🚀 INICIAR',savedTitle:'💾 Jogos Guardados',noSaved:'Sem jogos guardados',historyTitle:'📜 Histórico',noHistory:'Sem rondas ainda',undoBtn:'↩️ Desfazer',saveBtn:'💾 Guardar',newBtn:'🔄 Novo',gameOverTitle:'Jogo Terminado!',newGameBtn:'🎮 Novo Jogo',settingsTitle:'⚙️ Definições',langLabel:'🌐 Idioma',langDesc:'Mudar idioma',soundLabel:'🔊 Som',soundDesc:'Som do jogo',vibrateLabel:'📳 Vibração',vibrateDesc:'Feedback tátil',themeLabel:'🎨 Tema',themeDesc:'Esquema de cores',dataTitle:'🗄️ Dados',clearBtn:'🗑️ Apagar Tudo',backBtn:'⬅️ Voltar',langScreenTitle:'🌐 Escolher Idioma',player:'Jogador',winner:' Vence! 🎉',soundOn:'🔊',soundOff:'🔇',clearConfirm:'Apagar todos os jogos?',cleared:'Tudo apagado!',saved:'Jogo guardado!',popupTitle:'Adicionar Pontos',popupSub:'Toque nos números',toAllLabel:'A todos os jogadores'},
-  ptbr:{code:'ptbr',flag:'🇧🇷',name:'Português (Brasil)',subtitle:'Contador de Pontos',modeTitle:'👥 Modo de Jogo',playersTitle:'✏️ Nomes',targetTitle:'🎯 Objetivo',customLabel:'Personalizado:',startBtn:'🚀 INICIAR',savedTitle:'💾 Jogos Salvos',noSaved:'Sem jogos salvos',historyTitle:'📜 Histórico',noHistory:'Sem rodadas ainda',undoBtn:'↩️ Desfazer',saveBtn:'💾 Salvar',newBtn:'🔄 Novo',gameOverTitle:'Jogo Terminado!',newGameBtn:'🎮 Novo Jogo',settingsTitle:'⚙️ Configurações',langLabel:'🌐 Idioma',langDesc:'Mudar idioma',soundLabel:'🔊 Som',soundDesc:'Som do jogo',vibrateLabel:'📳 Vibração',vibrateDesc:'Feedback tátil',themeLabel:'🎨 Tema',themeDesc:'Esquema de cores',dataTitle:'🗄️ Dados',clearBtn:'🗑️ Limpar Tudo',backBtn:'⬅️ Voltar',langScreenTitle:'🌐 Escolher Idioma',player:'Jogador',winner:' Vence! 🎉',soundOn:'🔊',soundOff:'🔇',clearConfirm:'Limpar todos os jogos?',cleared:'Tudo limpo!',saved:'Jogo salvo!',popupTitle:'Adicionar Pontos',popupSub:'Toque nos números',toAllLabel:'A todos os jogadores'},
-  it:{code:'it',flag:'🇮🇹',name:'Italiano',subtitle:'Contatore Punti',modeTitle:'👥 Modalità',playersTitle:'✏️ Nomi',targetTitle:'🎯 Obiettivo',customLabel:'Personalizzato:',startBtn:'🚀 INIZIA',savedTitle:'💾 Partite Salvate',noSaved:'Nessuna partita salvata',historyTitle:'📜 Cronologia',noHistory:'Nessun round ancora',undoBtn:'↩️ Annulla',saveBtn:'💾 Salva',newBtn:'🔄 Nuovo',gameOverTitle:'Partita Finita!',newGameBtn:'🎮 Nuova Partita',settingsTitle:'⚙️ Impostazioni',langLabel:'🌐 Lingua',langDesc:'Cambia lingua',soundLabel:'🔊 Suono',soundDesc:'Suoni di gioco',vibrateLabel:'📳 Vibrazione',vibrateDesc:'Feedback aptico',themeLabel:'🎨 Tema',themeDesc:'Schema colori',dataTitle:'🗄️ Dati',clearBtn:'🗑️ Cancella Tutto',backBtn:'⬅️ Indietro',langScreenTitle:'🌐 Seleziona Lingua',player:'Giocatore',winner:' Vince! 🎉',soundOn:'🔊',soundOff:'🔇',clearConfirm:'Cancellare tutte le partite?',cleared:'Tutto cancellato!',saved:'Partita salvata!',popupTitle:'Aggiungi Punti',popupSub:'Tocca i numeri',toAllLabel:'A tutti i giocatori'},
-  ru:{code:'ru',flag:'🇷🇺',name:'Русский',subtitle:'Счетчик Очков',modeTitle:'👥 Режим',playersTitle:'✏️ Имена',targetTitle:'🎯 Цель',customLabel:'Свой:',startBtn:'🚀 СТАРТ',savedTitle:'💾 Сохраненные',noSaved:'Нет сохраненных игр',historyTitle:'📜 История',noHistory:'Пока нет раундов',undoBtn:'↩️ Отмена',saveBtn:'💾 Сохранить',newBtn:'🔄 Новая',gameOverTitle:'Игра Окончена!',newGameBtn:'🎮 Новая Игра',settingsTitle:'⚙️ Настройки',langLabel:'🌐 Язык',langDesc:'Сменить язык',soundLabel:'🔊 Звук',soundDesc:'Звуки игры',vibrateLabel:'📳 Вибрация',vibrateDesc:'Виброотклик',themeLabel:'🎨 Тема',themeDesc:'Цветовая схема',dataTitle:'🗄️ Данные',clearBtn:'🗑️ Удалить Все',backBtn:'⬅️ Назад',langScreenTitle:'🌐 Выбор Языка',player:'Игрок',winner:' Победил! 🎉',soundOn:'🔊',soundOff:'🔇',clearConfirm:'Удалить все игры?',cleared:'Все удалено!',saved:'Игра сохранена!',popupTitle:'Добавить Очки',popupSub:'Нажимайте цифры',toAllLabel:'Всем игрокам'},
-  zh:{code:'zh',flag:'🇨🇳',name:'中文',subtitle:'分数追踪器',modeTitle:'👥 游戏模式',playersTitle:'✏️ 玩家名称',targetTitle:'🎯 目标分数',customLabel:'自定义:',startBtn:'🚀 开始游戏',savedTitle:'💾 保存的游戏',noSaved:'没有保存的游戏',historyTitle:'📜 历史记录',noHistory:'还没有回合',undoBtn:'↩️ 撤销',saveBtn:'💾 保存',newBtn:'🔄 新游戏',gameOverTitle:'游戏结束!',newGameBtn:'🎮 新游戏',settingsTitle:'⚙️ 设置',langLabel:'🌐 语言',langDesc:'更改语言',soundLabel:'🔊 声音',soundDesc:'游戏音效',vibrateLabel:'📳 振动',vibrateDesc:'触觉反馈',themeLabel:'🎨 主题',themeDesc:'配色方案',dataTitle:'🗄️ 数据',clearBtn:'🗑️ 清除所有游戏',backBtn:'⬅️ 返回',langScreenTitle:'🌐 选择语言',player:'玩家',winner:' 获胜! 🎉',soundOn:'🔊',soundOff:'🔇',clearConfirm:'清除所有保存的游戏?',cleared:'全部清除!',saved:'游戏已保存!',popupTitle:'添加分数',popupSub:'点击数字',toAllLabel:'所有玩家'},
-  hi:{code:'hi',flag:'🇮🇳',name:'हिंदी',subtitle:'स्कोर ट्रैकर',modeTitle:'👥 गेम मोड',playersTitle:'✏️ खिलाड़ी के नाम',targetTitle:'🎯 लक्ष्य स्कोर',customLabel:'कस्टम:',startBtn:'🚀 शुरू करें',savedTitle:'💾 सेव्ड गेम्स',noSaved:'कोई सेव्ड गेम नहीं',historyTitle:'📜 इतिहास',noHistory:'अभी तक कोई राउंड नहीं',undoBtn:'↩️ पूर्ववत',saveBtn:'💾 सेव',newBtn:'🔄 नया',gameOverTitle:'गेम खत्म!',newGameBtn:'🎮 नया गेम',settingsTitle:'⚙️ सेटिंग्स',langLabel:'🌐 भाषा',langDesc:'भाषा बदलें',soundLabel:'🔊 आवाज',soundDesc:'गेम साउंड',vibrateLabel:'📳 कंपन',vibrateDesc:'हैप्टिक फीडबैक',themeLabel:'🎨 थीम',themeDesc:'रंग योजना',dataTitle:'🗄️ डेटा',clearBtn:'🗑️ सभी गेम्स हटाएं',backBtn:'⬅️ वापस',langScreenTitle:'🌐 भाषा चुनें',player:'खिलाड़ी',winner:' जीता! 🎉',soundOn:'🔊',soundOff:'🔇',clearConfirm:'सभी सेव्ड गेम्स हटाएं?',cleared:'सभी हटा दिए!',saved:'गेम सेव हो गया!',popupTitle:'अंक जोड़ें',popupSub:'नंबर दबाएं',toAllLabel:'सभी खिलाड़ियों को'},
-  id:{code:'id',flag:'🇮🇩',name:'Bahasa Indonesia',subtitle:'Penghitung Skor',modeTitle:'👥 Mode Permainan',playersTitle:'✏️ Nama Pemain',targetTitle:'🎯 Target Skor',customLabel:'Kustom:',startBtn:'🚀 MULAI',savedTitle:'💾 Game Tersimpan',noSaved:'Tidak ada game tersimpan',historyTitle:'📜 Riwayat',noHistory:'Belum ada ronde',undoBtn:'↩️ Urungkan',saveBtn:'💾 Simpan',newBtn:'🔄 Baru',gameOverTitle:'Permainan Selesai!',newGameBtn:'🎮 Game Baru',settingsTitle:'⚙️ Pengaturan',langLabel:'🌐 Bahasa',langDesc:'Ganti bahasa',soundLabel:'🔊 Suara',soundDesc:'Suara permainan',vibrateLabel:'📳 Getaran',vibrateDesc:'Umpan balik haptik',themeLabel:'🎨 Tema',themeDesc:'Skema warna',dataTitle:'🗄️ Data',clearBtn:'🗑️ Hapus Semua',backBtn:'⬅️ Kembali',langScreenTitle:'🌐 Pilih Bahasa',player:'Pemain',winner:' Menang! 🎉',soundOn:'🔊',soundOff:'🔇',clearConfirm:'Hapus semua game?',cleared:'Semua dihapus!',saved:'Game tersimpan!',popupTitle:'Tambah Poin',popupSub:'Ketuk angka',toAllLabel:'Ke semua pemain'},
-  tl:{code:'tl',flag:'🇵🇭',name:'Tagalog',subtitle:'Tagapagtrack ng Iskor',modeTitle:'👥 Mode ng Laro',playersTitle:'✏️ Mga Pangalan',targetTitle:'🎯 Target na Iskor',customLabel:'Custom:',startBtn:'🚀 SIMULA',savedTitle:'💾 Naka-save na Laro',noSaved:'Walang naka-save na laro',historyTitle:'📜 Kasaysayan',noHistory:'Wala pang rounds',undoBtn:'↩️ Bawiin',saveBtn:'💾 I-save',newBtn:'🔄 Bago',gameOverTitle:'Tapos na ang Laro!',newGameBtn:'🎮 Bagong Laro',settingsTitle:'⚙️ Mga Setting',langLabel:'🌐 Wika',langDesc:'Palitan ang wika',soundLabel:'🔊 Tunog',soundDesc:'Mga tunog ng laro',vibrateLabel:'📳 Vibrasyon',vibrateDesc:'Haptic feedback',themeLabel:'🎨 Tema',themeDesc:'Color scheme',dataTitle:'🗄️ Data',clearBtn:'🗑️ Burahin Lahat',backBtn:'⬅️ Balik',langScreenTitle:'🌐 Piliin ang Wika',player:'Manlalaro',winner:' Nanalo! 🎉',soundOn:'🔊',soundOff:'🔇',clearConfirm:'Burahin lahat ng laro?',cleared:'Lahat nabura!',saved:'Naka-save ang laro!',popupTitle:'Magdagdag ng Puntos',popupSub:'Pindutin ang mga numero',toAllLabel:'Sa lahat ng manlalaro'},
-  ht:{code:'ht',flag:'🇭🇹',name:'Kreyòl Ayisyen',subtitle:'Kontè Pwen',modeTitle:'👥 Mod Jwèt',playersTitle:'✏️ Non Jwè',targetTitle:'🎯 Pwen Objektif',customLabel:'Koutim:',startBtn:'🚀 KÒMANSE',savedTitle:'💾 Jwèt Ki Sove',noSaved:'Pa gen jwèt ki sove',historyTitle:'📜 Istwa',noHistory:'Pa gen rond ankò',undoBtn:'↩️ Anile',saveBtn:'💾 Sove',newBtn:'🔄 Nouvo',gameOverTitle:'Jwèt Fini!',newGameBtn:'🎮 Nouvo Jwèt',settingsTitle:'⚙️ Anviwònman',langLabel:'🌐 Lang',langDesc:'Chanje lang',soundLabel:'🔊 Son',soundDesc:'Son jwèt la',vibrateLabel:'📳 Vibration',vibrateDesc:'Haptic feedback',themeLabel:'🎨 Tèm',themeDesc:'Eskema koulè',dataTitle:'🗄️ Done',clearBtn:'🗑️ Efase Tout',backBtn:'⬅️ Retounen',langScreenTitle:'🌐 Chwazi Lang',player:'Jwè',winner:' Genyen! 🎉',soundOn:'🔊',soundOff:'🔇',clearConfirm:'Efase tout jwèt?',cleared:'Tout efase!',saved:'Jwèt sove!',popupTitle:'Ajoute Pwen',popupSub:'Peze chif yo',toAllLabel:'Bay tout jwè yo'},
-  he:{code:'he',flag:'🇮🇱',name:'עברית',subtitle:'מעקב ניקוד',modeTitle:'👥 מצב משחק',playersTitle:'✏️ שמות שחקנים',targetTitle:'🎯 יעד ניקוד',customLabel:'מותאם:',startBtn:'🚀 התחל',savedTitle:'💾 משחקים שמורים',noSaved:'אין משחקים שמורים',historyTitle:'📜 היסטוריה',noHistory:'עדיין אין סיבובים',undoBtn:'↩️ בטל',saveBtn:'💾 שמור',newBtn:'🔄 חדש',gameOverTitle:'המשחק נגמר!',newGameBtn:'🎮 משחק חדש',settingsTitle:'⚙️ הגדרות',langLabel:'🌐 שפה',langDesc:'שנה שפה',soundLabel:'🔊 צליל',soundDesc:'צלילי משחק',vibrateLabel:'📳 רטט',vibrateDesc:'משוב מגע',themeLabel:'🎨 ערכת נושא',themeDesc:'סכמת צבעים',dataTitle:'🗄️ נתונים',clearBtn:'🗑️ מחק הכל',backBtn:'⬅️ חזור',langScreenTitle:'🌐 בחר שפה',player:'שחקן',winner:' ניצח! 🎉',soundOn:'🔊',soundOff:'🔇',clearConfirm:'למחוק את כל המשחקים?',cleared:'הכל נמחק!',saved:'המשחק נשמר!',popupTitle:'הוסף ניקוד',popupSub:'לחץ על מספרים',toAllLabel:'לכל השחקנים'}
+  ku:{code:'ku',flag:'🇮🇶',name:'کوردی',subtitle:'ژمێریاری نمرە',modeTitle:'👥 شێوازی یاری',playersTitle:'✏️ ناوی یاریزانان',targetTitle:'🎯 ئامانجی نمرە',customLabel:'تایبەت:',startBtn:'🚀 دەستپێکردن',savedTitle:'💾 یاریە پاشەکەوتکراوەکان',noSaved:'هیچ یاریەک پاشەکەوت نەکراوە',historyTitle:'📜 مێژوو',noHistory:'هێشتا هیچ گەڕێک نییە',undoBtn:'↩️ گەڕانەوە',saveBtn:'💾 پاشەکەوت',newBtn:'🔄 یاری نوێ',gameOverTitle:'یاری تەواو بوو!',newGameBtn:'🎮 یاری نوێ',settingsTitle:'⚙️ ڕێکخستنەکان',langLabel:'🌐 زمان',langDesc:'گۆڕینی زمان',soundLabel:'🔊 دەنگ',soundDesc:'دەنگی یاری',vibrateLabel:'📳 هەژان',vibrateDesc:'هەژان لە کاتی کردارەکان',themeLabel:'🎨 ڕەنگ',themeDesc:'ڕەنگی بەرنامە',dataTitle:'🗄️ زانیاری',clearBtn:'🗑️ سڕینەوەی هەموو یاریەکان',backBtn:'⬅️ گەڕانەوە',langScreenTitle:'🌐 هەڵبژاردنی زمان',player:'یاریزان',winner:' بردنەوە! 🎉',soundOn:'🔊',soundOff:'🔇',clearConfirm:'دڵنیای لە سڕینەوەی هەموو یاریەکان؟',cleared:'هەموو یاریەکان سڕانەوە!',saved:'یاری پاشەکەوت کرا!',popupTitle:'زیادکردنی نمرە',popupSub:'ژمارەکان بنووسە',toAllLabel:'بۆ هەموو یاریزانەکان'}
+};
+const themes={green:{bg:'#0f1f0f'},dark:{bg:'#121212'},blue:{bg:'#0a1929'},red:{bg:'#1a0a0a'}};
+let S=localStorage.getItem('dp_sound')!=='false',V=localStorage.getItem('dp_vibrate')!=='false',H=localStorage.getItem('dp_theme')||'green',M=2,P=[],sc=[],tg=200,R=[],GO=false,popupPlayer=-1,popupValue=0,popupToAll=false;
+let previousScreen='setup';
+const AC=new(window.AudioContext||window.webkitAudioContext)();
+
+function getLang(){return localStorage.getItem('dp_lang')||'en'}
+function setLang(code){localStorage.setItem('dp_lang',code)}
+function t(){return T[getLang()]||T['en']}
+
+function play(sound){if(!S)return;try{const o=AC.createOscillator(),g=AC.createGain();o.connect(g);g.connect(AC.destination);if(sound==='add'){o.frequency.value=600;g.gain.value=0.12;o.start();o.stop(AC.currentTime+0.1)}else if(sound==='win'){o.frequency.value=523;g.gain.value=0.15;o.start();o.frequency.exponentialRampToValueAtTime(784,AC.currentTime+0.15);o.stop(AC.currentTime+0.2);setTimeout(()=>{const o2=AC.createOscillator(),g2=AC.createGain();o2.connect(g2);g2.connect(AC.destination);o2.frequency.value=1047;g2.gain.value=0.15;o2.start();o2.stop(AC.currentTime+0.3)},180)}else if(sound==='undo'){o.frequency.value=350;g.gain.value=0.1;o.start();o.stop(AC.currentTime+0.08)}else if(sound==='err'){o.frequency.value=180;g.gain.value=0.12;o.start();o.stop(AC.currentTime+0.15)}}catch(e){}}
+function vb(p){if(V&&navigator.vibrate)navigator.vibrate(p)}
+function applyTheme(n){document.body.style.background=themes[n].bg}
+function updateDirection(){
+  const code=getLang();
+  const rtlLangs=['ar','ku','he'];
+  const htmlEl=document.getElementById('htmlRoot');
+  if(htmlEl){
+    if(rtlLangs.indexOf(code)!==-1){htmlEl.dir='rtl';}
+    else{htmlEl.dir='ltr';}
+  }
+}
+
+function showScreen(name){
+  const current=document.querySelector('.screen.active');
+  if(current && current.id && !current.id.includes('settings') && !current.id.includes('lang')){
+    previousScreen=current.id.replace('Screen','');
+  }
+  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
+  const target=document.getElementById(name+'Screen');
+  if(target) target.classList.add('active');
+  updateNavBtn();
+}
+
+function handleNavBtn(){
+  const langActive=document.getElementById('langScreen').classList.contains('active');
+  if(langActive){closeLangScreen();return;}
+  const settingsActive=document.getElementById('settingsScreen').classList.contains('active');
+  if(settingsActive){closeSettings();return;}
+  openSettings();
+}
+
+function updateNavBtn(){
+  const btn=document.getElementById('navBtn');
+  if(!btn) return;
+  const langActive=document.getElementById('langScreen').classList.contains('active');
+  const settingsActive=document.getElementById('settingsScreen').classList.contains('active');
+  if(langActive||settingsActive){btn.textContent='⬅️';}
+  else{btn.textContent='⚙️';}
+}
+
+function updateAllText(){
+  const tx=t();
+  const updateEl=function(id,text){
+    const el=document.getElementById(id);
+    if(el) el.textContent=text;
+  };
+  updateEl('subtitle',tx.subtitle);
+  updateEl('modeTitle',tx.modeTitle);
+  updateEl('playersTitle',tx.playersTitle);
+  updateEl('targetTitle',tx.targetTitle);
+  updateEl('customLabel',tx.customLabel);
+  updateEl('startBtn',tx.startBtn);
+  updateEl('savedTitle',tx.savedTitle);
+  updateEl('historyTitle',tx.historyTitle);
+  updateEl('undoBtn',tx.undoBtn);
+  updateEl('saveBtn',tx.saveBtn);
+  updateEl('newBtn',tx.newBtn);
+  updateEl('settingsTitle',tx.settingsTitle);
+  updateEl('langLabel',tx.langLabel);
+  updateEl('langDesc',tx.langDesc);
+  updateEl('soundLabel',tx.soundLabel);
+  updateEl('soundDesc',tx.soundDesc);
+  updateEl('vibrateLabel',tx.vibrateLabel);
+  updateEl('vibrateDesc',tx.vibrateDesc);
+  updateEl('themeLabel',tx.themeLabel);
+  updateEl('themeDesc',tx.themeDesc);
+  updateEl('dataTitle',tx.dataTitle);
+  updateEl('clearBtn',tx.clearBtn);
+  updateEl('backBtn',tx.backBtn);
+  updateEl('langScreenTitle',tx.langScreenTitle);
+  updateEl('langBackBtn',tx.backBtn);
+  updateEl('popupTitle',tx.popupTitle);
+  updateEl('popupSub',tx.popupSub);
+  updateEl('toAllLabel',tx.toAllLabel);
+  updateEl('gameOverTitle',tx.gameOverTitle);
+  updateEl('newGameBtn',tx.newGameBtn);
+  updateEl('mode2','2 '+tx.player);
+  updateEl('mode3','3 '+tx.player);
+  updateEl('mode4','4 '+tx.player);
+  updateEl('noSaved',tx.noSaved);
+  updateEl('noHistory',tx.noHistory);
+}
+
+function updateUI(){
+  const tx=t();
+  const soundBtn=document.getElementById('soundBtn');
+  const soundToggle=document.getElementById('soundToggle');
+  const vibrateToggle=document.getElementById('vibrateToggle');
+  const langBtn=document.getElementById('langBtn');
+  if(soundBtn) soundBtn.textContent=S?tx.soundOn:tx.soundOff;
+  if(soundToggle) soundToggle.classList.toggle('active',S);
+  if(vibrateToggle) vibrateToggle.classList.toggle('active',V);
+  if(langBtn) langBtn.textContent=tx.code.toUpperCase()+' '+tx.flag;
+}
+
+function openSettings(){
+  showScreen('settings');
+  const ts=document.getElementById('themeSelect');
+  if(ts) ts.value=H;
+  updateAllText();
+  updateUI();
+  updateNavBtn();
+}
+
+function closeSettings(){
+  if(previousScreen==='game' && P.length>0){
+    showScreen('game');
+  } else {
+    showScreen('setup');
+    loadSaves();
+  }
+  updateNavBtn();
+}
+
+function openLangScreen(){
+  showScreen('lang');
+  buildLangList();
+  updateAllText();
+  updateUI();
+  updateNavBtn();
+}
+
+function closeLangScreen(){
+  showScreen('settings');
+  updateAllText();
+  updateUI();
+  updateNavBtn();
+}
+
+function selectLang(code){
+  setLang(code);
+  updateDirection();
+  updateAllText();
+  updateUI();
+  buildLangList();
+  if(document.getElementById('setupScreen').classList.contains('active')){
+    loadSaves();
+  }
+  updateNavBtn();
+}
+
+function buildLangList(){
+  const list=document.getElementById('langList');
+  if(!list) return;
+  const currentLang=getLang();
+  let h='';
+  Object.values(T).forEach(lang=>{
+    const isActive=lang.code===currentLang;
+    h+='<div class="lang-item '+(isActive?'active':'')+'" onclick="selectLang(\''+lang.code+'\')"><span class="lang-flag">'+lang.flag+'</span><span class="lang-name">'+lang.name+'</span></div>';
+  });
+  list.innerHTML=h;
+}
+
+function setMode(m){
+  M=m;
+  document.querySelectorAll('.mode-btn').forEach(b=>b.classList.remove('active'));
+  const btn=document.getElementById('mode'+m);
+  if(btn) btn.classList.add('active');
+  refreshPlayerInputs();
+}
+
+function refreshPlayerInputs(){
+  const c=document.getElementById('playerInputs');
+  if(!c) return;
+  const tx=t();
+  let h='';
+  const colors=['#4fc3f7','#ff8a65','#81c784','#ba68c8'];
+  for(let i=1;i<=M;i++){
+    const tc=i===4?'#fff':'#000';
+    h+='<div class="player-in"><div class="icon" style="background:'+colors[i-1]+';color:'+tc+'">P'+i+'</div><input type="text" id="p'+i+'" value="'+tx.player+' '+i+'" placeholder="'+tx.player+' '+i+'"></div>';
+  }
+  c.innerHTML=h;
+}
+
+function setTarget(val){
+  document.querySelectorAll('.target-q-btn').forEach(b=>b.classList.remove('active'));
+  if(val==='custom'){
+    const tc=document.getElementById('targetCustom');
+    const cb=document.querySelector('.target-q-btn[data-val="custom"]');
+    if(tc) tc.style.display='flex';
+    if(cb) cb.classList.add('active');
+    const cti=document.getElementById('customTarget');
+    tg=cti?(parseInt(cti.value)||200):200;
+  }else{
+    tg=val;
+    document.querySelectorAll('.target-q-btn').forEach(b=>{
+      if(parseInt(b.dataset.val)===val)b.classList.add('active');
+    });
+    const tc=document.getElementById('targetCustom');
+    if(tc) tc.style.display='none';
+  }
+}
+
+function updateCustomTarget(){tg=parseInt(document.getElementById('customTarget').value)||200}
+
+function startGame(){
+  P=[];
+  const tx=t();
+  for(let i=1;i<=M;i++){
+    const inp=document.getElementById('p'+i);
+    const val=inp?inp.value.trim():'';
+    P.push(val||tx.player+' '+i);
+  }
+  sc=new Array(M).fill(0);
+  R=[];
+  GO=false;
+  showScreen('game');
+  buildScoreBoard();
+  updateDisp();
+  play('add');
+  vb(30);
+  updateNavBtn();
+}
+
+function buildScoreBoard(){
+  const b=document.getElementById('scoreBoard');
+  if(!b) return;
+  let h='';
+  for(let i=0;i<M;i++){
+    h+='<div class="score-c" id="card'+i+'"><div class="tn" id="teamName'+i+'">'+P[i]+'</div><div class="sc-wrap"><div class="sc" id="score'+i+'">0</div><div class="tg" id="target'+i+'">/'+tg+'</div></div><div class="plus-btn" onclick="openPopup('+i+')">+</div><div class="bar" id="bar'+i+'" style="width:0%"></div></div>';
+  }
+  b.innerHTML=h;
+}
+
+function openPopup(p){
+  if(GO)return;
+  popupPlayer=p;
+  popupValue=0;
+  popupToAll=false;
+  document.getElementById('popupNum').textContent='0';
+  document.getElementById('pointPopup').classList.add('show');
+  document.getElementById('toAllRow').style.display=M>2?'flex':'none';
+  document.getElementById('toAllCheck').checked=false;
+  play('add');
+}
+
+function closePopup(){
+  document.getElementById('pointPopup').classList.remove('show');
+  popupValue=0;
+}
+
+function numPress(n){
+  if(popupValue<9999){
+    popupValue=popupValue*10+n;
+    document.getElementById('popupNum').textContent=popupValue;
+  }
+  play('add');
+}
+
+function numBack(){
+  popupValue=Math.floor(popupValue/10);
+  document.getElementById('popupNum').textContent=popupValue||'0';
+  play('undo');
+}
+
+function numClear(){
+  popupValue=0;
+  document.getElementById('popupNum').textContent='0';
+  play('undo');
+}
+
+function toggleToAll(){
+  popupToAll=document.getElementById('toAllCheck').checked;
+}
+
+function numOK(){
+  if(popupValue===0){
+    play('err');
+    vb([50,30,50]);
+    return;
+  }
+  const round={};
+  for(let i=0;i<M;i++){
+    const val=(popupToAll||i===popupPlayer)?popupValue:0;
+    sc[i]+=val;
+    round['p'+i]=val;
+  }
+  R.push(round);
+  closePopup();
+  updateDisp();
+  play('add');
+  vb(20);
+  checkWin();
+}
+
+function updateDisp(){
+  for(let i=0;i<M;i++){
+    const el=document.getElementById('score'+i);
+    const bar=document.getElementById('bar'+i);
+    if(el){
+      el.textContent=sc[i];
+      if(bar) bar.style.width=Math.min((sc[i]/tg)*100,100)+'%';
+      el.classList.remove('score-change');
+      void el.offsetWidth;
+      el.classList.add('score-change');
+      setTimeout(()=>el.classList.remove('score-change'),400);
+    }
+  }
+  renderHist();
+}
+
+function renderHist(){
+  const list=document.getElementById('historyList');
+  const tx=t();
+  if(R.length===0){
+    list.innerHTML='<div id="noHistory" style="text-align:center;color:#8fbc8f;padding:15px">'+tx.noHistory+'</div>';
+    return;
+  }
+  let h='';
+  for(let i=0;i<R.length;i++){
+    let scoresHtml='';
+    for(let j=0;j<M;j++){
+      scoresHtml+='<span>'+P[j]+': +'+R[i]['p'+j]+'</span>';
+    }
+    h+='<div class="hist-item"><span class="rn">#'+(i+1)+'</span><div class="sc-row">'+scoresHtml+'</div><button class="btn-del-r" onclick="delRound('+i+')">×</button></div>';
+  }
+  list.innerHTML=h;
+  list.scrollTop=list.scrollHeight;
+}
+
+function delRound(i){
+  if(GO)return;
+  for(let j=0;j<M;j++){sc[j]-=R[i]['p'+j];}
+  R.splice(i,1);
+  updateDisp();
+  play('undo');
+  vb(30);
+}
+
+function undoLast(){
+  if(R.length===0||GO)return;
+  const last=R.pop();
+  for(let j=0;j<M;j++){sc[j]-=last['p'+j];}
+  updateDisp();
+  play('undo');
+  vb(30);
+}
+
+function saveGame(){
+  const saves=JSON.parse(localStorage.getItem('dominoSaves')||'[]');
+  const tx=t();
+  saves.unshift({
+    id:Date.now(),
+    date:new Date().toLocaleString(),
+    mode:M,
+    players:P,
+    scores:sc,
+    target:tg,
+    rounds:R,
+    lang:getLang()
+  });
+  if(saves.length>10)saves.pop();
+  localStorage.setItem('dominoSaves',JSON.stringify(saves));
+  play('add');
+  vb([20,40,20]);
+  alert(tx.saved);
+}
+
+function loadSaves(){
+  const saves=JSON.parse(localStorage.getItem('dominoSaves')||'[]');
+  const c=document.getElementById('savedGamesList');
+  const tx=t();
+  if(saves.length===0){
+    c.innerHTML='<div id="noSaved" style="text-align:center;color:#8fbc8f;padding:15px">'+tx.noSaved+'</div>';
+    return;
+  }
+  let h='';
+  saves.forEach((save,idx)=>{
+    const pt=save.players.join(' · ');
+    h+='<div class="saved-item" onclick="loadGame('+idx+')"><div class="sg-info"><div class="sg-players">'+pt+'</div><div class="sg-date">'+save.date+'</div></div><span class="sg-score">'+save.scores.join('-')+'</span><button class="btn-del-r" onclick="event.stopPropagation();delSave('+idx+')">×</button></div>';
+  });
+  c.innerHTML=h;
+}
+
+function loadGame(idx){
+  const saves=JSON.parse(localStorage.getItem('dominoSaves')||'[]');
+  const save=saves[idx];
+  if(!save)return;
+  M=save.mode;
+  P=save.players;
+  sc=[...save.scores];
+  tg=save.target;
+  R=JSON.parse(JSON.stringify(save.rounds));
+  GO=false;
+  if(save.lang&&T[save.lang]){setLang(save.lang);}
+  updateDirection();
+  showScreen('game');
+  buildScoreBoard();
+  updateDisp();
+  updateAllText();
+  updateUI();
+  updateNavBtn();
+  play('add');
+  vb(30);
+}
+
+function delSave(idx){
+  let saves=JSON.parse(localStorage.getItem('dominoSaves')||'[]');
+  saves.splice(idx,1);
+  localStorage.setItem('dominoSaves',JSON.stringify(saves));
+  loadSaves();
+  play('undo');
+  vb(30);
+}
+
+function clearAllData(){
+  const tx=t();
+  if(confirm(tx.clearConfirm)){
+    localStorage.removeItem('dominoSaves');
+    loadSaves();
+    play('undo');
+    vb([50,30,50]);
+    alert(tx.cleared);
+  }
+}
+
+function checkWin(){
+  let winners=[];
+  for(let i=0;i<M;i++){if(sc[i]>=tg)winners.push(i);}
+  if(winners.length>0){
+    GO=true;
+
+    // --- NATIVE AD TRIGGER ---
+    if(window.median && median.admob) {
+        median.admob.interstitial.show();
+    }
+
+    for(let w of winners){document.getElementById('card'+w).classList.add('winner');}
+    const tx=t();
+    let wn='';
+    if(winners.length===1)wn=P[winners[0]]+tx.winner;
+    else wn=winners.map(w=>P[w]).join(' & ')+tx.winner;
+    document.getElementById('winnerName').textContent=wn;
+    document.getElementById('finalScore').textContent=sc.join(' - ');
+    play('win');
+    vb([100,50,100,50,200]);
+    setTimeout(()=>document.getElementById('gameOver').classList.add('show'),800);
+  }
+}
+
+function newGame(){
+  document.getElementById('gameOver').classList.remove('show');
+  for(let i=0;i<M;i++){
+    const c=document.getElementById('card'+i);
+    if(c)c.classList.remove('winner');
+  }
+  resetGame();
+}
+
+function resetGame(){
+  showScreen('setup');
+  for(let i=0;i<M;i++){
+    const c=document.getElementById('card'+i);
+    if(c)c.classList.remove('winner');
+  }
+  sc=[];
+  R=[];
+  GO=false;
+  updateNavBtn();
+  loadSaves();
+}
+
+// --- INITIALIZE ADS ON STARTUP ---
+document.addEventListener('deviceready', function() {
+    if (window.median && median.admob) {
+        median.admob.banner.show();
+    }
+}, false);
+
+document.addEventListener('DOMContentLoaded', function(){
+  applyTheme(H);
+  updateDirection();
+  updateAllText();
+  updateUI();
+  updateNavBtn();
+  setMode(2);
+  setTarget(200);
+  loadSaves();
+  showScreen('setup');
+});
+</script>
+</body>
+</html>
+🗄️ נתונים',clearBtn:'🗑️ מחק הכל',backBtn:'⬅️ חזור',langScreenTitle:'🌐 בחר שפה',player:'שחקן',winner:' ניצח! 🎉',soundOn:'🔊',soundOff:'🔇',clearConfirm:'למחוק את כל המשחקים?',cleared:'הכל נמחק!',saved:'המשחק נשמר!',popupTitle:'הוסף ניקוד',popupSub:'לחץ על מספרים',toAllLabel:'לכל השחקנים'}
 };
 const themes={green:{bg:'#0f1f0f'},dark:{bg:'#121212'},blue:{bg:'#0a1929'},red:{bg:'#1a0a0a'}};
 let S=localStorage.getItem('dp_sound')!=='false',V=localStorage.getItem('dp_vibrate')!=='false',H=localStorage.getItem('dp_theme')||'green',M=2,P=[],sc=[],tg=200,R=[],GO=false,popupPlayer=-1,popupValue=0,popupToAll=false;
