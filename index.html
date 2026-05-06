@@ -2,444 +2,234 @@
 <html lang="en" dir="ltr" id="htmlRoot">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, viewport-fit=cover">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
 <title>Domino Point</title>
 <style>
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
-
-*{margin:0;padding:0;box-sizing:border-box;font-family:'Inter',system-ui,-apple-system,sans-serif;-webkit-tap-highlight-color:transparent}
-html,body{height:100%;overflow:hidden}
-body{background:#0a1f0a;color:#e8f5e9;min-height:100vh;overflow-x:hidden;position:relative}
-
-/* ===== HEADER ===== */
-.header{background:linear-gradient(180deg,#0d3d18 0%,#0a2e12 100%);padding:16px 20px;text-align:center;position:fixed;top:0;left:0;right:0;z-index:100;box-shadow:0 4px 20px rgba(0,0,0,0.4)}
-.header-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px}
-.logo-area{display:flex;align-items:center;gap:10px}
-.logo-icon{width:36px;height:36px;background:linear-gradient(135deg,#f4a261,#e76f51);border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:20px;box-shadow:0 2px 8px rgba(244,162,97,0.3)}
-.logo-text{text-align:left}
-.logo-text h1{font-size:18px;font-weight:800;letter-spacing:1px;color:#fff;line-height:1.2}
-.logo-text .subtitle{font-size:11px;color:#f4a261;font-weight:600;letter-spacing:2px;text-transform:uppercase}
-.settings-btn-top{width:40px;height:40px;background:rgba(255,255,255,0.1);border:1px solid rgba(255,255,255,0.2);border-radius:12px;display:flex;align-items:center;justify-content:center;color:#f4a261;font-size:20px;cursor:pointer;transition:all 0.2s}
-.settings-btn-top:active{background:rgba(244,162,97,0.2);transform:scale(0.95)}
-
-/* ===== CONTAINER ===== */
-.container{max-width:480px;margin:0 auto;padding:100px 16px 20px;height:100vh;overflow-y:auto;overflow-x:hidden}
-.container::-webkit-scrollbar{width:4px}
-.container::-webkit-scrollbar-track{background:transparent}
-.container::-webkit-scrollbar-thumb{background:rgba(244,162,97,0.3);border-radius:2px}
-
-.screen{display:none;height:100%}
+*{margin:0;padding:0;box-sizing:border-box;font-family:system-ui,-apple-system,sans-serif}
+body{background:#0f1f0f;color:#e8f5e9;min-height:100vh;overflow-x:hidden}
+.header{background:linear-gradient(135deg,#0d3d18,#1a5f2a);padding:12px 15px;text-align:center;position:sticky;top:0;z-index:100}
+.header h1{font-size:20px;font-weight:800;letter-spacing:2px}
+.header .subtitle{font-size:11px;color:#f4a261;font-weight:600}
+.header-btns{display:flex;justify-content:space-between;align-items:center;padding:0 5px;margin-bottom:4px}
+.header-btn{background:rgba(255,255,255,0.15);border:none;color:white;padding:8px 12px;border-radius:10px;font-size:12px;font-weight:700;cursor:pointer}
+.container{max-width:500px;margin:0 auto;padding:12px}
+.screen{display:none}
 .screen.active{display:block;animation:fadeIn 0.3s ease}
-
-/* ===== CARDS ===== */
-.card{background:linear-gradient(145deg,#1a2e1a,#142414);border-radius:20px;padding:20px;border:1px solid rgba(45,90,45,0.5);margin-bottom:16px;box-shadow:0 4px 15px rgba(0,0,0,0.2)}
-.card-title{font-size:14px;font-weight:700;color:#8fbc8f;text-transform:uppercase;letter-spacing:2px;text-align:center;margin-bottom:16px}
-
-/* ===== MODE SELECT (Photo 4) ===== */
-.mode-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
-.mode-card{background:linear-gradient(145deg,#1e3a1e,#162a16);border:2px solid rgba(45,90,45,0.4);border-radius:16px;padding:16px;text-align:center;cursor:pointer;transition:all 0.2s;position:relative;overflow:hidden}
-.mode-card:active{transform:scale(0.97)}
-.mode-card.selected{border-color:#f4a261;background:linear-gradient(145deg,rgba(244,162,97,0.15),rgba(231,111,81,0.1));box-shadow:0 0 20px rgba(244,162,97,0.15)}
-.mode-card.selected::after{content:'SELECTED';position:absolute;bottom:8px;left:50%;transform:translateX(-50%);background:#f4a261;color:#0a1f0a;font-size:9px;font-weight:800;padding:3px 10px;border-radius:6px;letter-spacing:1px}
-.mode-icon{font-size:32px;margin-bottom:8px;display:block}
-.mode-name{font-size:13px;font-weight:700;color:#fff;margin-bottom:2px}
-.mode-desc{font-size:10px;color:#8fbc8f;font-weight:500}
-.mode-btn-select{margin-top:10px;padding:6px 16px;background:rgba(255,255,255,0.1);border:1px solid rgba(255,255,255,0.2);border-radius:8px;color:#f4a261;font-size:11px;font-weight:700;cursor:pointer;letter-spacing:1px}
-.mode-card.selected .mode-btn-select{background:#f4a261;color:#0a1f0a;border-color:#f4a261}
-
-/* ===== TARGET SELECT ===== */
-.target-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:12px}
-.target-btn{padding:12px 8px;background:linear-gradient(145deg,#1e3a1e,#162a16);border:2px solid rgba(45,90,45,0.4);border-radius:14px;color:#e8f5e9;font-size:14px;font-weight:700;cursor:pointer;text-align:center;transition:all 0.2s}
-.target-btn:active{transform:scale(0.95)}
-.target-btn.selected{border-color:#f4a261;background:linear-gradient(145deg,rgba(244,162,97,0.15),rgba(231,111,81,0.1));color:#f4a261;box-shadow:0 0 15px rgba(244,162,97,0.1)}
-.target-custom-row{display:flex;align-items:center;gap:10px;padding:10px;background:rgba(0,0,0,0.2);border-radius:12px;border:1px solid rgba(45,90,45,0.3)}
-.target-custom-row label{font-size:12px;color:#8fbc8f;font-weight:600;white-space:nowrap}
-.target-custom-row input{flex:1;background:transparent;border:none;color:#f4a261;font-size:16px;font-weight:700;outline:none;text-align:center}
-.target-custom-row input::placeholder{color:rgba(244,162,97,0.4)}
-.target-info{text-align:center;font-size:11px;color:#8fbc8f;margin-top:8px;font-weight:500}
-
-/* ===== PLAYER INPUTS ===== */
-.player-input-card{background:linear-gradient(145deg,#1e3a1e,#162a16);border:1px solid rgba(45,90,45,0.3);border-radius:14px;padding:14px;display:flex;align-items:center;gap:12px;margin-bottom:10px}
-.player-avatar{width:40px;height:40px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:14px;flex-shrink:0;box-shadow:0 2px 8px rgba(0,0,0,0.3)}
-.player-input-card input{flex:1;background:transparent;border:none;color:#fff;font-size:15px;font-weight:600;outline:none}
-.player-input-card input::placeholder{color:rgba(255,255,255,0.3)}
-
-/* ===== MAIN BUTTONS ===== */
-.btn-main{width:100%;padding:16px;background:linear-gradient(135deg,#f4a261,#e76f51);color:#fff;border:none;border-radius:16px;font-size:16px;font-weight:800;cursor:pointer;letter-spacing:1px;text-transform:uppercase;box-shadow:0 4px 15px rgba(244,162,97,0.3);transition:all 0.2s;margin-bottom:12px}
-.btn-main:active{transform:scale(0.98);box-shadow:0 2px 8px rgba(244,162,97,0.2)}
-.btn-sec{width:100%;padding:14px;background:linear-gradient(145deg,#1e3a1e,#162a16);color:#e8f5e9;border:2px solid rgba(45,90,45,0.4);border-radius:14px;font-size:14px;font-weight:700;cursor:pointer;transition:all 0.2s}
+.card{background:#1a2e1a;border-radius:16px;padding:16px;border:1px solid #2d5a2d;margin-bottom:12px}
+.card h2{font-size:15px;margin-bottom:10px;color:#f4a261}
+.card h3{font-size:15px;margin-bottom:10px;color:#f4a261}
+.mode-sel{display:flex;gap:8px;margin-bottom:10px}
+.mode-btn{flex:1;padding:12px;border:2px solid #2d5a2d;background:#243824;color:#e8f5e9;border-radius:12px;font-size:13px;font-weight:600;cursor:pointer;text-align:center}
+.mode-btn.active{border-color:#f4a261;background:rgba(244,162,97,0.15);color:#f4a261}
+.player-in{display:flex;align-items:center;gap:10px;margin-bottom:8px;width:100%}
+.player-in .icon{width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:14px;flex-shrink:0}
+.player-in input{flex:1;min-width:0;padding:11px 13px;border:2px solid #2d5a2d;background:#0f1f0f;color:#e8f5e9;border-radius:10px;font-size:15px;outline:none}
+.player-in input:focus{border-color:#f4a261}
+.target-quick{display:flex;gap:6px;margin-bottom:10px;overflow-x:auto;padding-bottom:5px}
+.target-quick::-webkit-scrollbar{display:none}
+.target-q-btn{padding:8px 14px;border:2px solid #2d5a2d;background:#243824;color:#e8f5e9;border-radius:20px;font-size:13px;font-weight:600;cursor:pointer;white-space:nowrap}
+.target-q-btn.active{border-color:#f4a261;background:rgba(244,162,97,0.15);color:#f4a261}
+.target-custom{display:flex;gap:8px;align-items:center;margin-top:8px}
+.target-custom label{font-size:13px;color:#8fbc8f}
+.target-custom input{flex:1;padding:10px 12px;border:2px solid #2d5a2d;background:#0f1f0f;color:#e8f5e9;border-radius:10px;font-size:15px;outline:none}
+.target-custom input:focus{border-color:#f4a261}
+.btn-pri{width:100%;padding:15px;background:linear-gradient(135deg,#f4a261,#e76f51);color:white;border:none;border-radius:14px;font-size:17px;font-weight:700;cursor:pointer;margin-bottom:12px}
+.btn-pri:active{transform:scale(0.98)}
+.btn-sec{flex:1;padding:11px;background:#243824;color:#e8f5e9;border:2px solid #2d5a2d;border-radius:12px;font-size:13px;font-weight:600;cursor:pointer}
+.btn-sec.danger{border-color:#c0392b;color:#c0392b}
 .btn-sec:active{transform:scale(0.98)}
-.btn-dang{width:100%;padding:14px;background:linear-gradient(145deg,#c0392b,#a93226);color:#fff;border:none;border-radius:14px;font-size:14px;font-weight:700;cursor:pointer;transition:all 0.2s}
-.btn-dang:active{transform:scale(0.98)}
-
-/* ===== GAME SCREEN - SCORE CARDS (Photo 5) ===== */
-.score-grid{display:grid;gap:12px;margin-bottom:16px}
-.score-grid.cols-2{grid-template-columns:1fr 1fr}
-.score-grid.cols-1{grid-template-columns:1fr}
-.score-player-card{background:linear-gradient(145deg,#1e3a1e,#162a16);border:2px solid rgba(45,90,45,0.3);border-radius:20px;padding:16px;position:relative;overflow:hidden;transition:all 0.3s}
-.score-player-card.winner{border-color:#27ae60;box-shadow:0 0 25px rgba(39,174,96,0.2),inset 0 0 20px rgba(39,174,96,0.05)}
-.score-player-card.winner::before{content:'🏆 WINNER';position:absolute;top:8px;right:10px;background:#27ae60;color:#fff;font-size:9px;font-weight:800;padding:3px 8px;border-radius:6px;letter-spacing:1px}
-.player-header{display:flex;align-items:center;gap:10px;margin-bottom:10px}
-.player-avatar-sm{width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:12px}
-.player-info{flex:1}
-.player-name{font-size:15px;font-weight:700;color:#fff}
-.player-target{font-size:11px;color:#8fbc8f;font-weight:500}
-.score-big{font-size:42px;font-weight:800;color:#f4a261;line-height:1;margin:8px 0;text-shadow:0 2px 10px rgba(244,162,97,0.2)}
-.progress-bar-bg{width:100%;height:8px;background:rgba(0,0,0,0.3);border-radius:4px;overflow:hidden;margin:8px 0}
-.progress-bar-fill{height:100%;background:linear-gradient(90deg,#f4a261,#e76f51);border-radius:4px;transition:width 0.5s ease;box-shadow:0 0 10px rgba(244,162,97,0.3)}
-.progress-text{font-size:11px;color:#8fbc8f;text-align:right;font-weight:600}
-.add-points-btn{width:100%;padding:10px;background:rgba(244,162,97,0.1);border:1.5px solid rgba(244,162,97,0.4);border-radius:12px;color:#f4a261;font-size:13px;font-weight:700;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:6px;transition:all 0.2s;margin-top:8px}
-.add-points-btn:active{background:rgba(244,162,97,0.25);transform:scale(0.98)}
-
-/* ===== TEAM CARDS (Photo 2 & 3) ===== */
-.team-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:16px}
-.team-card{background:linear-gradient(145deg,#1e3a1e,#162a16);border:2px solid rgba(45,90,45,0.3);border-radius:20px;padding:18px;text-align:center;position:relative;overflow:hidden;transition:all 0.3s}
-.team-card.winner{border-color:#27ae60;box-shadow:0 0 25px rgba(39,174,96,0.2)}
-.team-card.winner::before{content:'🏆 WINNER';position:absolute;top:8px;left:50%;transform:translateX(-50%);background:#27ae60;color:#fff;font-size:9px;font-weight:800;padding:3px 10px;border-radius:6px;letter-spacing:1px;white-space:nowrap}
-.team-label{font-size:12px;font-weight:800;text-transform:uppercase;letter-spacing:2px;margin-bottom:8px}
-.team-a .team-label{color:#4fc3f7}
-.team-b .team-label{color:#ff8a65}
-.team-members{font-size:12px;color:#8fbc8f;margin-bottom:10px;font-weight:500}
-.team-score{font-size:36px;font-weight:800;color:#f4a261;line-height:1;margin:8px 0}
-.team-progress-bg{width:100%;height:10px;background:rgba(0,0,0,0.3);border-radius:5px;overflow:hidden;margin:10px 0}
-.team-progress-fill{height:100%;border-radius:5px;transition:width 0.5s ease}
-.team-a .team-progress-fill{background:linear-gradient(90deg,#4fc3f7,#29b6f6);box-shadow:0 0 10px rgba(79,195,247,0.3)}
-.team-b .team-progress-fill{background:linear-gradient(90deg,#ff8a65,#ff7043);box-shadow:0 0 10px rgba(255,138,101,0.3)}
-.team-progress-text{font-size:11px;color:#8fbc8f;font-weight:600}
-.team-add-btn{width:100%;padding:10px;background:rgba(244,162,97,0.1);border:1.5px solid rgba(244,162,97,0.4);border-radius:12px;color:#f4a261;font-size:13px;font-weight:700;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:6px;transition:all 0.2s;margin-top:10px}
-.team-add-btn:active{background:rgba(244,162,97,0.25);transform:scale(0.98)}
-
-/* ===== ROUND TABLE (Photo 6) ===== */
-.round-table-card{background:linear-gradient(145deg,#1e3a1e,#162a16);border:1px solid rgba(45,90,45,0.3);border-radius:16px;padding:16px;margin-bottom:16px;overflow-x:auto}
-.round-table-card::-webkit-scrollbar{height:4px}
-.round-table-card::-webkit-scrollbar-track{background:transparent}
-.round-table-card::-webkit-scrollbar-thumb{background:rgba(244,162,97,0.3);border-radius:2px}
-.round-table{width:100%;min-width:300px;border-collapse:collapse;font-size:13px}
-.round-table th{padding:10px 8px;text-align:center;color:#f4a261;font-weight:700;font-size:11px;text-transform:uppercase;letter-spacing:1px;border-bottom:2px solid rgba(244,162,97,0.3);white-space:nowrap}
-.round-table td{padding:10px 8px;text-align:center;color:#e8f5e9;font-weight:600;border-bottom:1px solid rgba(45,90,45,0.3);white-space:nowrap}
-.round-table tr:last-child td{border-bottom:none;font-weight:800;color:#f4a261;background:rgba(244,162,97,0.05)}
-.round-table .round-num{color:#8fbc8f;font-weight:700;font-size:11px}
-.round-table .total-row td{color:#f4a261;font-size:14px}
-
-/* ===== HISTORY LIST ===== */
-.history-card{background:linear-gradient(145deg,#1e3a1e,#162a16);border:1px solid rgba(45,90,45,0.3);border-radius:16px;padding:16px;margin-bottom:16px;max-height:200px;overflow-y:auto}
-.history-card::-webkit-scrollbar{width:4px}
-.history-card::-webkit-scrollbar-track{background:transparent}
-.history-card::-webkit-scrollbar-thumb{background:rgba(244,162,97,0.3);border-radius:2px}
-.history-title{font-size:13px;font-weight:700;color:#f4a261;margin-bottom:12px;text-transform:uppercase;letter-spacing:1px;display:flex;align-items:center;gap:8px}
-.history-item{display:flex;justify-content:space-between;align-items:center;padding:10px 12px;background:rgba(0,0,0,0.2);border-radius:12px;margin-bottom:8px;font-size:12px;border:1px solid rgba(45,90,45,0.2)}
-.history-round{font-weight:800;color:#f4a261;min-width:30px}
-.history-scores{display:flex;gap:12px;flex:1;justify-content:center;flex-wrap:wrap}
-.history-scores span{font-weight:600;white-space:nowrap}
-.history-del{width:26px;height:26px;background:#c0392b;color:#fff;border:none;border-radius:50%;font-size:14px;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0}
-.history-empty{text-align:center;color:#8fbc8f;padding:20px;font-size:13px}
-
-/* ===== BOTTOM ACTIONS ===== */
-.bottom-actions{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin-bottom:16px}
-.action-btn{padding:12px;background:linear-gradient(145deg,#1e3a1e,#162a16);border:1.5px solid rgba(45,90,45,0.4);border-radius:14px;color:#e8f5e9;font-size:12px;font-weight:700;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:4px;transition:all 0.2s}
-.action-btn:active{transform:scale(0.97)}
-.action-btn .icon{font-size:18px}
-.action-btn.danger{border-color:rgba(192,57,43,0.5);color:#e74c3c}
-
-/* ===== POPUP (Add Points) ===== */
-.popup-overlay{display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.85);backdrop-filter:blur(8px);z-index:300;align-items:center;justify-content:center;flex-direction:column;padding:20px}
-.popup-overlay.show{display:flex;animation:fadeIn 0.2s ease}
-.popup-card{background:linear-gradient(145deg,#1e3a1e,#162a16);border-radius:24px;padding:24px;text-align:center;border:1px solid rgba(45,90,45,0.5);max-width:360px;width:100%;box-shadow:0 20px 60px rgba(0,0,0,0.5);animation:slideUp 0.3s ease}
-.popup-header{margin-bottom:16px}
-.popup-title{font-size:18px;font-weight:800;color:#f4a261;margin-bottom:4px}
-.popup-sub{font-size:12px;color:#8fbc8f;font-weight:500}
-.popup-player-name{font-size:14px;color:#fff;font-weight:700;margin-bottom:12px;padding:8px 16px;background:rgba(244,162,97,0.1);border-radius:10px;display:inline-block;border:1px solid rgba(244,162,97,0.2)}
-.popup-num{font-size:56px;font-weight:800;color:#fff;margin:16px 0;line-height:1;min-height:60px;text-shadow:0 2px 20px rgba(244,162,97,0.3);letter-spacing:2px}
-.popup-toall{display:flex;align-items:center;justify-content:center;gap:10px;margin-bottom:16px;font-size:13px;color:#8fbc8f;cursor:pointer;padding:8px;background:rgba(0,0,0,0.2);border-radius:10px}
-.popup-toall input{width:18px;height:18px;accent-color:#f4a261}
-.numpad{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:12px}
-.numpad-btn{padding:18px;background:linear-gradient(145deg,#243824,#1a2e1a);color:#fff;border:1.5px solid rgba(45,90,45,0.4);border-radius:16px;font-size:24px;font-weight:700;cursor:pointer;text-align:center;user-select:none;transition:all 0.1s}
-.numpad-btn:active{background:#f4a261;color:#0a1f0f;border-color:#f4a261;transform:scale(0.95)}
+.btn-back{width:100%;padding:13px;background:#243824;color:#e8f5e9;border:2px solid #2d5a2d;border-radius:12px;font-size:15px;font-weight:700;cursor:pointer;margin-top:10px}
+.btn-dang{width:100%;padding:13px;background:#c0392b;color:white;border:none;border-radius:12px;font-size:15px;font-weight:700;cursor:pointer;margin-top:10px}
+.score-b{display:flex;gap:8px;margin-bottom:12px}
+.score-c{flex:1;background:#1a2e1a;border-radius:16px;padding:12px;text-align:center;border:2px solid #2d5a2d;position:relative;overflow:hidden}
+.score-c .tn{font-size:12px;font-weight:600;color:#8fbc8f;margin-bottom:4px}
+.score-c .sc-wrap{display:flex;align-items:baseline;justify-content:center;gap:3px;margin:5px 0}
+.score-c .sc{font-size:38px;font-weight:800;color:#f4a261;line-height:1}
+.score-c .tg{font-size:12px;color:#8fbc8f}
+.score-c .plus-btn{width:36px;height:36px;border-radius:50%;background:rgba(244,162,97,0.2);border:2px solid #f4a261;color:#f4a261;font-size:22px;font-weight:700;display:flex;align-items:center;justify-content:center;margin:8px auto 0;cursor:pointer;transition:all 0.2s}
+.plus-btn:active{background:#f4a261;color:#0f1f0f}
+.score-c .bar{position:absolute;bottom:0;left:0;height:3px;background:#f4a261;transition:width 0.5s}
+.score-c.winner{border-color:#27ae60;box-shadow:0 0 20px rgba(39,174,96,0.3);animation:pulse 1.5s infinite}
+@keyframes pulse{0%,100%{transform:scale(1)}50%{transform:scale(1.02)}}
+.hist-sec{background:#1a2e1a;border-radius:16px;padding:16px;border:1px solid #2d5a2d;margin-bottom:12px}
+.hist-list{max-height:200px;overflow-y:auto}
+.hist-item{display:flex;justify-content:space-between;align-items:center;padding:9px 11px;background:#243824;border-radius:10px;margin-bottom:7px;font-size:13px}
+.hist-item .rn{font-weight:700;color:#f4a261;min-width:25px}
+.hist-item .sc-row{display:flex;gap:12px;font-weight:600;flex:1;justify-content:center;flex-wrap:wrap}
+.hist-item .sc-row span{white-space:nowrap;font-size:12px}
+.btn-del-r{background:#c0392b;color:white;border:none;width:26px;height:26px;border-radius:50%;font-size:14px;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.bt-act{display:flex;gap:8px;margin-top:10px}
+.popup-overlay{display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.9);z-index:300;align-items:center;justify-content:center;flex-direction:column}
+.popup-overlay.show{display:flex}
+.popup-card{background:#1a2e1a;border-radius:20px;padding:20px;text-align:center;border:1px solid #2d5a2d;max-width:340px;width:90%;animation:slideUp 0.3s ease}
+.popup-card .popup-title{font-size:17px;font-weight:700;margin-bottom:4px;color:#f4a261}
+.popup-card .popup-sub{font-size:12px;color:#8fbc8f;margin-bottom:12px}
+.popup-card .popup-num{font-size:52px;font-weight:800;color:white;margin:8px 0;line-height:1;min-height:55px}
+.popup-card .popup-toall{display:flex;align-items:center;justify-content:center;gap:8px;margin-bottom:12px;font-size:13px;color:#8fbc8f;cursor:pointer}
+.popup-card .popup-toall input{width:18px;height:18px;accent-color:#f4a261}
+.numpad{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:12px}
+.numpad-btn{padding:16px 6px;background:#243824;color:white;border:2px solid #2d5a2d;border-radius:12px;font-size:22px;font-weight:700;cursor:pointer;text-align:center;user-select:none}
+.numpad-btn:active{background:#f4a261;color:#0f1f0f;border-color:#f4a261}
 .numpad-btn.wide{grid-column:span 2}
-.numpad-btn.action{background:rgba(192,57,43,0.2);border-color:rgba(192,57,43,0.5);color:#e74c3c}
-.numpad-btn.action:active{background:#c0392b;color:#fff}
-.numpad-btn.ok{background:linear-gradient(135deg,#27ae60,#219a52);border-color:#27ae60;color:#fff;font-size:16px}
+.numpad-btn.action{background:#c0392b;border-color:#c0392b}
+.numpad-btn.action:active{background:#a93226}
+.numpad-btn.ok{background:#27ae60;border-color:#27ae60;font-size:17px}
 .numpad-btn.ok:active{background:#1e8449}
-.popup-actions{display:grid;grid-template-columns:1fr 1fr;gap:10px}
-
-/* ===== GAME OVER (Photo 3) ===== */
-.game-over-overlay{display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.9);backdrop-filter:blur(10px);z-index:200;align-items:center;justify-content:center;flex-direction:column;padding:20px}
-.game-over-overlay.show{display:flex;animation:fadeIn 0.3s ease}
-.game-over-card{background:linear-gradient(145deg,#1e3a1e,#162a16);border-radius:24px;padding:30px 24px;text-align:center;border:2px solid rgba(244,162,97,0.3);max-width:380px;width:100%;box-shadow:0 20px 60px rgba(0,0,0,0.5);animation:slideUp 0.5s ease}
-.game-over-badge{background:linear-gradient(135deg,#f4a261,#e76f51);color:#0a1f0a;font-size:11px;font-weight:800;padding:6px 16px;border-radius:20px;display:inline-block;margin-bottom:16px;letter-spacing:2px;text-transform:uppercase}
-.game-over-title{font-size:28px;font-weight:800;color:#f4a261;margin-bottom:8px;text-shadow:0 2px 15px rgba(244,162,97,0.3)}
-.game-over-winner{font-size:18px;font-weight:700;color:#fff;margin-bottom:6px}
-.game-over-score{font-size:14px;color:#8fbc8f;margin-bottom:20px;font-weight:500}
-.game-over-details{background:rgba(0,0,0,0.2);border-radius:16px;padding:16px;margin-bottom:20px;text-align:left;border:1px solid rgba(45,90,45,0.3)}
-.detail-row{display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid rgba(45,90,45,0.2);font-size:13px}
-.detail-row:last-child{border-bottom:none}
-.detail-label{color:#8fbc8f;font-weight:500}
-.detail-value{color:#f4a261;font-weight:700}
-.game-over-actions{display:grid;grid-template-columns:1fr 1fr;gap:10px}
-
-/* ===== SETTINGS (Photo 1) ===== */
-.settings-card{background:linear-gradient(145deg,#1e3a1e,#162a16);border-radius:20px;padding:20px;border:1px solid rgba(45,90,45,0.3);margin-bottom:16px}
-.settings-header{display:flex;align-items:center;gap:12px;margin-bottom:20px;padding-bottom:16px;border-bottom:1px solid rgba(45,90,45,0.3)}
-.settings-header-icon{width:44px;height:44px;background:linear-gradient(135deg,#f4a261,#e76f51);border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:22px;box-shadow:0 2px 10px rgba(244,162,97,0.3)}
-.settings-header-text{text-align:left}
-.settings-header-text h2{font-size:18px;font-weight:800;color:#fff}
-.settings-header-text p{font-size:11px;color:#8fbc8f;font-weight:500}
-.set-row{display:flex;justify-content:space-between;align-items:center;padding:14px 0;border-bottom:1px solid rgba(45,90,45,0.2);cursor:pointer;transition:background 0.2s}
+.game-ov{display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.85);z-index:200;align-items:center;justify-content:center;flex-direction:column}
+.game-ov.show{display:flex}
+.game-ov-c{background:#1a2e1a;border-radius:24px;padding:35px 25px;text-align:center;border:2px solid #f4a261;max-width:300px;width:90%;animation:slideUp 0.5s ease}
+.game-ov-c .tr{font-size:55px;margin-bottom:12px}
+.game-ov-c h2{font-size:22px;color:#f4a261;margin-bottom:8px}
+.game-ov-c .wn{font-size:18px;font-weight:700;margin-bottom:15px}
+.game-ov-c .fs{font-size:15px;color:#8fbc8f;margin-bottom:20px}
+.btn-ng{width:100%;padding:13px;background:#f4a261;color:white;border:none;border-radius:12px;font-size:15px;font-weight:700;cursor:pointer}
+.set-row{display:flex;justify-content:space-between;align-items:center;padding:12px 0;border-bottom:1px solid #2d5a2d}
 .set-row:last-child{border-bottom:none}
-.set-row:active{background:rgba(255,255,255,0.03);border-radius:8px}
-.set-info{text-align:left;flex:1}
-.set-label{font-size:14px;font-weight:700;color:#fff;display:flex;align-items:center;gap:8px}
-.set-label .icon{font-size:18px}
-.set-desc{font-size:11px;color:#8fbc8f;margin-top:2px;font-weight:500}
-.set-value{display:flex;align-items:center;gap:8px}
-.set-badge{padding:6px 12px;background:rgba(244,162,97,0.1);border:1px solid rgba(244,162,97,0.3);border-radius:10px;color:#f4a261;font-size:12px;font-weight:700}
-.toggle{position:relative;width:50px;height:28px;background:#2d5a2d;border-radius:14px;cursor:pointer;transition:background 0.3s;flex-shrink:0}
-.toggle.active{background:linear-gradient(135deg,#f4a261,#e76f51)}
-.toggle::after{content:'';position:absolute;top:3px;left:3px;width:22px;height:22px;background:#fff;border-radius:50%;transition:transform 0.3s;box-shadow:0 2px 4px rgba(0,0,0,0.2)}
-.toggle.active::after{transform:translateX(22px)}
-.set-select{padding:8px 14px;background:rgba(0,0,0,0.2);border:1.5px solid rgba(45,90,45,0.4);border-radius:10px;color:#f4a261;font-size:13px;font-weight:700;outline:none;cursor:pointer}
-
-/* ===== LANGUAGE SCREEN ===== */
-.lang-list{display:flex;flex-direction:column;gap:8px}
-.lang-item{display:flex;align-items:center;gap:14px;padding:14px;background:linear-gradient(145deg,#1e3a1e,#162a16);border:2px solid rgba(45,90,45,0.3);border-radius:14px;cursor:pointer;transition:all 0.2s}
-.lang-item:active{transform:scale(0.98)}
-.lang-item.active{border-color:#f4a261;background:linear-gradient(145deg,rgba(244,162,97,0.1),rgba(231,111,81,0.05))}
-.lang-flag{font-size:28px}
-.lang-info{flex:1;text-align:left}
-.lang-name{font-size:15px;font-weight:700;color:#fff}
-.lang-native{font-size:12px;color:#8fbc8f;font-weight:500}
-.lang-check{width:24px;height:24px;background:#f4a261;border-radius:50%;display:flex;align-items:center;justify-content:center;color:#0a1f0a;font-size:14px;font-weight:800;opacity:0;transition:opacity 0.2s}
-.lang-item.active .lang-check{opacity:1}
-
-/* ===== SAVED GAMES ===== */
-.saved-card{background:linear-gradient(145deg,#1e3a1e,#162a16);border-radius:16px;padding:16px;border:1px solid rgba(45,90,45,0.3);margin-bottom:16px}
-.saved-item{display:flex;align-items:center;gap:12px;padding:12px;background:rgba(0,0,0,0.15);border-radius:12px;margin-bottom:8px;cursor:pointer;border:1px solid rgba(45,90,45,0.15);transition:all 0.2s}
-.saved-item:active{background:rgba(255,255,255,0.03);transform:scale(0.98)}
-.saved-avatar{width:40px;height:40px;background:linear-gradient(135deg,#f4a261,#e76f51);border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0}
-.saved-info{flex:1;min-width:0;text-align:left}
-.saved-players{font-weight:700;font-size:13px;color:#fff;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.saved-meta{font-size:11px;color:#8fbc8f;font-weight:500;margin-top:2px}
-.saved-score{font-weight:800;color:#f4a261;font-size:16px;margin-right:4px}
-.saved-del{width:32px;height:32px;background:rgba(192,57,43,0.2);color:#e74c3c;border:none;border-radius:8px;font-size:16px;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0}
-.saved-empty{text-align:center;color:#8fbc8f;padding:20px;font-size:13px}
-
-/* ===== CONFIRM DIALOG ===== */
-.confirm-overlay{display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.8);backdrop-filter:blur(5px);z-index:400;align-items:center;justify-content:center;padding:20px}
-.confirm-overlay.show{display:flex}
-.confirm-card{background:linear-gradient(145deg,#1e3a1e,#162a16);border-radius:20px;padding:24px;text-align:center;border:1px solid rgba(45,90,45,0.5);max-width:320px;width:100%;box-shadow:0 20px 60px rgba(0,0,0,0.5)}
-.confirm-title{font-size:18px;font-weight:800;color:#fff;margin-bottom:8px}
-.confirm-text{font-size:13px;color:#8fbc8f;margin-bottom:20px;line-height:1.5}
-.confirm-actions{display:grid;grid-template-columns:1fr 1fr;gap:10px}
-
-/* ===== ANIMATIONS ===== */
+.set-lb{font-size:14px;font-weight:600}
+.set-dc{font-size:11px;color:#8fbc8f;margin-top:2px}
+.tog-sw{position:relative;width:46px;height:26px;background:#2d5a2d;border-radius:13px;cursor:pointer;transition:background 0.3s;flex-shrink:0}
+.tog-sw.active{background:#27ae60}
+.tog-sw::after{content:'';position:absolute;top:2px;left:2px;width:22px;height:22px;background:white;border-radius:50%;transition:transform 0.3s}
+.tog-sw.active::after{transform:translateX(20px)}
+.set-sel{padding:7px 12px;border:2px solid #2d5a2d;background:#0f1f0f;color:#e8f5e9;border-radius:10px;font-size:13px;outline:none;cursor:pointer}
+.lang-list{display:flex;flex-direction:column;gap:6px}
+.lang-item{display:flex;align-items:center;gap:12px;padding:12px;border:2px solid #2d5a2d;background:#243824;border-radius:12px;cursor:pointer;transition:all 0.2s}
+.lang-item:active{background:#2d5a2d}
+.lang-item.active{border-color:#f4a261;background:rgba(244,162,97,0.1)}
+.lang-flag{font-size:22px}
+.lang-name{font-size:14px;font-weight:600}
+.saved-item{display:flex;justify-content:space-between;align-items:center;padding:10px 11px;background:#243824;border-radius:10px;margin-bottom:7px;font-size:13px;cursor:pointer}
+.saved-item:active{background:#2d5a2d}
+.saved-item .sg-info{flex:1;min-width:0}
+.saved-item .sg-players{font-weight:600;font-size:12px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.saved-item .sg-date{font-size:10px;color:#8fbc8f}
+.saved-item .sg-score{font-weight:700;color:#f4a261;margin-right:6px;flex-shrink:0}
 @keyframes fadeIn{from{opacity:0}to{opacity:1}}
 @keyframes slideUp{from{transform:translateY(40px);opacity:0}to{transform:translateY(0);opacity:1}}
-@keyframes scorePop{0%{transform:scale(1)}50%{transform:scale(1.2);color:#27ae60}100%{transform:scale(1)}}
-.score-pop{animation:scorePop 0.4s ease}
-
-/* ===== RTL SUPPORT ===== */
-[dir="rtl"] .header-top{flex-direction:row-reverse}
-[dir="rtl"] .logo-area{flex-direction:row-reverse}
-[dir="rtl"] .logo-text{text-align:right}
-[dir="rtl"] .player-input-card{flex-direction:row-reverse}
-[dir="rtl"] .player-header{flex-direction:row-reverse}
+@keyframes scorePop{0%{transform:scale(1)}50%{transform:scale(1.3);color:#27ae60}100%{transform:scale(1)}}
+.score-change{animation:scorePop 0.4s ease}
+.hist-list::-webkit-scrollbar{width:3px}
+.hist-list::-webkit-scrollbar-track{background:#0f1f0f}
+.hist-list::-webkit-scrollbar-thumb{background:#2d5a2d;border-radius:2px}
+/* RTL Support */
+[dir="rtl"] .player-in{flex-direction:row-reverse}
+[dir="rtl"] .score-b{flex-direction:row-reverse}
+[dir="rtl"] .bt-act{flex-direction:row-reverse}
+[dir="rtl"] .header-btns{flex-direction:row-reverse}
 [dir="rtl"] .set-row{flex-direction:row-reverse}
-[dir="rtl"] .set-info{text-align:right}
-[dir="rtl"] .lang-item{flex-direction:row-reverse}
-[dir="rtl"] .lang-info{text-align:right}
+[dir="rtl"] .target-custom{flex-direction:row-reverse}
+[dir="rtl"] .target-custom label{margin-left:0;margin-right:8px}
 [dir="rtl"] .saved-item{flex-direction:row-reverse}
-[dir="rtl"] .saved-info{text-align:right}
-[dir="rtl"] .history-item{flex-direction:row-reverse}
+[dir="rtl"] .saved-item .sg-info{text-align:right}
+[dir="rtl"] .hist-item{flex-direction:row-reverse}
+[dir="rtl"] .hist-item .sc-row{flex-direction:row-reverse}
+[dir="rtl"] .lang-item{flex-direction:row-reverse}
+[dir="rtl"] .popup-toall{flex-direction:row-reverse}
 [dir="rtl"] input,[dir="rtl"] select{text-align:right}
-[dir="rtl"] .detail-row{flex-direction:row-reverse}
-[dir="rtl"] .detail-label{text-align:right}
-[dir="rtl"] .detail-value{text-align:left}
 </style>
 </head>
 <body>
 
-<!-- ===== HEADER ===== -->
 <div class="header">
-  <div class="header-top">
-    <div class="logo-area">
-      <div class="logo-icon">🎲</div>
-      <div class="logo-text">
-        <h1>DOMINO POINT</h1>
-        <div class="subtitle" id="subtitle">Score Tracker</div>
-      </div>
-    </div>
-    <button class="settings-btn-top" id="settingsTopBtn" onclick="handleSettingsClick()">⚙️</button>
+  <div class="header-btns">
+    <button class="header-btn" id="soundBtn" onclick="toggleSound()">🔊</button>
+    <button class="header-btn" id="navBtn" onclick="handleNavBtn()">⚙️</button>
   </div>
+  <h1>🎲 DOMINO POINT</h1>
+  <div class="subtitle" id="subtitle">Score Tracker</div>
 </div>
 
 <div class="container">
 
-<!-- ===== SETUP SCREEN (Photo 4) ===== -->
 <div class="screen active" id="setupScreen">
   <div class="card">
-    <div class="card-title" id="modeTitle">Choose Player Mode</div>
-    <div class="mode-grid">
-      <div class="mode-card selected" id="modeCard2" onclick="selectMode(2)">
-        <span class="mode-icon">👤👤</span>
-        <div class="mode-name" id="modeName2">2 Player Mode</div>
-        <div class="mode-desc" id="modeDesc2">Individual Score</div>
-        <button class="mode-btn-select" id="modeBtn2">SELECTED</button>
-      </div>
-      <div class="mode-card" id="modeCard3" onclick="selectMode(3)">
-        <span class="mode-icon">👤👤👤</span>
-        <div class="mode-name" id="modeName3">3 Player Mode</div>
-        <div class="mode-desc" id="modeDesc3">Gut. Throat Individual</div>
-        <button class="mode-btn-select" id="modeBtn3">SELECT</button>
-      </div>
-      <div class="mode-card" id="modeCard4" onclick="selectMode(4)">
-        <span class="mode-icon">👤👤👤👤</span>
-        <div class="mode-name" id="modeName4">4 Player Mode</div>
-        <div class="mode-desc" id="modeDesc4">Individual (4 Players)</div>
-        <button class="mode-btn-select" id="modeBtn4">SELECT</button>
-      </div>
-      <div class="mode-card" id="modeCard22" onclick="selectMode(22)">
-        <span class="mode-icon">🆚</span>
-        <div class="mode-name" id="modeName22">2v2 Player Mode</div>
-        <div class="mode-desc" id="modeDesc22">Team A to Team B (Linked Score)</div>
-        <button class="mode-btn-select" id="modeBtn22">SELECT</button>
-      </div>
+    <h2 id="modeTitle">👥 Game Mode</h2>
+    <div class="mode-sel">
+      <button class="mode-btn active" onclick="setMode(2)" id="mode2">2 Players</button>
+      <button class="mode-btn" onclick="setMode(3)" id="mode3">3 Players</button>
+      <button class="mode-btn" onclick="setMode(4)" id="mode4">4 Players</button>
+      <button class="mode-btn" onclick="setMode(22)" id="mode22">2v2 Teams</button>
     </div>
-  </div>
-
-  <div class="card">
-    <div class="card-title" id="targetTitle">Set Target Score</div>
-    <div class="target-grid">
-      <button class="target-btn" data-val="100" onclick="setTarget(100)">100</button>
-      <button class="target-btn" data-val="150" onclick="setTarget(150)">150</button>
-      <button class="target-btn selected" data-val="200" onclick="setTarget(200)">200</button>
-      <button class="target-btn" data-val="500" onclick="setTarget(500)">500</button>
+    <h2 id="playersTitle">✏️ Player Names</h2>
+    <div id="playerInputs">
+      <div class="player-in"><div class="icon" style="background:#4fc3f7;color:#000">P1</div><input type="text" id="p1" value="Player 1"></div>
+      <div class="player-in"><div class="icon" style="background:#ff8a65;color:#000">P2</div><input type="text" id="p2" value="Player 2"></div>
     </div>
-    <div class="target-custom-row" id="targetCustomRow" style="display:none">
+    <h2 id="targetTitle">🎯 Target Score</h2>
+    <div class="target-quick" id="targetQuick">
+      <button class="target-q-btn" onclick="setTarget(100)" data-val="100">100</button>
+      <button class="target-q-btn" onclick="setTarget(120)" data-val="120">120</button>
+      <button class="target-q-btn" onclick="setTarget(150)" data-val="150">150</button>
+      <button class="target-q-btn active" onclick="setTarget(200)" data-val="200">200</button>
+      <button class="target-q-btn" onclick="setTarget(500)" data-val="500">500</button>
+      <button class="target-q-btn" onclick="setTarget('custom')" data-val="custom">⋯</button>
+    </div>
+    <div class="target-custom" id="targetCustom" style="display:none">
       <label id="customLabel">Custom:</label>
-      <input type="number" id="customTargetInput" placeholder="Enter score" value="200" onchange="updateCustomTarget()">
+      <input type="number" id="customTarget" placeholder="Enter score" value="200" onchange="updateCustomTarget()">
     </div>
-    <div class="target-info" id="targetInfo">Selected: Target 200</div>
   </div>
-
-  <div class="card" id="playersCard">
-    <div class="card-title" id="playersTitle">Player Names</div>
-    <div id="playerInputs"></div>
-  </div>
-
-  <button class="btn-main" id="startBtn" onclick="startGame()">🚀 START GAME</button>
-
-  <div class="saved-card">
-    <div class="card-title" id="savedTitle">💾 Saved Games</div>
-    <div id="savedGamesList"><div class="saved-empty" id="noSaved">No saved games</div></div>
+  <button class="btn-pri" id="startBtn" onclick="startGame()">🚀 START GAME</button>
+  <div class="card">
+    <h3 id="savedTitle">💾 Saved Games</h3>
+    <div id="savedGamesList"><div style="text-align:center;color:#8fbc8f;padding:15px" id="noSaved">No saved games</div></div>
   </div>
 </div>
 
-<!-- ===== GAME SCREEN (Photo 2,5,6) ===== -->
 <div class="screen" id="gameScreen">
-  <div id="scoreArea"></div>
-
-  <!-- Round Table for all modes -->
-  <div class="round-table-card" id="roundTableCard">
-    <div class="history-title">📊 Round History</div>
-    <div id="roundTableContainer">
-      <div class="history-empty" id="noRounds">No rounds yet</div>
-    </div>
+  <div class="score-b" id="scoreBoard"></div>
+  <div class="hist-sec">
+    <h3 id="historyTitle">📜 History</h3>
+    <div class="hist-list" id="historyList"><div style="text-align:center;color:#8fbc8f;padding:15px" id="noHistory">No rounds yet</div></div>
   </div>
-
-  <div class="bottom-actions">
-    <button class="action-btn" onclick="undoLast()">
-      <span class="icon">↩️</span>
-      <span id="undoBtnText">Undo</span>
-    </button>
-    <button class="action-btn" onclick="saveGame()">
-      <span class="icon">💾</span>
-      <span id="saveBtnText">Save</span>
-    </button>
-    <button class="action-btn danger" onclick="confirmEndGame()">
-      <span class="icon">🔄</span>
-      <span id="newBtnText">New</span>
-    </button>
+  <div class="bt-act">
+    <button class="btn-sec" id="undoBtn" onclick="undoLast()">↩️ Undo</button>
+    <button class="btn-sec" id="saveBtn" onclick="saveGame()">💾 Save</button>
+    <button class="btn-sec danger" id="newBtn" onclick="resetGame()">🔄 New</button>
   </div>
 </div>
 
-<!-- ===== SETTINGS SCREEN (Photo 1) ===== -->
 <div class="screen" id="settingsScreen">
-  <div class="settings-card">
-    <div class="settings-header">
-      <div class="settings-header-icon">⚙️</div>
-      <div class="settings-header-text">
-        <h2 id="settingsTitle">Settings</h2>
-        <p id="settingsSub">General Preferences</p>
-      </div>
-    </div>
-
+  <div class="card">
+    <h2 id="settingsTitle">⚙️ Settings</h2>
     <div class="set-row" onclick="openLangScreen()">
-      <div class="set-info">
-        <div class="set-label"><span class="icon">🌐</span> <span id="langLabel">Language</span></div>
-        <div class="set-desc" id="langDesc">Select Language</div>
-      </div>
-      <div class="set-value">
-        <span class="set-badge" id="langBadge">EN 🇺🇸</span>
-      </div>
+      <div><div class="set-lb" id="langLabel">🌐 Language</div><div class="set-dc" id="langDesc">Change language</div></div>
+      <button class="header-btn" id="langBtn">EN 🇺🇸</button>
     </div>
-
-    <div class="set-row" onclick="toggleSound()">
-      <div class="set-info">
-        <div class="set-label"><span class="icon">🔊</span> <span id="soundLabel">Sound</span></div>
-        <div class="set-desc" id="soundDesc">Game Sounds</div>
-      </div>
-      <div class="toggle active" id="soundToggle"></div>
-    </div>
-
-    <div class="set-row" onclick="toggleVibrate()">
-      <div class="set-info">
-        <div class="set-label"><span class="icon">📳</span> <span id="vibrateLabel">Vibration</span></div>
-        <div class="set-desc" id="vibrateDesc">Haptic Feedback</div>
-      </div>
-      <div class="toggle active" id="vibrateToggle"></div>
-    </div>
-
     <div class="set-row">
-      <div class="set-info">
-        <div class="set-label"><span class="icon">🎨</span> <span id="themeLabel">Theme</span></div>
-        <div class="set-desc" id="themeDesc">Color Scheme</div>
-      </div>
-      <select class="set-select" id="themeSelect" onchange="changeTheme(this.value)">
-        <option value="green">Green</option>
-        <option value="dark">Dark</option>
-        <option value="blue">Blue</option>
-        <option value="red">Red</option>
-      </select>
+      <div><div class="set-lb" id="soundLabel">🔊 Sound</div><div class="set-dc" id="soundDesc">Game sounds</div></div>
+      <div class="tog-sw active" id="soundToggle" onclick="toggleSound()"></div>
+    </div>
+    <div class="set-row">
+      <div><div class="set-lb" id="vibrateLabel">📳 Vibration</div><div class="set-dc" id="vibrateDesc">Haptic feedback</div></div>
+      <div class="tog-sw active" id="vibrateToggle" onclick="toggleVibrate()"></div>
+    </div>
+    <div class="set-row">
+      <div><div class="set-lb" id="themeLabel">🎨 Theme</div><div class="set-dc" id="themeDesc">Color scheme</div></div>
+      <select class="set-sel" id="themeSelect" onchange="changeTheme(this.value)"><option value="green">Green</option><option value="dark">Dark</option><option value="blue">Blue</option><option value="red">Red</option></select>
     </div>
   </div>
-
-  <div class="settings-card">
-    <div class="card-title" id="dataTitle">🗄️ Data</div>
+  <div class="card">
+    <h2 id="dataTitle">🗄️ Data</h2>
     <button class="btn-dang" id="clearBtn" onclick="clearAllData()">🗑️ Clear All Games</button>
   </div>
-
-  <button class="btn-sec" id="backBtn" onclick="closeSettings()">⬅️ Back</button>
+  <button class="btn-back" id="backBtn" onclick="closeSettings()">⬅️ Back</button>
 </div>
 
-<!-- ===== LANGUAGE SCREEN ===== -->
 <div class="screen" id="langScreen">
   <div class="card">
-    <div class="card-title" id="langScreenTitle">Select Language</div>
+    <h2 id="langScreenTitle">🌐 Select Language</h2>
     <div class="lang-list" id="langList"></div>
   </div>
-  <button class="btn-sec" id="langBackBtn" onclick="closeLangScreen()">⬅️ Back</button>
+  <button class="btn-back" id="langBackBtn" onclick="closeLangScreen()">⬅️ Back</button>
 </div>
 
 </div>
 
-<!-- ===== ADD POINTS POPUP ===== -->
 <div class="popup-overlay" id="pointPopup">
   <div class="popup-card">
-    <div class="popup-header">
-      <div class="popup-title" id="popupTitle">Add Points</div>
-      <div class="popup-sub" id="popupSub">Tap numbers to enter</div>
-    </div>
-    <div class="popup-player-name" id="popupPlayerName">Player 1</div>
+    <div class="popup-title" id="popupTitle">Add Points</div>
+    <div class="popup-sub" id="popupSub">Tap numbers to enter</div>
     <div class="popup-num" id="popupNum">0</div>
     <div class="popup-toall" id="toAllRow" style="display:none">
       <input type="checkbox" id="toAllCheck" onchange="toggleToAll()">
@@ -449,811 +239,603 @@ body{background:#0a1f0a;color:#e8f5e9;min-height:100vh;overflow-x:hidden;positio
       <button class="numpad-btn" onclick="numPress(1)">1</button>
       <button class="numpad-btn" onclick="numPress(2)">2</button>
       <button class="numpad-btn" onclick="numPress(3)">3</button>
+      <button class="numpad-btn action" onclick="numBack()">⌫</button>
       <button class="numpad-btn" onclick="numPress(4)">4</button>
       <button class="numpad-btn" onclick="numPress(5)">5</button>
       <button class="numpad-btn" onclick="numPress(6)">6</button>
+      <button class="numpad-btn" onclick="numClear()">C</button>
       <button class="numpad-btn" onclick="numPress(7)">7</button>
       <button class="numpad-btn" onclick="numPress(8)">8</button>
       <button class="numpad-btn" onclick="numPress(9)">9</button>
-      <button class="numpad-btn action" onclick="numClear()">C</button>
       <button class="numpad-btn" onclick="numPress(0)">0</button>
-      <button class="numpad-btn action" onclick="numBack()">⌫</button>
-    </div>
-    <div class="popup-actions">
-      <button class="numpad-btn action wide" onclick="closePopup()">✕ Cancel</button>
-      <button class="numpad-btn ok wide" onclick="numOK()">✓ OK</button>
+      <button class="numpad-btn wide ok" onclick="numOK()">✓ OK</button>
+      <button class="numpad-btn action" onclick="closePopup()">✕</button>
     </div>
   </div>
 </div>
 
-<!-- ===== GAME OVER OVERLAY (Photo 3) ===== -->
-<div class="game-over-overlay" id="gameOver">
-  <div class="game-over-card">
-    <div class="game-over-badge" id="gameOverBadge">FINAL MATCH RESULTS</div>
-    <div class="game-over-title" id="gameOverTitle">🏆 Game Over!</div>
-    <div class="game-over-winner" id="winnerName">Winner!</div>
-    <div class="game-over-score" id="finalScore">0 - 0</div>
-    <div class="game-over-details" id="gameOverDetails"></div>
-    <div class="game-over-actions">
-      <button class="btn-sec" onclick="newGame()">🔄 New Match</button>
-      <button class="btn-main" onclick="viewHistory()" style="margin-bottom:0">📜 View History</button>
-    </div>
-  </div>
-</div>
-
-<!-- ===== CONFIRM DIALOG ===== -->
-<div class="confirm-overlay" id="confirmDialog">
-  <div class="confirm-card">
-    <div class="confirm-title" id="confirmTitle">End Game?</div>
-    <div class="confirm-text" id="confirmText">Are you sure you want to end this game?</div>
-    <div class="confirm-actions">
-      <button class="btn-sec" onclick="cancelEndGame()">[NO]</button>
-      <button class="btn-dang" onclick="confirmEndYes()">[YES]</button>
-    </div>
+<div class="game-ov" id="gameOver">
+  <div class="game-ov-c">
+    <div class="tr">🏆</div>
+    <h2 id="gameOverTitle">Game Over!</h2>
+    <div class="wn" id="winnerName">Winner!</div>
+    <div class="fs" id="finalScore">0 - 0</div>
+    <button class="btn-ng" id="newGameBtn" onclick="newGame()">🎮 New Game</button>
   </div>
 </div>
 
 <script>
-
-// ===== TRANSLATIONS =====
-var TX = {
-  en:{code:'en',flag:'🇺🇸',name:'English',native:'English',dir:'ltr',subtitle:'Score Tracker',modeTitle:'Choose Player Mode',playersTitle:'Player Names',targetTitle:'Set Target Score',customLabel:'Custom:',targetInfo:'Selected: Target {target}',startBtn:'🚀 START GAME',savedTitle:'💾 Saved Games',noSaved:'No saved games',historyTitle:'📊 Round History',noHistory:'No rounds yet',noRounds:'No rounds yet',undoBtn:'Undo',saveBtn:'Save',newBtn:'New',gameOverTitle:'🏆 Game Over!',newGameBtn:'🔄 New Match',viewHistoryBtn:'📜 View History',settingsTitle:'Settings',settingsSub:'General Preferences',langLabel:'Language',langDesc:'Select Language',soundLabel:'Sound',soundDesc:'Game Sounds',vibrateLabel:'Vibration',vibrateDesc:'Haptic Feedback',themeLabel:'Theme',themeDesc:'Color Scheme',dataTitle:'🗄️ Data',clearBtn:'🗑️ Clear All Games',backBtn:'⬅️ Back',langScreenTitle:'Select Language',player:'Player',teamA:'Team A',teamB:'Team B',winner:' Wins!',soundOn:'🔊',soundOff:'🔇',clearConfirm:'Delete all saved games?',cleared:'All games deleted!',saved:'Game Saved!',popupTitle:'Add Points',popupSub:'Tap numbers to enter',toAllLabel:'Add to ALL players',confirmEnd:'Are you sure you want to end this game?',confirmYes:'[YES]',confirmNo:'[NO]',endGameTitle:'End Game?',modeName2:'2 Player Mode',modeDesc2:'Individual Score',modeName3:'3 Player Mode',modeDesc3:'Gut. Throat Individual',modeName4:'4 Player Mode',modeDesc4:'Individual (4 Players)',modeName22:'2v2 Player Mode',modeDesc22:'Team A to Team B (Linked Score)',selectBtn:'SELECT',selectedBtn:'SELECTED',addPoints:'+ Add Points',round:'R',total:'Total',matchTotal:'Match Total Points:',winnerLabel:'Winner:'},
-
-  ar:{code:'ar',flag:'🇸🇦',name:'العربية',native:'العربية',dir:'rtl',subtitle:'متتبع النقاط',modeTitle:'اختر وضع اللاعبين',playersTitle:'أسماء اللاعبين',targetTitle:'حدد الهدف',customLabel:'مخصص:',targetInfo:'المحدد: هدف {target}',startBtn:'🚀 ابدأ اللعبة',savedTitle:'💾 الألعاب المحفوظة',noSaved:'لا توجد ألعاب محفوظة',historyTitle:'📊 سجل الجولات',noHistory:'لا توجد جولات',noRounds:'لا توجد جولات بعد',undoBtn:'تراجع',saveBtn:'حفظ',newBtn:'جديد',gameOverTitle:'🏆 انتهت اللعبة!',newGameBtn:'🔄 مباراة جديدة',viewHistoryBtn:'📜 عرض السجل',settingsTitle:'الإعدادات',settingsSub:'التفضيلات العامة',langLabel:'اللغة',langDesc:'اختر اللغة',soundLabel:'الصوت',soundDesc:'أصوات اللعبة',vibrateLabel:'الاهتزاز',vibrateDesc:'ردود الفعل اللمسية',themeLabel:'السمة',themeDesc:'نظام الألوان',dataTitle:'🗄️ البيانات',clearBtn:'🗑️ مسح جميع الألعاب',backBtn:'⬅️ رجوع',langScreenTitle:'اختيار اللغة',player:'اللاعب',teamA:'الفريق أ',teamB:'الفريق ب',winner:' فاز!',soundOn:'🔊',soundOff:'🔇',clearConfirm:'مسح جميع الألعاب المحفوظة؟',cleared:'تم مسح جميع الألعاب!',saved:'تم حفظ اللعبة!',popupTitle:'إضافة نقاط',popupSub:'اضغط الأرقام للإدخال',toAllLabel:'إضافة لجميع اللاعبين',confirmEnd:'هل أنت متأكد من إنهاء هذه اللعبة؟',confirmYes:'[نعم]',confirmNo:'[لا]',endGameTitle:'إنهاء اللعبة؟',modeName2:'وضع لاعبين',modeDesc2:'نقاط فردية',modeName3:'وضع 3 لاعبين',modeDesc3:'فردي (3 لاعبين)',modeName4:'وضع 4 لاعبين',modeDesc4:'فردي (4 لاعبين)',modeName22:'وضع 2 ضد 2',modeDesc22:'فريق أ ضد فريق ب (نقاط مرتبطة)',selectBtn:'اختيار',selectedBtn:'محدد',addPoints:'+ إضافة نقاط',round:'ج',total:'المجموع',matchTotal:'مجموع نقاط المباراة:',winnerLabel:'الفائز:'},
-
-  ku:{code:'ku',flag:'🇮🇶',name:'سۆرانی',native:'سۆرانی',dir:'rtl',subtitle:'ژمێریاری نمرە',modeTitle:'شێوازی یاری هەڵبژێرە',playersTitle:'ناوی یاریزانان',targetTitle:'ئامانجی نمرە',customLabel:'تایبەت:',targetInfo:'هەڵبژێردراو: ئامانج {target}',startBtn:'🚀 دەستپێکردن',savedTitle:'💾 یاریە پاشەکەوتکراوەکان',noSaved:'هیچ یاریەک پاشەکەوت نەکراوە',historyTitle:'📊 مێژووی گەڕەکان',noHistory:'هێشتا هیچ گەڕێک نییە',noRounds:'هێشتا هیچ گەڕێ نییە',undoBtn:'گەڕانەوە',saveBtn:'پاشەکەوت',newBtn:'نوێ',gameOverTitle:'🏆 یاری تەواو بوو!',newGameBtn:'🔄 یاری نوێ',viewHistoryBtn:'📜 بینینی مێژوو',settingsTitle:'ڕێکخستنەکان',settingsSub:'هەڵبژاردنە گشتییەکان',langLabel:'زمان',langDesc:'گۆڕینی زمان',soundLabel:'دەنگ',soundDesc:'دەنگی یاری',vibrateLabel:'هەژان',vibrateDesc:'هەژان لە کاتی کردارەکان',themeLabel:'ڕەنگ',themeDesc:'ڕەنگی بەرنامە',dataTitle:'🗄️ زانیاری',clearBtn:'🗑️ سڕینەوەی هەموو یاریەکان',backBtn:'⬅️ گەڕانەوە',langScreenTitle:'هەڵبژاردنی زمان',player:'یاریزان',teamA:'تێمی ئە',teamB:'تێمی ب',winner:' بردنەوە!',soundOn:'🔊',soundOff:'🔇',clearConfirm:'دڵنیای لە سڕینەوەی هەموو یاریەکان؟',cleared:'هەموو یاریەکان سڕانەوە!',saved:'یاری پاشەکەوت کرا!',popupTitle:'زیادکردنی نمرە',popupSub:'ژمارەکان بنووسە',toAllLabel:'بۆ هەموو یاریزانەکان',confirmEnd:'دڵنیای لە کۆتایی هێنانی ئەم یارییە؟',confirmYes:'[بەڵێ]',confirmNo:'[نەخێر]',endGameTitle:'کۆتایی یاری؟',modeName2:'شێوازی 2 یاریزان',modeDesc2:'نمرەی تاکەکەسی',modeName3:'شێوازی 3 یاریزان',modeDesc3:'تاکەکەسی (3 یاریزان)',modeName4:'شێوازی 4 یاریزان',modeDesc4:'تاکەکەسی (4 یاریزان)',modeName22:'شێوازی 2بەرامبەر2',modeDesc22:'تێمی ئە بەرامبەر تێمی ب (نمرەی بەستراو)',selectBtn:'هەڵبژاردن',selectedBtn:'هەڵبژێردراو',addPoints:'+ زیادکردنی نمرە',round:'گ',total:'کۆ',matchTotal:'کۆی نمرەی یاری:',winnerLabel:'براوە:'},
-
-  kd:{code:'kd',flag:'🇮🇶',name:'بادینی',native:'بادینی',dir:'rtl',subtitle:'ژمێرەی خاڵ',modeTitle:'شێلێی یاری هەلبژەرە',playersTitle:'ناوێ یاریزانێ',targetTitle:'ئامانجی خاڵ',customLabel:'تایبەت:',targetInfo:'هەلبژێری: ئامانج {target}',startBtn:'🚀 دەستپێکە',savedTitle:'💾 یاریێ پاشەکەوتکراوێ',noSaved:'هیچ یاریێ پاشەکەوت نەکراوە',historyTitle:'📊 مێژووی گەڕێن',noHistory:'هێشتا هیچ گەڕێ نینە',noRounds:'هێشتا هیچ گەڕێ نینە',undoBtn:'گەڕینەوە',saveBtn:'پاشکەوتی',newBtn:'نە',gameOverTitle:'🏆 یاری تەواوە!',newGameBtn:'🔄 یاریێ نە',viewHistoryBtn:'📜 بینینی مێژوو',settingsTitle:'ڕێکخستنێ',settingsSub:'هەلبژارتنێ گشتی',langLabel:'زمانە',langDesc:'گۆرینی زمانە',soundLabel:'دەنگە',soundDesc:'دەنگی یاری',vibrateLabel:'هەژانە',vibrateDesc:'هەژان ل کاتی کردارێن',themeLabel:'ڕەنگە',themeDesc:'ڕەنگی بەرنامە',dataTitle:'🗄️ زانیاریێ',clearBtn:'🗑️ سڕینەوەی هەموو یاریێن',backBtn:'⬅️ گەڕینەوە',langScreenTitle:'هەلبژارتنی زمانە',player:'یاریزان',teamA:'تیمێ ئە',teamB:'تیمێ ب',winner:' بردنەوە!',soundOn:'🔊',soundOff:'🔇',clearConfirm:'دڵنیای ل سڕینەوەی هەموو یاریێن؟',cleared:'هەموو یاریێن سڕانەوە!',saved:'یاری پاشکەوتی کرا!',popupTitle:'زیادکردنی خاڵ',popupSub:'ژمارێ بنووسە',toAllLabel:'بۆ هەموو یاریزانێن',confirmEnd:'دڵنیای ل کۆتایی هێنانێ یارییا نە؟',confirmYes:'[بەڵێ]',confirmNo:'[نە]',endGameTitle:'کۆتایی یاری؟',modeName2:'شێلێ 2 یاریزان',modeDesc2:'خاڵێ تاکەکەسی',modeName3:'شێلێ 3 یاریزان',modeDesc3:'تاکەکەسی (3 یاریزان)',modeName4:'شێلێ 4 یاریزان',modeDesc4:'تاکەکەسی (4 یاریزان)',modeName22:'شێلێ 2بەرامبەر2',modeDesc22:'تیمێ ئە بەرامبەر تیمێ ب (خاڵێ بەستراو)',selectBtn:'هەلبژartin',selectedBtn:'هەلبژێری',addPoints:'+ زیادکرنا خاڵێ',round:'گ',total:'کۆ',matchTotal:'کۆی خاڵێ یاری:',winnerLabel:'براوە:'},
-
-  es:{code:'es',flag:'🇪🇸',name:'Español',native:'Español',dir:'ltr',subtitle:'Rastreador de Puntos',modeTitle:'Elegir Modo',playersTitle:'Nombres',targetTitle:'Puntaje Objetivo',customLabel:'Personalizado:',targetInfo:'Seleccionado: Objetivo {target}',startBtn:'🚀 INICIAR',savedTitle:'💾 Partidas Guardadas',noSaved:'No hay partidas',historyTitle:'📊 Historial de Rondas',noHistory:'Sin rondas',noRounds:'Sin rondas aún',undoBtn:'Deshacer',saveBtn:'Guardar',newBtn:'Nuevo',gameOverTitle:'🏆 ¡Juego Terminado!',newGameBtn:'🔄 Nueva Partida',viewHistoryBtn:'📜 Ver Historial',settingsTitle:'Ajustes',settingsSub:'Preferencias Generales',langLabel:'Idioma',langDesc:'Cambiar idioma',soundLabel:'Sonido',soundDesc:'Sonidos del juego',vibrateLabel:'Vibración',vibrateDesc:'Retroalimentación háptica',themeLabel:'Tema',themeDesc:'Esquema de colores',dataTitle:'🗄️ Datos',clearBtn:'🗑️ Borrar Todo',backBtn:'⬅️ Atrás',langScreenTitle:'Seleccionar Idioma',player:'Jugador',teamA:'Equipo A',teamB:'Equipo B',winner:' ¡Gana!',soundOn:'🔊',soundOff:'🔇',clearConfirm:'¿Borrar todas las partidas?',cleared:'¡Todo borrado!',saved:'¡Partida guardada!',popupTitle:'Añadir Puntos',popupSub:'Toca los números',toAllLabel:'Añadir a TODOS',confirmEnd:'¿Seguro que quieres terminar este juego?',confirmYes:'[SÍ]',confirmNo:'[NO]',endGameTitle:'¿Terminar Juego?',modeName2:'Modo 2 Jugadores',modeDesc2:'Puntaje Individual',modeName3:'Modo 3 Jugadores',modeDesc3:'Individual (3 Jugadores)',modeName4:'Modo 4 Jugadores',modeDesc4:'Individual (4 Jugadores)',modeName22:'Modo 2v2',modeDesc22:'Equipo A vs Equipo B (Puntaje Vinculado)',selectBtn:'SELECCIONAR',selectedBtn:'SELECCIONADO',addPoints:'+ Añadir Puntos',round:'R',total:'Total',matchTotal:'Puntos Totales:',winnerLabel:'Ganador:'},
-
-  fr:{code:'fr',flag:'🇫🇷',name:'Français',native:'Français',dir:'ltr',subtitle:'Suivi de Score',modeTitle:'Choisir le Mode',playersTitle:'Noms',targetTitle:'Score Cible',customLabel:'Personnalisé:',targetInfo:'Sélectionné: Cible {target}',startBtn:'🚀 DÉMARRER',savedTitle:'💾 Parties Sauv.',noSaved:'Aucune partie',historyTitle:'📊 Historique des Manches',noHistory:'Aucun tour',noRounds:'Aucune manche',undoBtn:'Annuler',saveBtn:'Sauver',newBtn:'Nouveau',gameOverTitle:'🏆 Fin du Jeu!',newGameBtn:'🔄 Nouvelle Partie',viewHistoryBtn:'📜 Voir Historique',settingsTitle:'Paramètres',settingsSub:'Préférences Générales',langLabel:'Langue',langDesc:'Changer la langue',soundLabel:'Son',soundDesc:'Sons du jeu',vibrateLabel:'Vibration',vibrateDesc:'Retour haptique',themeLabel:'Thème',themeDesc:'Palette de couleurs',dataTitle:'🗄️ Données',clearBtn:'🗑️ Tout Effacer',backBtn:'⬅️ Retour',langScreenTitle:'Choisir Langue',player:'Joueur',teamA:'Équipe A',teamB:'Équipe B',winner:' Gagne!',soundOn:'🔊',soundOff:'🔇',clearConfirm:'Effacer toutes les parties?',cleared:'Tout effacé!',saved:'Partie sauv.!',popupTitle:'Ajouter Points',popupSub:'Tapez les chiffres',toAllLabel:'Ajouter à TOUS',confirmEnd:'Voulez-vous vraiment terminer cette partie?',confirmYes:'[OUI]',confirmNo:'[NON]',endGameTitle:'Terminer?',modeName2:'Mode 2 Joueurs',modeDesc2:'Score Individuel',modeName3:'Mode 3 Joueurs',modeDesc3:'Individuel (3 Joueurs)',modeName4:'Mode 4 Joueurs',modeDesc4:'Individuel (4 Joueurs)',modeName22:'Mode 2v2',modeDesc22:'Équipe A vs Équipe B (Score Lié)',selectBtn:'SÉLECTIONNER',selectedBtn:'SÉLECTIONNÉ',addPoints:'+ Ajouter Points',round:'M',total:'Total',matchTotal:'Points Totaux:',winnerLabel:'Gagnant:'},
-
-  de:{code:'de',flag:'🇩🇪',name:'Deutsch',native:'Deutsch',dir:'ltr',subtitle:'Punkte Tracker',modeTitle:'Spielmodus Wählen',playersTitle:'Spielernamen',targetTitle:'Zielpunkte',customLabel:'Benutzerdef.:',targetInfo:'Ausgewählt: Ziel {target}',startBtn:'🚀 STARTEN',savedTitle:'💾 Gespeichert',noSaved:'Keine Spiele',historyTitle:'📊 Rundenverlauf',noHistory:'Noch keine Runden',noRounds:'Noch keine Runden',undoBtn:'Rückgängig',saveBtn:'Speichern',newBtn:'Neu',gameOverTitle:'🏆 Spiel Ende!',newGameBtn:'🔄 Neues Spiel',viewHistoryBtn:'📜 Verlauf Anzeigen',settingsTitle:'Einstellungen',settingsSub:'Allgemeine Einstellungen',langLabel:'Sprache',langDesc:'Sprache ändern',soundLabel:'Ton',soundDesc:'Spielgeräusche',vibrateLabel:'Vibration',vibrateDesc:'Haptisches Feedback',themeLabel:'Design',themeDesc:'Farbschema',dataTitle:'🗄️ Daten',clearBtn:'🗑️ Alles Löschen',backBtn:'⬅️ Zurück',langScreenTitle:'Sprache Wählen',player:'Spieler',teamA:'Team A',teamB:'Team B',winner:' Gewinnt!',soundOn:'🔊',soundOff:'🔇',clearConfirm:'Alle Spiele löschen?',cleared:'Alles gelöscht!',saved:'Spiel gespeichert!',popupTitle:'Punkte Hinzuf.',popupSub:'Zahlen tippen',toAllLabel:'Für ALLE',confirmEnd:'Spiel wirklich beenden?',confirmYes:'[JA]',confirmNo:'[NEIN]',endGameTitle:'Spiel Beenden?',modeName2:'2 Spieler Modus',modeDesc2:'Individueller Punktestand',modeName3:'3 Spieler Modus',modeDesc3:'Individuell (3 Spieler)',modeName4:'4 Spieler Modus',modeDesc4:'Individuell (4 Spieler)',modeName22:'2v2 Modus',modeDesc22:'Team A vs Team B (Verbundener Score)',selectBtn:'AUSWÄHLEN',selectedBtn:'AUSGEWÄHLT',addPoints:'+ Punkte Hinzuf.',round:'R',total:'Gesamt',matchTotal:'Gesamtpunkte:',winnerLabel:'Gewinner:'},
-
-  pt:{code:'pt',flag:'🇧🇷',name:'Português',native:'Português',dir:'ltr',subtitle:'Rastreador',modeTitle:'Escolher Modo',playersTitle:'Nomes',targetTitle:'Meta',customLabel:'Personalizado:',targetInfo:'Selecionado: Meta {target}',startBtn:'🚀 COMEÇAR',savedTitle:'💾 Salvos',noSaved:'Sem jogos',historyTitle:'📊 Histórico de Rodadas',noHistory:'Sem rodadas',noRounds:'Sem rodadas ainda',undoBtn:'Desfazer',saveBtn:'Salvar',newBtn:'Novo',gameOverTitle:'🏆 Fim!',newGameBtn:'🔄 Nova Partida',viewHistoryBtn:'📜 Ver Histórico',settingsTitle:'Config.',settingsSub:'Preferências Gerais',langLabel:'Idioma',langDesc:'Mudar idioma',soundLabel:'Som',soundDesc:'Sons do jogo',vibrateLabel:'Vibração',vibrateDesc:'Feedback tátil',themeLabel:'Tema',themeDesc:'Esquema de cores',dataTitle:'🗄️ Dados',clearBtn:'🗑️ Limpar Tudo',backBtn:'⬅️ Voltar',langScreenTitle:'Escolher Idioma',player:'Jogador',teamA:'Time A',teamB:'Time B',winner:' Vence!',soundOn:'🔊',soundOff:'🔇',clearConfirm:'Limpar todos os jogos?',cleared:'Tudo limpo!',saved:'Jogo salvo!',popupTitle:'Add Pontos',popupSub:'Toque os números',toAllLabel:'Add a TODOS',confirmEnd:'Tem certeza que quer encerrar?',confirmYes:'[SIM]',confirmNo:'[NÃO]',endGameTitle:'Encerrar Jogo?',modeName2:'Modo 2 Jogadores',modeDesc2:'Pontuação Individual',modeName3:'Modo 3 Jogadores',modeDesc3:'Individual (3 Jogadores)',modeName4:'Modo 4 Jogadores',modeDesc4:'Individual (4 Jogadores)',modeName22:'Modo 2v2',modeDesc22:'Time A vs Time B (Pontuação Vinculada)',selectBtn:'SELECIONAR',selectedBtn:'SELECIONADO',addPoints:'+ Add Pontos',round:'R',total:'Total',matchTotal:'Pontos Totais:',winnerLabel:'Vencedor:'},
-
-  ru:{code:'ru',flag:'🇷🇺',name:'Русский',native:'Русский',dir:'ltr',subtitle:'Счётчик Очков',modeTitle:'Выбрать Режим',playersTitle:'Имена',targetTitle:'Цель',customLabel:'Свой:',targetInfo:'Выбрано: Цель {target}',startBtn:'🚀 СТАРТ',savedTitle:'💾 Сохранённые',noSaved:'Нет игр',historyTitle:'📊 История Раундов',noHistory:'Нет раундов',noRounds:'Нет раундов',undoBtn:'Отмена',saveBtn:'Сохр.',newBtn:'Новая',gameOverTitle:'🏆 Конец!',newGameBtn:'🔄 Новая Игра',viewHistoryBtn:'📜 Смотреть Историю',settingsTitle:'Настройки',settingsSub:'Общие Настройки',langLabel:'Язык',langDesc:'Сменить язык',soundLabel:'Звук',soundDesc:'Звуки игры',vibrateLabel:'Вибрация',vibrateDesc:'Тактильный отклик',themeLabel:'Тема',themeDesc:'Цветовая схема',dataTitle:'🗄️ Данные',clearBtn:'🗑️ Очистить Всё',backBtn:'⬅️ Назад',langScreenTitle:'Выбор Языка',player:'Игрок',teamA:'Команда А',teamB:'Команда Б',winner:' Победил!',soundOn:'🔊',soundOff:'🔇',clearConfirm:'Удалить все игры?',cleared:'Всё удалено!',saved:'Игра сохранена!',popupTitle:'Добавить Очки',popupSub:'Нажмите цифры',toAllLabel:'Всем игрокам',confirmEnd:'Уверены, что хотите закончить?',confirmYes:'[ДА]',confirmNo:'[НЕТ]',endGameTitle:'Закончить Игру?',modeName2:'Режим 2 Игроков',modeDesc2:'Индивидуальный Счёт',modeName3:'Режим 3 Игроков',modeDesc3:'Индивидуальный (3 Игрока)',modeName4:'Режим 4 Игроков',modeDesc4:'Индивидуальный (4 Игрока)',modeName22:'Режим 2на2',modeDesc22:'Команда А vs Команда Б (Связанный Счёт)',selectBtn:'ВЫБРАТЬ',selectedBtn:'ВЫБРАНО',addPoints:'+ Добавить Очки',round:'Р',total:'Итого',matchTotal:'Всего Очков:',winnerLabel:'Победитель:'},
-
-  zh:{code:'zh',flag:'🇨🇳',name:'中文',native:'中文',dir:'ltr',subtitle:'记分器',modeTitle:'选择游戏模式',playersTitle:'玩家名称',targetTitle:'目标分数',customLabel:'自定义:',targetInfo:'已选择: 目标 {target}',startBtn:'🚀 开始游戏',savedTitle:'💾 已保存',noSaved:'没有保存的游戏',historyTitle:'📊 回合历史',noHistory:'暂无回合',noRounds:'暂无回合',undoBtn:'撤销',saveBtn:'保存',newBtn:'新建',gameOverTitle:'🏆 游戏结束!',newGameBtn:'🔄 新比赛',viewHistoryBtn:'📜 查看历史',settingsTitle:'设置',settingsSub:'通用偏好',langLabel:'语言',langDesc:'切换语言',soundLabel:'声音',soundDesc:'游戏音效',vibrateLabel:'震动',vibrateDesc:'触觉反馈',themeLabel:'主题',themeDesc:'配色方案',dataTitle:'🗄️ 数据',clearBtn:'🗑️ 清空全部',backBtn:'⬅️ 返回',langScreenTitle:'选择语言',player:'玩家',teamA:'A队',teamB:'B队',winner:' 获胜!',soundOn:'🔊',soundOff:'🔇',clearConfirm:'删除所有游戏?',cleared:'全部清空!',saved:'游戏已保存!',popupTitle:'添加分数',popupSub:'点击数字输入',toAllLabel:'给所有玩家添加',confirmEnd:'确定要结束此游戏吗?',confirmYes:'[是]',confirmNo:'[否]',endGameTitle:'结束游戏?',modeName2:'2人模式',modeDesc2:'个人分数',modeName3:'3人模式',modeDesc3:'个人(3人)',modeName4:'4人模式',modeDesc4:'个人(4人)',modeName22:'2v2模式',modeDesc22:'A队对B队(关联分数)',selectBtn:'选择',selectedBtn:'已选',addPoints:'+ 添加分数',round:'回',total:'总计',matchTotal:'比赛总分:',winnerLabel:'获胜者:'},
-
-  tr:{code:'tr',flag:'🇹🇷',name:'Türkçe',native:'Türkçe',dir:'ltr',subtitle:'Puan Takibi',modeTitle:'Oyun Modu Seç',playersTitle:'Oyuncu Adları',targetTitle:'Hedef Puan',customLabel:'Özel:',targetInfo:'Seçildi: Hedef {target}',startBtn:'🚀 BAŞLA',savedTitle:'💾 Kayıtlı',noSaved:'Kayıtlı oyun yok',historyTitle:'📊 Tur Geçmişi',noHistory:'Henüz tur yok',noRounds:'Henüz tur yok',undoBtn:'Geri Al',saveBtn:'Kaydet',newBtn:'Yeni',gameOverTitle:'🏆 Oyun Bitti!',newGameBtn:'🔄 Yeni Oyun',viewHistoryBtn:'📜 Geçmişi Gör',settingsTitle:'Ayarlar',settingsSub:'Genel Tercihler',langLabel:'Dil',langDesc:'Dili değiştir',soundLabel:'Ses',soundDesc:'Oyun sesleri',vibrateLabel:'Titreşim',vibrateDesc:'Dokunsal geri bildirim',themeLabel:'Tema',themeDesc:'Renk şeması',dataTitle:'🗄️ Veri',clearBtn:'🗑️ Tümünü Sil',backBtn:'⬅️ Geri',langScreenTitle:'Dil Seç',player:'Oyuncu',teamA:'Takım A',teamB:'Takım B',winner:' Kazandı!',soundOn:'🔊',soundOff:'🔇',clearConfirm:'Tüm oyunları sil?',cleared:'Tümü silindi!',saved:'Oyun kaydedildi!',popupTitle:'Puan Ekle',popupSub:'Sayılara dokun',toAllLabel:'TÜM oyunculara ekle',confirmEnd:'Bu oyunu bitirmek istediğine emin misin?',confirmYes:'[EVET]',confirmNo:'[HAYIR]',endGameTitle:'Oyunu Bitir?',modeName2:'2 Oyuncu Modu',modeDesc2:'Bireysel Puan',modeName3:'3 Oyuncu Modu',modeDesc3:'Bireysel (3 Oyuncu)',modeName4:'4 Oyuncu Modu',modeDesc4:'Bireysel (4 Oyuncu)',modeName22:'2e2 Modu',modeDesc22:'Takım A vs Takım B (Bağlı Puan)',selectBtn:'SEÇ',selectedBtn:'SEÇİLDİ',addPoints:'+ Puan Ekle',round:'T',total:'Toplam',matchTotal:'Toplam Puan:',winnerLabel:'Kazanan:'},
-
-  hi:{code:'hi',flag:'🇮🇳',name:'हिन्दी',native:'हिन्दी',dir:'ltr',subtitle:'स्कोर ट्रैकर',modeTitle:'गेम मोड चुनें',playersTitle:'खिलाड़ी नाम',targetTitle:'लक्ष्य स्कोर',customLabel:'कस्टम:',targetInfo:'चयनित: लक्ष्य {target}',startBtn:'🚀 शुरू करें',savedTitle:'💾 सेव्ड गेम्स',noSaved:'कोई गेम नहीं',historyTitle:'📊 राउंड इतिहास',noHistory:'अभी तक कोई राउंड नहीं',noRounds:'अभी तक कोई राउंड नहीं',undoBtn:'पूर्ववत',saveBtn:'सेव करें',newBtn:'नया',gameOverTitle:'🏆 गेम खत्म!',newGameBtn:'🔄 नया गेम',viewHistoryBtn:'📜 इतिहास देखें',settingsTitle:'सेटिंग्स',settingsSub:'सामान्य प्राथमिकताएं',langLabel:'भाषा',langDesc:'भाषा बदलें',soundLabel:'आवाज़',soundDesc:'गेम की आवाज़ें',vibrateLabel:'कंपन',vibrateDesc:'स्पर्श प्रतिक्रिया',themeLabel:'थीम',themeDesc:'रंग योजना',dataTitle:'🗄️ डेटा',clearBtn:'🗑️ सब हटाएँ',backBtn:'⬅️ वापस',langScreenTitle:'भाषा चुनें',player:'खिलाड़ी',teamA:'टीम A',teamB:'टीम B',winner:' जीता!',soundOn:'🔊',soundOff:'🔇',clearConfirm:'सभी गेम हटाएँ?',cleared:'सब हटा दिया!',saved:'गेम सेव हो गया!',popupTitle:'अंक जोड़ें',popupSub:'नंबर दबाएँ',toAllLabel:'सभी खिलाड़ियों को जोड़ें',confirmEnd:'क्या आप वाकई इस गेम को समाप्त करना चाहते हैं?',confirmYes:'[हाँ]',confirmNo:'[नहीं]',endGameTitle:'गेम समाप्त करें?',modeName2:'2 खिलाड़ी मोड',modeDesc2:'व्यक्तिगत स्कोर',modeName3:'3 खिलाड़ी मोड',modeDesc3:'व्यक्तिगत (3 खिलाड़ी)',modeName4:'4 खिलाड़ी मोड',modeDesc4:'व्यक्तिगत (4 खिलाड़ी)',modeName22:'2बनाम2 मोड',modeDesc22:'टीम A बनाम टीम B (लिंक्ड स्कोर)',selectBtn:'चुनें',selectedBtn:'चयनित',addPoints:'+ अंक जोड़ें',round:'र',total:'कुल',matchTotal:'मैच कुल अंक:',winnerLabel:'विजेता:'}
+const T={
+  en:{code:'en',flag:'🇺🇸',name:'English',subtitle:'Score Tracker',modeTitle:'👥 Game Mode',playersTitle:'✏️ Player Names',targetTitle:'🎯 Target Score',customLabel:'Custom:',startBtn:'🚀 START GAME',savedTitle:'💾 Saved Games',noSaved:'No saved games',historyTitle:'📜 History',noHistory:'No rounds yet',undoBtn:'↩️ Undo',saveBtn:'💾 Save',newBtn:'🔄 New',gameOverTitle:'Game Over!',newGameBtn:'🎮 New Game',settingsTitle:'⚙️ Settings',langLabel:'🌐 Language',langDesc:'Change language',soundLabel:'🔊 Sound',soundDesc:'Game sounds',vibrateLabel:'📳 Vibration',vibrateDesc:'Haptic feedback',themeLabel:'🎨 Theme',themeDesc:'Color scheme',dataTitle:'🗄️ Data',clearBtn:'🗑️ Clear All Games',backBtn:'⬅️ Back',langScreenTitle:'🌐 Select Language',player:'Player',team:'Team',teamMode:'2v2 Teams',winner:' Wins! 🎉',soundOn:'🔊',soundOff:'🔇',clearConfirm:'Delete all saved games?',cleared:'All games deleted!',saved:'Game Saved!',popupTitle:'Add Points',popupSub:'Tap numbers to enter',toAllLabel:'Add to ALL players'},
+  ar:{code:'ar',flag:'🇸🇦',name:'العربية',subtitle:'متتبع النقاط',modeTitle:'👥 وضع اللعبة',playersTitle:'✏️ الأسماء',targetTitle:'🎯 الهدف',customLabel:'مخصص:',startBtn:'🚀 ابدأ',savedTitle:'💾 المحفوظة',noSaved:'لا توجد ألعاب',historyTitle:'📜 السجل',noHistory:'لا توجد جولات',undoBtn:'↩️ تراجع',saveBtn:'💾 حفظ',newBtn:'🔄 جديد',gameOverTitle:'انتهت!',newGameBtn:'🎮 جديدة',settingsTitle:'⚙️ الإعدادات',langLabel:'🌐 اللغة',langDesc:'تغيير اللغة',soundLabel:'🔊 الصوت',soundDesc:'أصوات اللعبة',vibrateLabel:'📳 الاهتزاز',vibrateDesc:'ردود فعل لمسية',themeLabel:'🎨 السمة',themeDesc:'نظام الألوان',dataTitle:'🗄️ البيانات',clearBtn:'🗑️ مسح جميع الألعاب',backBtn:'⬅️ رجوع',langScreenTitle:'🌐 اختيار اللغة',player:'اللاعب',team:'الفريق',teamMode:'فريق ٢ض٢',winner:' فاز! 🎉',soundOn:'🔊',soundOff:'🔇',clearConfirm:'مسح جميع الألعاب؟',cleared:'تم المسح!',saved:'تم الحفظ!',popupTitle:'إضافة نقاط',popupSub:'اضغط الأرقام',toAllLabel:'لجميع اللاعبين'},
+  ku:{code:'ku',flag:'🇮🇶',name:'کوردی',subtitle:'ژمێریاری نمرە',modeTitle:'👥 شێوازی یاری',playersTitle:'✏️ ناوی یاریزانان',targetTitle:'🎯 ئامانجی نمرە',customLabel:'تایبەت:',startBtn:'🚀 دەستپێکردن',savedTitle:'💾 یاریە پاشەکەوتکراوەکان',noSaved:'هیچ یاریەک پاشەکەوت نەکراوە',historyTitle:'📜 مێژوو',noHistory:'هێشتا هیچ گەڕێک نییە',undoBtn:'↩️ گەڕانەوە',saveBtn:'💾 پاشەکەوت',newBtn:'🔄 یاری نوێ',gameOverTitle:'یاری تەواو بوو!',newGameBtn:'🎮 یاری نوێ',settingsTitle:'⚙️ ڕێکخستنەکان',langLabel:'🌐 زمان',langDesc:'گۆڕینی زمان',soundLabel:'🔊 دەنگ',soundDesc:'دەنگی یاری',vibrateLabel:'📳 هەژان',vibrateDesc:'هەژان لە کاتی کردارەکان',themeLabel:'🎨 ڕەنگ',themeDesc:'ڕەنگی بەرنامە',dataTitle:'🗄️ زانیاری',clearBtn:'🗑️ سڕینەوەی هەموو یاریەکان',backBtn:'⬅️ گەڕانەوە',langScreenTitle:'🌐 هەڵبژاردنی زمان',player:'یاریزان',team:'تێم',teamMode:'تێمی ٢دژی٢',winner:' بردنەوە! 🎉',soundOn:'🔊',soundOff:'🔇',clearConfirm:'دڵنیای لە سڕینەوەی هەموو یاریەکان؟',cleared:'هەموو یاریەکان سڕانەوە!',saved:'یاری پاشەکەوت کرا!',popupTitle:'زیادکردنی نمرە',popupSub:'ژمارەکان بنووسە',toAllLabel:'بۆ هەموو یاریزانەکان'}
 };
+const themes={green:{bg:'#0f1f0f'},dark:{bg:'#121212'},blue:{bg:'#0a1929'},red:{bg:'#1a0a0a'}};
+let S=localStorage.getItem('dp_sound')!=='false',V=localStorage.getItem('dp_vibrate')!=='false',H=localStorage.getItem('dp_theme')||'green',M=2,P=[],sc=[],tg=200,R=[],GO=false,popupPlayer=-1,popupValue=0,popupToAll=false;
+let previousScreen='setup';
+const AC=new(window.AudioContext||window.webkitAudioContext)();
 
-// ===== THEMES =====
-var TH = {
-  green:{bg:'#0a1f0a',header:'linear-gradient(180deg,#0d3d18 0%,#0a2e12 100%)',accent:'#f4a261'},
-  dark:{bg:'#121212',header:'linear-gradient(180deg,#1a1a1a 0%,#0d0d0d 100%)',accent:'#bb86fc'},
-  blue:{bg:'#0a1929',header:'linear-gradient(180deg,#0d2847 0%,#0a1f3a 100%)',accent:'#4fc3f7'},
-  red:{bg:'#1a0a0a',header:'linear-gradient(180deg,#3d0d0d 0%,#2a0a0a 100%)',accent:'#ff8a65'}
-};
+function getLang(){return localStorage.getItem('dp_lang')||'en'}
+function setLang(code){localStorage.setItem('dp_lang',code)}
+function t(){return T[getLang()]||T['en']}
 
-// ===== STATE =====
-var SOUND = localStorage.getItem('dp_sound') !== 'false';
-var VIBRATE = localStorage.getItem('dp_vibrate') !== 'false';
-var THEME = localStorage.getItem('dp_theme') || 'green';
-var MODE = 2;
-var PLAYERS = [];
-var SCORES = [];
-var TARGET = 200;
-var ROUNDS = [];
-var GAME_OVER = false;
-var POPUP_PLAYER = -1;
-var POPUP_VALUE = 0;
-var POPUP_TOALL = false;
-var TEAM_MODE = false;
-var PREV_SCREEN = 'setup';
-
-// ===== HELPERS =====
-function getLang() { return localStorage.getItem('dp_lang') || 'en'; }
-function setLang(code) { localStorage.setItem('dp_lang', code); }
-function txt() { return TX[getLang()] || TX['en']; }
-
-function playBeep(freq, dur, vol) {
-  if (!SOUND) return;
-  try {
-    var ctx = new (window.AudioContext || window.webkitAudioContext)();
-    var osc = ctx.createOscillator();
-    var gain = ctx.createGain();
-    osc.connect(gain);
-    gain.connect(ctx.destination);
-    osc.frequency.value = freq;
-    gain.gain.value = vol || 0.1;
-    osc.start();
-    osc.stop(ctx.currentTime + dur);
-  } catch(e) {}
-}
-
-function playSound(type) {
-  if (type === 'add') playBeep(600, 0.1, 0.12);
-  else if (type === 'win') { playBeep(523, 0.2, 0.15); setTimeout(function(){playBeep(784, 0.2, 0.15);}, 150); setTimeout(function(){playBeep(1047, 0.3, 0.15);}, 300); }
-  else if (type === 'undo') playBeep(350, 0.08, 0.1);
-  else if (type === 'err') playBeep(180, 0.15, 0.12);
-}
-
-function doVibrate(p) { if (VIBRATE && navigator.vibrate) navigator.vibrate(p); }
-
-function applyTheme(n) {
-  var t = TH[n] || TH.green;
-  document.body.style.background = t.bg;
-  var header = document.querySelector('.header');
-  if (header) header.style.background = t.header;
-}
-
-function updateDir() {
-  var code = getLang();
-  var htmlEl = document.getElementById('htmlRoot');
-  var t = TX[code] || TX['en'];
-  if (htmlEl) htmlEl.dir = t.dir || 'ltr';
-}
-
-function showScreen(name) {
-  var current = document.querySelector('.screen.active');
-  if (current && current.id) {
-    var id = current.id;
-    if (id !== 'settingsScreen' && id !== 'langScreen') {
-      PREV_SCREEN = id.replace('Screen', '');
-    }
+function play(sound){if(!S)return;try{const o=AC.createOscillator(),g=AC.createGain();o.connect(g);g.connect(AC.destination);if(sound==='add'){o.frequency.value=600;g.gain.value=0.12;o.start();o.stop(AC.currentTime+0.1)}else if(sound==='win'){o.frequency.value=523;g.gain.value=0.15;o.start();o.frequency.exponentialRampToValueAtTime(784,AC.currentTime+0.15);o.stop(AC.currentTime+0.2);setTimeout(()=>{const o2=AC.createOscillator(),g2=AC.createGain();o2.connect(g2);g2.connect(AC.destination);o2.frequency.value=1047;g2.gain.value=0.15;o2.start();o2.stop(AC.currentTime+0.3)},180)}else if(sound==='undo'){o.frequency.value=350;g.gain.value=0.1;o.start();o.stop(AC.currentTime+0.08)}else if(sound==='err'){o.frequency.value=180;g.gain.value=0.12;o.start();o.stop(AC.currentTime+0.15)}}catch(e){}}
+function vb(p){if(V&&navigator.vibrate)navigator.vibrate(p)}
+function applyTheme(n){document.body.style.background=themes[n].bg}
+function updateDirection(){
+  const code=getLang();
+  const rtlLangs=['ar','ku'];
+  const htmlEl=document.getElementById('htmlRoot');
+  if(htmlEl){
+    if(rtlLangs.indexOf(code)!==-1){htmlEl.dir='rtl';}
+    else{htmlEl.dir='ltr';}
   }
-  document.querySelectorAll('.screen').forEach(function(s) { s.classList.remove('active'); });
-  var target = document.getElementById(name + 'Screen');
-  if (target) target.classList.add('active');
-  updateSettingsBtn();
 }
 
-function handleSettingsClick() {
-  var isLang = document.getElementById('langScreen').classList.contains('active');
-  var isSet = document.getElementById('settingsScreen').classList.contains('active');
-  if (isLang) { closeLangScreen(); return; }
-  if (isSet) { closeSettings(); return; }
+function showScreen(name){
+  const current=document.querySelector('.screen.active');
+  if(current && current.id && !current.id.includes('settings') && !current.id.includes('lang')){
+    previousScreen=current.id.replace('Screen','');
+  }
+  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
+  const target=document.getElementById(name+'Screen');
+  if(target) target.classList.add('active');
+  updateNavBtn();
+}
+
+function handleNavBtn(){
+  const langActive=document.getElementById('langScreen').classList.contains('active');
+  if(langActive){closeLangScreen();return;}
+  const settingsActive=document.getElementById('settingsScreen').classList.contains('active');
+  if(settingsActive){closeSettings();return;}
   openSettings();
 }
 
-function updateSettingsBtn() {
-  var btn = document.getElementById('settingsTopBtn');
-  if (!btn) return;
-  var isLang = document.getElementById('langScreen').classList.contains('active');
-  var isSet = document.getElementById('settingsScreen').classList.contains('active');
-  btn.textContent = (isLang || isSet) ? '✕' : '⚙️';
+function updateNavBtn(){
+  const btn=document.getElementById('navBtn');
+  if(!btn) return;
+  const langActive=document.getElementById('langScreen').classList.contains('active');
+  const settingsActive=document.getElementById('settingsScreen').classList.contains('active');
+  if(langActive||settingsActive){btn.textContent='⬅️';}
+  else{btn.textContent='⚙️';}
 }
 
-function updateAllText() {
-  var tx = txt();
-  var map = {
-    subtitle: tx.subtitle,
-    modeTitle: tx.modeTitle,
-    playersTitle: tx.playersTitle,
-    targetTitle: tx.targetTitle,
-    customLabel: tx.customLabel,
-    startBtn: tx.startBtn,
-    savedTitle: tx.savedTitle,
-    historyTitle: tx.historyTitle,
-    undoBtnText: tx.undoBtn,
-    saveBtnText: tx.saveBtn,
-    newBtnText: tx.newBtn,
-    settingsTitle: tx.settingsTitle,
-    settingsSub: tx.settingsSub,
-    langLabel: tx.langLabel,
-    langDesc: tx.langDesc,
-    soundLabel: tx.soundLabel,
-    soundDesc: tx.soundDesc,
-    vibrateLabel: tx.vibrateLabel,
-    vibrateDesc: tx.vibrateDesc,
-    themeLabel: tx.themeLabel,
-    themeDesc: tx.themeDesc,
-    dataTitle: tx.dataTitle,
-    clearBtn: tx.clearBtn,
-    backBtn: tx.backBtn,
-    langScreenTitle: tx.langScreenTitle,
-    langBackBtn: tx.backBtn,
-    popupTitle: tx.popupTitle,
-    popupSub: tx.popupSub,
-    toAllLabel: tx.toAllLabel,
-    gameOverTitle: tx.gameOverTitle,
-    newGameBtn: tx.newGameBtn,
-    viewHistoryBtn: tx.viewHistoryBtn,
-    confirmTitle: tx.endGameTitle,
-    confirmText: tx.confirmEnd,
-    noSaved: tx.noSaved,
-    noRounds: tx.noRounds,
-    modeName2: tx.modeName2,
-    modeDesc2: tx.modeDesc2,
-    modeName3: tx.modeName3,
-    modeDesc3: tx.modeDesc3,
-    modeName4: tx.modeName4,
-    modeDesc4: tx.modeDesc4,
-    modeName22: tx.modeName22,
-    modeDesc22: tx.modeDesc22
+function updateAllText(){
+  const tx=t();
+  const updateEl=function(id,text){
+    const el=document.getElementById(id);
+    if(el) el.textContent=text;
   };
-  for (var key in map) {
-    var el = document.getElementById(key);
-    if (el) el.textContent = map[key];
-  }
-
-  // Update target info
-  var ti = document.getElementById('targetInfo');
-  if (ti) ti.textContent = tx.targetInfo.replace('{target}', TARGET);
-
-  // Update lang badge
-  var lb = document.getElementById('langBadge');
-  if (lb) lb.textContent = tx.code.toUpperCase() + ' ' + tx.flag;
+  updateEl('subtitle',tx.subtitle);
+  updateEl('modeTitle',tx.modeTitle);
+  updateEl('playersTitle',tx.playersTitle);
+  updateEl('targetTitle',tx.targetTitle);
+  updateEl('customLabel',tx.customLabel);
+  updateEl('startBtn',tx.startBtn);
+  updateEl('savedTitle',tx.savedTitle);
+  updateEl('historyTitle',tx.historyTitle);
+  updateEl('undoBtn',tx.undoBtn);
+  updateEl('saveBtn',tx.saveBtn);
+  updateEl('newBtn',tx.newBtn);
+  updateEl('settingsTitle',tx.settingsTitle);
+  updateEl('langLabel',tx.langLabel);
+  updateEl('langDesc',tx.langDesc);
+  updateEl('soundLabel',tx.soundLabel);
+  updateEl('soundDesc',tx.soundDesc);
+  updateEl('vibrateLabel',tx.vibrateLabel);
+  updateEl('vibrateDesc',tx.vibrateDesc);
+  updateEl('themeLabel',tx.themeLabel);
+  updateEl('themeDesc',tx.themeDesc);
+  updateEl('dataTitle',tx.dataTitle);
+  updateEl('clearBtn',tx.clearBtn);
+  updateEl('backBtn',tx.backBtn);
+  updateEl('langScreenTitle',tx.langScreenTitle);
+  updateEl('langBackBtn',tx.backBtn);
+  updateEl('popupTitle',tx.popupTitle);
+  updateEl('popupSub',tx.popupSub);
+  updateEl('toAllLabel',tx.toAllLabel);
+  updateEl('gameOverTitle',tx.gameOverTitle);
+  updateEl('newGameBtn',tx.newGameBtn);
+  updateEl('mode2','2 '+tx.player);
+  updateEl('mode3','3 '+tx.player);
+  updateEl('mode4','4 '+tx.player);
+  updateEl('mode22',tx.teamMode);
+  updateEl('noSaved',tx.noSaved);
+  updateEl('noHistory',tx.noHistory);
 }
 
-function updateUI() {
-  var tx = txt();
-  var st = document.getElementById('soundToggle');
-  var vt = document.getElementById('vibrateToggle');
-  if (st) st.classList.toggle('active', SOUND);
-  if (vt) vt.classList.toggle('active', VIBRATE);
+function updateUI(){
+  const tx=t();
+  const soundBtn=document.getElementById('soundBtn');
+  const soundToggle=document.getElementById('soundToggle');
+  const vibrateToggle=document.getElementById('vibrateToggle');
+  const langBtn=document.getElementById('langBtn');
+  if(soundBtn) soundBtn.textContent=S?tx.soundOn:tx.soundOff;
+  if(soundToggle) soundToggle.classList.toggle('active',S);
+  if(vibrateToggle) vibrateToggle.classList.toggle('active',V);
+  if(langBtn) langBtn.textContent=tx.code.toUpperCase()+' '+tx.flag;
 }
 
-function openSettings() {
+function openSettings(){
   showScreen('settings');
-  var ts = document.getElementById('themeSelect');
-  if (ts) ts.value = THEME;
+  const ts=document.getElementById('themeSelect');
+  if(ts) ts.value=H;
   updateAllText();
   updateUI();
-  updateSettingsBtn();
+  updateNavBtn();
 }
 
-function closeSettings() {
-  if (PREV_SCREEN === 'game' && PLAYERS.length > 0) {
+function closeSettings(){
+  if(previousScreen==='game' && P.length>0){
     showScreen('game');
   } else {
     showScreen('setup');
     loadSaves();
   }
-  updateSettingsBtn();
+  updateNavBtn();
 }
 
-function openLangScreen() {
+function openLangScreen(){
   showScreen('lang');
   buildLangList();
   updateAllText();
   updateUI();
-  updateSettingsBtn();
+  updateNavBtn();
 }
 
-function closeLangScreen() {
+function closeLangScreen(){
   showScreen('settings');
   updateAllText();
   updateUI();
-  updateSettingsBtn();
+  updateNavBtn();
 }
 
-function selectLang(code) {
+function selectLang(code){
   setLang(code);
-  updateDir();
+  updateDirection();
   updateAllText();
   updateUI();
   buildLangList();
-  if (document.getElementById('setupScreen').classList.contains('active')) {
+  if(document.getElementById('setupScreen').classList.contains('active')){
     loadSaves();
-    refreshPlayerInputs();
   }
-  updateSettingsBtn();
+  updateNavBtn();
 }
 
-function buildLangList() {
-  var list = document.getElementById('langList');
-  if (!list) return;
-  var currentLang = getLang();
-  var h = '';
-  for (var key in TX) {
-    var lang = TX[key];
-    var isActive = lang.code === currentLang;
-    h += '<div class="lang-item ' + (isActive ? 'active' : '') + '" onclick="selectLang('' + lang.code + '')">';
-    h += '<span class="lang-flag">' + lang.flag + '</span>';
-    h += '<div class="lang-info"><div class="lang-name">' + lang.name + '</div><div class="lang-native">' + lang.native + '</div></div>';
-    h += '<div class="lang-check">✓</div></div>';
-  }
-  list.innerHTML = h;
+function buildLangList(){
+  const list=document.getElementById('langList');
+  if(!list) return;
+  const currentLang=getLang();
+  let h='';
+  Object.values(T).forEach(lang=>{
+    const isActive=lang.code===currentLang;
+    h+='<div class="lang-item '+(isActive?'active':'')+'" onclick="selectLang(\''+lang.code+'\')"><span class="lang-flag">'+lang.flag+'</span><span class="lang-name">'+lang.name+'</span></div>';
+  });
+  list.innerHTML=h;
 }
 
-// ===== MODE SELECT =====
-function selectMode(m) {
-  MODE = m;
-  TEAM_MODE = (m === 22);
-  document.querySelectorAll('.mode-card').forEach(function(c) { c.classList.remove('selected'); });
-  document.querySelectorAll('.mode-btn-select').forEach(function(b) { b.textContent = txt().selectBtn; });
-  var card = document.getElementById('modeCard' + m);
-  var btn = document.getElementById('modeBtn' + m);
-  if (card) card.classList.add('selected');
-  if (btn) btn.textContent = txt().selectedBtn;
+function setMode(m){
+  M=m;
+  document.querySelectorAll('.mode-btn').forEach(b=>b.classList.remove('active'));
+  const btn=document.getElementById('mode'+m);
+  if(btn) btn.classList.add('active');
   refreshPlayerInputs();
 }
 
-function refreshPlayerInputs() {
-  var c = document.getElementById('playerInputs');
-  if (!c) return;
-  var tx = txt();
-  var h = '';
-  if (TEAM_MODE) {
-    var teamAColor = '#4fc3f7';
-    var teamBColor = '#ff8a65';
-    h += '<div class="player-input-card"><div class="player-avatar" style="background:' + teamAColor + ';color:#000">P1</div><input type="text" id="p1" value="' + tx.player + ' 1" placeholder="' + tx.player + ' 1"></div>';
-    h += '<div class="player-input-card"><div class="player-avatar" style="background:' + teamAColor + ';color:#000">P2</div><input type="text" id="p2" value="' + tx.player + ' 2" placeholder="' + tx.player + ' 2"></div>';
-    h += '<div class="player-input-card"><div class="player-avatar" style="background:' + teamBColor + ';color:#fff">P3</div><input type="text" id="p3" value="' + tx.player + ' 3" placeholder="' + tx.player + ' 3"></div>';
-    h += '<div class="player-input-card"><div class="player-avatar" style="background:' + teamBColor + ';color:#fff">P4</div><input type="text" id="p4" value="' + tx.player + ' 4" placeholder="' + tx.player + ' 4"></div>';
-  } else {
-    var colors = ['#4fc3f7', '#ff8a65', '#81c784', '#ba68c8'];
-    for (var i = 1; i <= MODE; i++) {
-      var tc = (i === 4) ? '#fff' : '#000';
-      h += '<div class="player-input-card"><div class="player-avatar" style="background:' + colors[i-1] + ';color:' + tc + '">P' + i + '</div><input type="text" id="p' + i + '" value="' + tx.player + ' ' + i + '" placeholder="' + tx.player + ' ' + i + '"></div>';
+function refreshPlayerInputs(){
+  const c=document.getElementById('playerInputs');
+  if(!c) return;
+  const tx=t();
+  let h='';
+  const colors=['#4fc3f7','#ff8a65','#81c784','#ba68c8'];
+  if(M===22){
+    h+='<div style="text-align:center;color:#f4a261;font-size:13px;font-weight:600;margin-bottom:8px">'+tx.teamMode+'</div>';
+    for(let i=1;i<=4;i++){
+      const tc=i===4?'#fff':'#000';
+      const teamNum=i<=2?1:2;
+      const teamLabel=tx.team+' '+teamNum;
+      h+='<div class="player-in"><div class="icon" style="background:'+colors[i-1]+';color:'+tc+'">P'+i+'</div><input type="text" id="p'+i+'" value="'+teamLabel+' - '+tx.player+' '+i+'" placeholder="'+teamLabel+' - '+tx.player+' '+i+'"></div>';
+    }
+  }else{
+    for(let i=1;i<=M;i++){
+      const tc=i===4?'#fff':'#000';
+      h+='<div class="player-in"><div class="icon" style="background:'+colors[i-1]+';color:'+tc+'">P'+i+'</div><input type="text" id="p'+i+'" value="'+tx.player+' '+i+'" placeholder="'+tx.player+' '+i+'"></div>';
     }
   }
-  c.innerHTML = h;
+  c.innerHTML=h;
 }
 
-// ===== TARGET SELECT =====
-function setTarget(val) {
-  document.querySelectorAll('.target-btn').forEach(function(b) { b.classList.remove('selected'); });
-  if (val === 'custom') {
-    document.getElementById('targetCustomRow').style.display = 'flex';
-    var cti = document.getElementById('customTargetInput');
-    TARGET = cti ? (parseInt(cti.value) || 200) : 200;
-  } else {
-    TARGET = val;
-    document.querySelectorAll('.target-btn').forEach(function(b) {
-      if (parseInt(b.getAttribute('data-val')) === val) b.classList.add('selected');
+function setTarget(val){
+  document.querySelectorAll('.target-q-btn').forEach(b=>b.classList.remove('active'));
+  if(val==='custom'){
+    const tc=document.getElementById('targetCustom');
+    const cb=document.querySelector('.target-q-btn[data-val="custom"]');
+    if(tc) tc.style.display='flex';
+    if(cb) cb.classList.add('active');
+    const cti=document.getElementById('customTarget');
+    tg=cti?(parseInt(cti.value)||200):200;
+  }else{
+    tg=val;
+    document.querySelectorAll('.target-q-btn').forEach(b=>{
+      if(parseInt(b.dataset.val)===val)b.classList.add('active');
     });
-    document.getElementById('targetCustomRow').style.display = 'none';
+    const tc=document.getElementById('targetCustom');
+    if(tc) tc.style.display='none';
   }
-  var tx = txt();
-  var ti = document.getElementById('targetInfo');
-  if (ti) ti.textContent = tx.targetInfo.replace('{target}', TARGET);
 }
 
-function updateCustomTarget() {
-  TARGET = parseInt(document.getElementById('customTargetInput').value) || 200;
-  var tx = txt();
-  var ti = document.getElementById('targetInfo');
-  if (ti) ti.textContent = tx.targetInfo.replace('{target}', TARGET);
-}
+function updateCustomTarget(){tg=parseInt(document.getElementById('customTarget').value)||200}
 
-// ===== START GAME =====
-function startGame() {
-  PLAYERS = [];
-  var tx = txt();
-  var count = TEAM_MODE ? 4 : MODE;
-  for (var i = 1; i <= count; i++) {
-    var inp = document.getElementById('p' + i);
-    var val = inp ? inp.value.trim() : '';
-    PLAYERS.push(val || tx.player + ' ' + i);
+function startGame(){
+  P=[];
+  const tx=t();
+  const actualPlayers=M===22?4:M;
+  for(let i=1;i<=actualPlayers;i++){
+    const inp=document.getElementById('p'+i);
+    const val=inp?inp.value.trim():'';
+    P.push(val||tx.player+' '+i);
   }
-  SCORES = new Array(TEAM_MODE ? 2 : MODE).fill(0);
-  ROUNDS = [];
-  GAME_OVER = false;
+  sc=new Array(actualPlayers).fill(0);
+  R=[];
+  GO=false;
   showScreen('game');
-  buildScoreArea();
-  renderRoundTable();
-  playSound('add');
-  doVibrate(30);
-  updateSettingsBtn();
+  buildScoreBoard();
+  updateDisp();
+  play('add');
+  vb(30);
+  updateNavBtn();
 }
 
-// ===== BUILD SCORE AREA =====
-function buildScoreArea() {
-  var area = document.getElementById('scoreArea');
-  if (!area) return;
-  var tx = txt();
-  var h = '';
-
-  if (TEAM_MODE) {
-    // Team mode (Photo 2)
-    h += '<div class="team-grid">';
-    h += '<div class="team-card team-a" id="card0">';
-    h += '<div class="team-label">' + tx.teamA + '</div>';
-    h += '<div class="team-members">' + PLAYERS[0] + ' & ' + PLAYERS[1] + '</div>';
-    h += '<div class="team-score" id="score0">0</div>';
-    h += '<div class="team-progress-bg"><div class="team-progress-fill" id="bar0" style="width:0%"></div></div>';
-    h += '<div class="team-progress-text" id="progress0">0% (0/' + TARGET + ')</div>';
-    h += '<button class="team-add-btn" onclick="openPopup(0)"><span>+</span> ' + tx.addPoints + '</button>';
-    h += '</div>';
-    h += '<div class="team-card team-b" id="card1">';
-    h += '<div class="team-label">' + tx.teamB + '</div>';
-    h += '<div class="team-members">' + PLAYERS[2] + ' & ' + PLAYERS[3] + '</div>';
-    h += '<div class="team-score" id="score1">0</div>';
-    h += '<div class="team-progress-bg"><div class="team-progress-fill" id="bar1" style="width:0%"></div></div>';
-    h += '<div class="team-progress-text" id="progress1">0% (0/' + TARGET + ')</div>';
-    h += '<button class="team-add-btn" onclick="openPopup(1)"><span>+</span> ' + tx.addPoints + '</button>';
-    h += '</div>';
-    h += '</div>';
-  } else {
-    // Individual mode (Photo 5)
-    var cols = MODE <= 2 ? 'cols-2' : (MODE === 3 ? 'cols-2' : 'cols-2');
-    h += '<div class="score-grid ' + cols + '">';
-    var colors = ['#4fc3f7', '#ff8a65', '#81c784', '#ba68c8'];
-    var tc = ['#000', '#000', '#000', '#fff'];
-    for (var i = 0; i < MODE; i++) {
-      h += '<div class="score-player-card" id="card' + i + '">';
-      h += '<div class="player-header">';
-      h += '<div class="player-avatar-sm" style="background:' + colors[i] + ';color:' + tc[i] + '">P' + (i+1) + '</div>';
-      h += '<div class="player-info"><div class="player-name" id="pname' + i + '">' + PLAYERS[i] + '</div><div class="player-target">Target: ' + TARGET + '</div></div>';
-      h += '</div>';
-      h += '<div class="score-big" id="score' + i + '">0</div>';
-      h += '<div class="progress-bar-bg"><div class="progress-bar-fill" id="bar' + i + '" style="width:0%"></div></div>';
-      h += '<div class="progress-text" id="progress' + i + '">0% (0/' + TARGET + ')</div>';
-      h += '<button class="add-points-btn" onclick="openPopup(' + i + ')"><span>+</span> ' + tx.addPoints + '</button>';
-      h += '</div>';
+function buildScoreBoard(){
+  const b=document.getElementById('scoreBoard');
+  if(!b) return;
+  let h='';
+  if(M===22){
+    const tx=t();
+    for(let t=0;t<2;t++){
+      const teamNames=P[t*2]+' & '+P[t*2+1];
+      h+='<div class="score-c" id="card'+t+'"><div class="tn" id="teamName'+t+'">'+tx.team+' '+(t+1)+': '+teamNames+'</div><div class="sc-wrap"><div class="sc" id="score'+t+'">0</div><div class="tg" id="target'+t+'">/'+tg+'</div></div><div class="plus-btn" onclick="openPopup('+t+')">+</div><div class="bar" id="bar'+t+'" style="width:0%"></div></div>';
     }
-    h += '</div>';
+  }else{
+    for(let i=0;i<M;i++){
+      h+='<div class="score-c" id="card'+i+'"><div class="tn" id="teamName'+i+'">'+P[i]+'</div><div class="sc-wrap"><div class="sc" id="score'+i+'">0</div><div class="tg" id="target'+i+'">/'+tg+'</div></div><div class="plus-btn" onclick="openPopup('+i+')">+</div><div class="bar" id="bar'+i+'" style="width:0%"></div></div>';
+    }
   }
-  area.innerHTML = h;
+  b.innerHTML=h;
 }
 
-// ===== ROUND TABLE (Photo 6) =====
-function renderRoundTable() {
-  var container = document.getElementById('roundTableContainer');
-  var tx = txt();
-  if (ROUNDS.length === 0) {
-    container.innerHTML = '<div class="history-empty" id="noRounds">' + tx.noRounds + '</div>';
+function openPopup(p){
+  if(GO)return;
+  popupPlayer=p;
+  popupValue=0;
+  popupToAll=false;
+  document.getElementById('popupNum').textContent='0';
+  document.getElementById('pointPopup').classList.add('show');
+  document.getElementById('toAllRow').style.display=(M>2||M===22)?'flex':'none';
+  document.getElementById('toAllCheck').checked=false;
+  play('add');
+}
+
+function closePopup(){
+  document.getElementById('pointPopup').classList.remove('show');
+  popupValue=0;
+}
+
+function numPress(n){
+  if(popupValue<9999){
+    popupValue=popupValue*10+n;
+    document.getElementById('popupNum').textContent=popupValue;
+  }
+  play('add');
+}
+
+function numBack(){
+  popupValue=Math.floor(popupValue/10);
+  document.getElementById('popupNum').textContent=popupValue||'0';
+  play('undo');
+}
+
+function numClear(){
+  popupValue=0;
+  document.getElementById('popupNum').textContent='0';
+  play('undo');
+}
+
+function toggleToAll(){
+  popupToAll=document.getElementById('toAllCheck').checked;
+}
+
+function numOK(){
+  if(popupValue===0){
+    play('err');
+    vb([50,30,50]);
     return;
   }
-
-  var count = TEAM_MODE ? 2 : MODE;
-  var h = '<table class="round-table">';
-  h += '<thead><tr><th>' + tx.round + '</th>';
-  if (TEAM_MODE) {
-    h += '<th>' + tx.teamA + '</th><th>' + tx.teamB + '</th>';
-  } else {
-    for (var i = 0; i < MODE; i++) {
-      h += '<th>' + PLAYERS[i] + '</th>';
+  const round={};
+  if(M===22){
+    const teamSize=2;
+    const teamStart=popupPlayer*teamSize;
+    for(let i=0;i<4;i++){
+      const val=(popupToAll||(i>=teamStart&&i<teamStart+teamSize))?popupValue:0;
+      sc[i]+=val;
+      round['p'+i]=val;
+    }
+  }else{
+    for(let i=0;i<M;i++){
+      const val=(popupToAll||i===popupPlayer)?popupValue:0;
+      sc[i]+=val;
+      round['p'+i]=val;
     }
   }
-  h += '<th>' + tx.total + '</th></tr></thead><tbody>';
-
-  for (var r = 0; r < ROUNDS.length; r++) {
-    h += '<tr><td class="round-num">' + tx.round + (r + 1) + '</td>';
-    var roundTotal = 0;
-    if (TEAM_MODE) {
-      var t0 = ROUNDS[r]['t0'] || 0;
-      var t1 = ROUNDS[r]['t1'] || 0;
-      h += '<td>+' + t0 + '</td><td>+' + t1 + '</td>';
-      roundTotal = t0 + t1;
-    } else {
-      for (var i = 0; i < MODE; i++) {
-        var val = ROUNDS[r]['p' + i] || 0;
-        h += '<td>+' + val + '</td>';
-        roundTotal += val;
-      }
-    }
-    h += '<td style="color:#f4a261;font-weight:800">' + roundTotal + '</td></tr>';
-  }
-
-  // Total row
-  h += '<tr class="total-row"><td>' + tx.total + '</td>';
-  for (var i = 0; i < count; i++) {
-    h += '<td>' + SCORES[i] + '</td>';
-  }
-  h += '<td style="color:#f4a261">' + SCORES.reduce(function(a,b){return a+b;}, 0) + '</td></tr>';
-  h += '</tbody></table>';
-  container.innerHTML = h;
-}
-
-// ===== POPUP =====
-function openPopup(p) {
-  if (GAME_OVER) return;
-  POPUP_PLAYER = p;
-  POPUP_VALUE = 0;
-  POPUP_TOALL = false;
-  document.getElementById('popupNum').textContent = '0';
-  document.getElementById('pointPopup').classList.add('show');
-
-  var tx = txt();
-  var pname = '';
-  if (TEAM_MODE) {
-    pname = (p === 0) ? tx.teamA : tx.teamB;
-  } else {
-    pname = PLAYERS[p];
-  }
-  document.getElementById('popupPlayerName').textContent = pname;
-
-  // Show "add to all" only for individual mode with 3+ players
-  var toAllRow = document.getElementById('toAllRow');
-  if (toAllRow) {
-    toAllRow.style.display = (MODE > 2 && !TEAM_MODE) ? 'flex' : 'none';
-  }
-  document.getElementById('toAllCheck').checked = false;
-  playSound('add');
-}
-
-function closePopup() {
-  document.getElementById('pointPopup').classList.remove('show');
-  POPUP_VALUE = 0;
-}
-
-function numPress(n) {
-  if (POPUP_VALUE < 9999) {
-    POPUP_VALUE = POPUP_VALUE * 10 + n;
-    document.getElementById('popupNum').textContent = POPUP_VALUE;
-  }
-  playSound('add');
-}
-
-function numBack() {
-  POPUP_VALUE = Math.floor(POPUP_VALUE / 10);
-  document.getElementById('popupNum').textContent = POPUP_VALUE || '0';
-  playSound('undo');
-}
-
-function numClear() {
-  POPUP_VALUE = 0;
-  document.getElementById('popupNum').textContent = '0';
-  playSound('undo');
-}
-
-function toggleToAll() { POPUP_TOALL = document.getElementById('toAllCheck').checked; }
-
-function numOK() {
-  if (POPUP_VALUE === 0) { playSound('err'); doVibrate([50, 30, 50]); return; }
-  var round = {};
-  if (TEAM_MODE) {
-    SCORES[POPUP_PLAYER] += POPUP_VALUE;
-    round['t' + POPUP_PLAYER] = POPUP_VALUE;
-  } else {
-    for (var i = 0; i < MODE; i++) {
-      var val = (POPUP_TOALL || i === POPUP_PLAYER) ? POPUP_VALUE : 0;
-      SCORES[i] += val;
-      round['p' + i] = val;
-    }
-  }
-  ROUNDS.push(round);
+  R.push(round);
   closePopup();
   updateDisp();
-  playSound('add');
-  doVibrate(20);
+  play('add');
+  vb(20);
   checkWin();
 }
 
-// ===== UPDATE DISPLAY =====
-function updateDisp() {
-  var count = TEAM_MODE ? 2 : MODE;
-  var tx = txt();
-  for (var i = 0; i < count; i++) {
-    var scoreEl = document.getElementById('score' + i);
-    var barEl = document.getElementById('bar' + i);
-    var progEl = document.getElementById('progress' + i);
-    if (scoreEl) {
-      scoreEl.textContent = SCORES[i];
-      scoreEl.classList.remove('score-pop');
-      void scoreEl.offsetWidth;
-      scoreEl.classList.add('score-pop');
-      setTimeout(function(e) { return function() { e.classList.remove('score-pop'); }; }(scoreEl), 400);
+function updateDisp(){
+  if(M===22){
+    for(let t=0;t<2;t++){
+      const teamScore=sc[t*2]+sc[t*2+1];
+      const el=document.getElementById('score'+t);
+      const bar=document.getElementById('bar'+t);
+      if(el){
+        el.textContent=teamScore;
+        if(bar) bar.style.width=Math.min((teamScore/tg)*100,100)+'%';
+        el.classList.remove('score-change');
+        void el.offsetWidth;
+        el.classList.add('score-change');
+        setTimeout(()=>el.classList.remove('score-change'),400);
+      }
     }
-    if (barEl) {
-      var pct = Math.min((SCORES[i] / TARGET) * 100, 100);
-      barEl.style.width = pct + '%';
-    }
-    if (progEl) {
-      var pct = Math.min(Math.round((SCORES[i] / TARGET) * 100), 100);
-      progEl.textContent = pct + '% (' + SCORES[i] + '/' + TARGET + ')';
+  }else{
+    for(let i=0;i<M;i++){
+      const el=document.getElementById('score'+i);
+      const bar=document.getElementById('bar'+i);
+      if(el){
+        el.textContent=sc[i];
+        if(bar) bar.style.width=Math.min((sc[i]/tg)*100,100)+'%';
+        el.classList.remove('score-change');
+        void el.offsetWidth;
+        el.classList.add('score-change');
+        setTimeout(()=>el.classList.remove('score-change'),400);
+      }
     }
   }
-  renderRoundTable();
+  renderHist();
 }
 
-// ===== UNDO / DELETE =====
-function undoLast() {
-  if (ROUNDS.length === 0 || GAME_OVER) return;
-  var last = ROUNDS.pop();
-  if (TEAM_MODE) {
-    SCORES[0] -= last['t0'] || 0;
-    SCORES[1] -= last['t1'] || 0;
-  } else {
-    for (var j = 0; j < MODE; j++) { SCORES[j] -= last['p' + j] || 0; }
+function renderHist(){
+  const list=document.getElementById('historyList');
+  const tx=t();
+  if(R.length===0){
+    list.innerHTML='<div id="noHistory" style="text-align:center;color:#8fbc8f;padding:15px">'+tx.noHistory+'</div>';
+    return;
   }
+  let h='';
+  for(let i=0;i<R.length;i++){
+    let scoresHtml='';
+    if(M===22){
+      for(let t=0;t<2;t++){
+        const teamScore=R[i]['p'+(t*2)]+R[i]['p'+(t*2+1)];
+        scoresHtml+='<span>'+tx.team+' '+(t+1)+': +'+teamScore+'</span>';
+      }
+    }else{
+      for(let j=0;j<M;j++){
+        scoresHtml+='<span>'+P[j]+': +'+R[i]['p'+j]+'</span>';
+      }
+    }
+    h+='<div class="hist-item"><span class="rn">#'+(i+1)+'</span><div class="sc-row">'+scoresHtml+'</div><button class="btn-del-r" onclick="delRound('+i+')">×</button></div>';
+  }
+  list.innerHTML=h;
+  list.scrollTop=list.scrollHeight;
+}
+
+function delRound(i){
+  if(GO)return;
+  const actualPlayers=M===22?4:M;
+  for(let j=0;j<actualPlayers;j++){sc[j]-=R[i]['p'+j];}
+  R.splice(i,1);
   updateDisp();
-  playSound('undo');
-  doVibrate(30);
+  play('undo');
+  vb(30);
 }
 
-// ===== SAVE / LOAD =====
-function saveGame() {
-  var saves = JSON.parse(localStorage.getItem('dominoSaves') || '[]');
-  var tx = txt();
+function undoLast(){
+  if(R.length===0||GO)return;
+  const last=R.pop();
+  const actualPlayers=M===22?4:M;
+  for(let j=0;j<actualPlayers;j++){sc[j]-=last['p'+j];}
+  updateDisp();
+  play('undo');
+  vb(30);
+}
+
+function saveGame(){
+  const saves=JSON.parse(localStorage.getItem('dominoSaves')||'[]');
+  const tx=t();
   saves.unshift({
-    id: Date.now(),
-    date: new Date().toLocaleString(),
-    mode: MODE,
-    players: PLAYERS,
-    scores: SCORES,
-    target: TARGET,
-    rounds: ROUNDS,
-    lang: getLang(),
-    teamMode: TEAM_MODE
+    id:Date.now(),
+    date:new Date().toLocaleString(),
+    mode:M,
+    players:P,
+    scores:sc,
+    target:tg,
+    rounds:R,
+    lang:getLang()
   });
-  if (saves.length > 10) saves.pop();
-  localStorage.setItem('dominoSaves', JSON.stringify(saves));
-  playSound('add');
-  doVibrate([20, 40, 20]);
+  if(saves.length>10)saves.pop();
+  localStorage.setItem('dominoSaves',JSON.stringify(saves));
+  play('add');
+  vb([20,40,20]);
   alert(tx.saved);
 }
 
-function loadSaves() {
-  var saves = JSON.parse(localStorage.getItem('dominoSaves') || '[]');
-  var c = document.getElementById('savedGamesList');
-  var tx = txt();
-  if (saves.length === 0) {
-    c.innerHTML = '<div class="saved-empty" id="noSaved">' + tx.noSaved + '</div>';
+function loadSaves(){
+  const saves=JSON.parse(localStorage.getItem('dominoSaves')||'[]');
+  const c=document.getElementById('savedGamesList');
+  const tx=t();
+  if(saves.length===0){
+    c.innerHTML='<div id="noSaved" style="text-align:center;color:#8fbc8f;padding:15px">'+tx.noSaved+'</div>';
     return;
   }
-  var h = '';
-  for (var i = 0; i < saves.length; i++) {
-    var save = saves[i];
-    var pt = save.players.join(' · ');
-    h += '<div class="saved-item" onclick="loadGame(' + i + ')">';
-    h += '<div class="saved-avatar">🎲</div>';
-    h += '<div class="saved-info"><div class="saved-players">' + pt + '</div><div class="saved-meta">' + save.date + '</div></div>';
-    h += '<span class="saved-score">' + save.scores.join('-') + '</span>';
-    h += '<button class="saved-del" onclick="event.stopPropagation();delSave(' + i + ')">×</button></div>';
-  }
-  c.innerHTML = h;
+  let h='';
+  saves.forEach((save,idx)=>{
+    const pt=save.players.join(' · ');
+    h+='<div class="saved-item" onclick="loadGame('+idx+')"><div class="sg-info"><div class="sg-players">'+pt+'</div><div class="sg-date">'+save.date+'</div></div><span class="sg-score">'+save.scores.join('-')+'</span><button class="btn-del-r" onclick="event.stopPropagation();delSave('+idx+')">×</button></div>';
+  });
+  c.innerHTML=h;
 }
 
-function loadGame(idx) {
-  var saves = JSON.parse(localStorage.getItem('dominoSaves') || '[]');
-  var save = saves[idx];
-  if (!save) return;
-  MODE = save.mode;
-  TEAM_MODE = save.teamMode || false;
-  PLAYERS = save.players;
-  SCORES = save.scores.slice();
-  TARGET = save.target;
-  ROUNDS = JSON.parse(JSON.stringify(save.rounds));
-  GAME_OVER = false;
-  if (save.lang && TX[save.lang]) setLang(save.lang);
-  updateDir();
+function loadGame(idx){
+  const saves=JSON.parse(localStorage.getItem('dominoSaves')||'[]');
+  const save=saves[idx];
+  if(!save)return;
+  M=save.mode;
+  P=save.players;
+  sc=[...save.scores];
+  tg=save.target;
+  R=JSON.parse(JSON.stringify(save.rounds));
+  GO=false;
+  if(save.lang&&T[save.lang]){setLang(save.lang);}
+  updateDirection();
   showScreen('game');
-  buildScoreArea();
+  buildScoreBoard();
   updateDisp();
   updateAllText();
   updateUI();
-  updateSettingsBtn();
-  playSound('add');
-  doVibrate(30);
+  updateNavBtn();
+  play('add');
+  vb(30);
 }
 
-function delSave(idx) {
-  var saves = JSON.parse(localStorage.getItem('dominoSaves') || '[]');
-  saves.splice(idx, 1);
-  localStorage.setItem('dominoSaves', JSON.stringify(saves));
+function delSave(idx){
+  let saves=JSON.parse(localStorage.getItem('dominoSaves')||'[]');
+  saves.splice(idx,1);
+  localStorage.setItem('dominoSaves',JSON.stringify(saves));
   loadSaves();
-  playSound('undo');
-  doVibrate(30);
+  play('undo');
+  vb(30);
 }
 
-function clearAllData() {
-  var tx = txt();
-  if (confirm(tx.clearConfirm)) {
+function clearAllData(){
+  const tx=t();
+  if(confirm(tx.clearConfirm)){
     localStorage.removeItem('dominoSaves');
     loadSaves();
-    playSound('undo');
-    doVibrate([50, 30, 50]);
+    play('undo');
+    vb([50,30,50]);
     alert(tx.cleared);
   }
 }
 
-// ===== GAME OVER (Photo 3) =====
-function checkWin() {
-  var winners = [];
-  var count = TEAM_MODE ? 2 : MODE;
-  for (var i = 0; i < count; i++) { if (SCORES[i] >= TARGET) winners.push(i); }
-  if (winners.length > 0) {
-    GAME_OVER = true;
-    for (var w = 0; w < winners.length; w++) {
-      var c = document.getElementById('card' + winners[w]);
-      if (c) c.classList.add('winner');
+function checkWin(){
+  let winners=[];
+  if(M===22){
+    for(let t=0;t<2;t++){
+      const teamScore=sc[t*2]+sc[t*2+1];
+      if(teamScore>=tg)winners.push(t);
     }
-    var tx = txt();
-    var wn = '';
-    if (TEAM_MODE) {
-      if (winners.length === 1) wn = (winners[0] === 0 ? tx.teamA : tx.teamB) + tx.winner;
-      else wn = tx.teamA + ' & ' + tx.teamB + tx.winner;
-    } else {
-      if (winners.length === 1) wn = PLAYERS[winners[0]] + tx.winner;
-      else wn = winners.map(function(w) { return PLAYERS[w]; }).join(' & ') + tx.winner;
+  }else{
+    for(let i=0;i<M;i++){if(sc[i]>=tg)winners.push(i);}
+  }
+  if(winners.length>0){
+    GO=true;
+
+    // --- NATIVE AD TRIGGER ---
+    if(window.median && median.admob) {
+        median.admob.showInterstitialIfReady();
     }
 
-    document.getElementById('winnerName').textContent = wn;
-    document.getElementById('finalScore').textContent = SCORES.join(' - ');
-
-    // Build details
-    var details = '';
-    details += '<div class="detail-row"><span class="detail-label">' + tx.matchTotal + '</span><span class="detail-value">' + SCORES.reduce(function(a,b){return a+b;}, 0) + '</span></div>';
-    if (TEAM_MODE) {
-      details += '<div class="detail-row"><span class="detail-label">' + tx.teamA + ':</span><span class="detail-value">' + SCORES[0] + '</span></div>';
-      details += '<div class="detail-row"><span class="detail-label">' + tx.teamB + ':</span><span class="detail-value">' + SCORES[1] + '</span></div>';
-    } else {
-      for (var i = 0; i < MODE; i++) {
-        details += '<div class="detail-row"><span class="detail-label">' + PLAYERS[i] + ':</span><span class="detail-value">' + SCORES[i] + '</span></div>';
+    for(let w of winners){document.getElementById('card'+w).classList.add('winner');}
+    const tx=t();
+    let wn='';
+    if(M===22){
+      if(winners.length===1){
+        const t=winners[0];
+        wn=tx.team+' '+(t+1)+' ('+P[t*2]+' & '+P[t*2+1]+')'+tx.winner;
+      }else{
+        wn=winners.map(t=>tx.team+' '+(t+1)).join(' & ')+tx.winner;
       }
+    }else{
+      if(winners.length===1)wn=P[winners[0]]+tx.winner;
+      else wn=winners.map(w=>P[w]).join(' & ')+tx.winner;
     }
-    details += '<div class="detail-row"><span class="detail-label">' + tx.winnerLabel + '</span><span class="detail-value">' + wn + '</span></div>';
-    document.getElementById('gameOverDetails').innerHTML = details;
-
-    playSound('win');
-    doVibrate([100, 50, 100, 50, 200]);
-    setTimeout(function() { document.getElementById('gameOver').classList.add('show'); }, 800);
+    document.getElementById('winnerName').textContent=wn;
+    if(M===22){
+      const teamScores=[sc[0]+sc[1],sc[2]+sc[3]];
+      document.getElementById('finalScore').textContent=teamScores.join(' - ');
+    }else{
+      document.getElementById('finalScore').textContent=sc.join(' - ');
+    }
+    play('win');
+    vb([100,50,100,50,200]);
+    setTimeout(()=>document.getElementById('gameOver').classList.add('show'),800);
   }
 }
 
-function newGame() {
+function newGame(){
   document.getElementById('gameOver').classList.remove('show');
-  var count = TEAM_MODE ? 2 : MODE;
-  for (var i = 0; i < count; i++) {
-    var c = document.getElementById('card' + i);
-    if (c) c.classList.remove('winner');
+  for(let i=0;i<M;i++){
+    const c=document.getElementById('card'+i);
+    if(c)c.classList.remove('winner');
   }
   resetGame();
 }
 
-function resetGame() {
+function resetGame(){
   showScreen('setup');
-  var count = TEAM_MODE ? 2 : MODE;
-  for (var i = 0; i < count; i++) {
-    var c = document.getElementById('card' + i);
-    if (c) c.classList.remove('winner');
+  for(let i=0;i<M;i++){
+    const c=document.getElementById('card'+i);
+    if(c)c.classList.remove('winner');
   }
-  SCORES = [];
-  ROUNDS = [];
-  GAME_OVER = false;
-  updateSettingsBtn();
+  sc=[];
+  R=[];
+  GO=false;
+  updateNavBtn();
   loadSaves();
 }
 
-// ===== CONFIRM END GAME =====
-function confirmEndGame() {
-  var tx = txt();
-  document.getElementById('confirmTitle').textContent = tx.endGameTitle;
-  document.getElementById('confirmText').textContent = tx.confirmEnd;
-  document.getElementById('confirmDialog').classList.add('show');
-}
+// --- INITIALIZE ADS ON STARTUP ---
+document.addEventListener('deviceready', function() {
+    if (window.median && median.admob) {
+        median.admob.banner.enable();
+    }
+}, false);
 
-function cancelEndGame() {
-  document.getElementById('confirmDialog').classList.remove('show');
-}
 
-function confirmEndYes() {
-  document.getElementById('confirmDialog').classList.remove('show');
-  resetGame();
-}
-
-function viewHistory() {
-  document.getElementById('gameOver').classList.remove('show');
-}
-
-// ===== SETTINGS =====
-function toggleSound() {
-  SOUND = !SOUND;
-  localStorage.setItem('dp_sound', SOUND);
-  updateUI();
-  playSound('add');
-}
-
-function toggleVibrate() {
-  VIBRATE = !VIBRATE;
-  localStorage.setItem('dp_vibrate', VIBRATE);
-  updateUI();
-  doVibrate(50);
-}
-
-function changeTheme(v) {
-  THEME = v;
-  localStorage.setItem('dp_theme', v);
-  applyTheme(v);
-}
-
-// ===== INIT =====
-document.addEventListener('DOMContentLoaded', function() {
-  applyTheme(THEME);
-  updateDir();
+function toggleSound(){S=!S;localStorage.setItem('dp_sound',S);updateUI();play('add')}
+function toggleVibrate(){V=!V;localStorage.setItem('dp_vibrate',V);updateUI();vb(50)}
+function changeTheme(v){H=v;localStorage.setItem('dp_theme',v);applyTheme(v)}
+document.addEventListener('DOMContentLoaded', function(){
+  applyTheme(H);
+  updateDirection();
   updateAllText();
   updateUI();
-  updateSettingsBtn();
-  selectMode(2);
+  updateNavBtn();
+  setMode(2);
   setTarget(200);
   loadSaves();
   showScreen('setup');
