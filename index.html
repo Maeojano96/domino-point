@@ -765,8 +765,12 @@ function checkWin(){
     GO=true;
 
     // --- NATIVE AD TRIGGER ---
-    if(window.median && median.admob) {
-        median.admob.showInterstitialIfReady();
+    try {
+        if(window.median && median.admob && median.admob.showInterstitialIfReady) {
+            median.admob.showInterstitialIfReady();
+        }
+    } catch(e) {
+        console.log('Interstitial error: ' + e.message);
     }
 
     for(let w of winners){document.getElementById('card'+w).classList.add('winner');}
@@ -820,10 +824,18 @@ function resetGame(){
 
 // --- INITIALIZE ADS ON STARTUP ---
 document.addEventListener('deviceready', function() {
-    if (window.median && median.admob) {
-        median.admob.banner.enable();
-        console.log('AdMob Banner enabled');
-    }
+    setTimeout(function() {
+        try {
+            if (window.median && median.admob && median.admob.banner) {
+                median.admob.banner.enable();
+                console.log('AdMob Banner: enabled');
+            } else {
+                console.log('AdMob Banner: not available');
+            }
+        } catch(e) {
+            console.log('AdMob error: ' + e.message);
+        }
+    }, 1500);
 }, false);
 
 
@@ -843,4 +855,4 @@ document.addEventListener('DOMContentLoaded', function(){
 });
 </script>
 </body>
-  </html>
+</html>
