@@ -40,6 +40,9 @@
     min-height: 100vh;
     overflow-x: hidden;
     padding-bottom: 70px;
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    user-select: none;
   }
 
   .header {
@@ -1504,20 +1507,20 @@ function renderGame() {
     html += '<div class="team-label">' + t('teamA') + '</div>';
     html += '<div class="player-name">' + players[0] + ' & ' + players[1] + '</div>';
     html += '<div class="score-wrap"><span class="score-num" id="sc0">' + scores[0] + '</span><span class="score-target">/' + targetScore + '</span></div>';
-    html += '<button class="add-btn" onclick="openPopup(0)">+</button></div>';
+    html += '<button class="add-btn" data-player="0" type="button">+</button></div>';
 
     html += '<div class="score-card team-b ' + (teamBWon ? 'winner' : '') + '" style="--progress:' + Math.min(teamBScore/targetScore,1) + '">';
     html += '<div class="team-label">' + t('teamB') + '</div>';
     html += '<div class="player-name">' + players[2] + ' & ' + players[3] + '</div>';
     html += '<div class="score-wrap"><span class="score-num" id="sc1">' + scores[2] + '</span><span class="score-target">/' + targetScore + '</span></div>';
-    html += '<button class="add-btn" onclick="openPopup(2)">+</button></div>';
+    html += '<button class="add-btn" data-player="2" type="button">+</button></div>';
   } else {
     for (let i = 0; i < count; i++) {
       const won = scores[i] >= targetScore;
       html += '<div class="score-card ' + (won ? 'winner' : '') + '" style="--progress:' + Math.min(scores[i]/targetScore,1) + '">';
       html += '<div class="player-name">' + players[i] + '</div>';
       html += '<div class="score-wrap"><span class="score-num" id="sc' + i + '">' + scores[i] + '</span><span class="score-target">/' + targetScore + '</span></div>';
-      html += '<button class="add-btn" onclick="openPopup(' + i + ')">+</button></div>';
+      html += '<button class="add-btn" data-player="' + i + '" type="button">+</button></div>';
     }
   }
   board.innerHTML = html;
@@ -1536,7 +1539,7 @@ function renderHistory() {
       html += '<span>' + t('teamA') + ': <b style="color:var(--team-a)">' + h[0] + '</b></span>';
       html += '<span>' + t('teamB') + ': <b style="color:var(--team-b)">' + h[2] + '</b></span>';
       html += '</span>';
-      html += '<button class="del-btn" onclick="deleteRound(' + idx + ')">×</button></div>';
+      html += '<button class="del-btn" data-round="' + idx + '" type="button">×</button></div>';
     } else {
       html += '<div class="hist-item">';
       html += '<span class="round-num">' + t('round') + (idx+1) + '</span>';
@@ -1545,7 +1548,7 @@ function renderHistory() {
         html += '<span>' + players[i] + ': <b style="color:var(--accent)">' + s + '</b></span>';
       });
       html += '</span>';
-      html += '<button class="del-btn" onclick="deleteRound(' + idx + ')">×</button></div>';
+      html += '<button class="del-btn" data-round="' + idx + '" type="button">×</button></div>';
     }
   });
   list.innerHTML = html;
@@ -1908,6 +1911,43 @@ document.addEventListener('DOMContentLoaded', function() {
   // Apply language and load saves
   loadSaves();
   setTimeout(applyLanguage, 50);
+
+  // Event delegation for dynamically created buttons
+  document.addEventListener('click', function(e) {
+    // Add score buttons
+    const addBtn = e.target.closest('.add-btn');
+    if (addBtn) {
+      e.preventDefault();
+      e.stopPropagation();
+      const playerIdx = parseInt(addBtn.getAttribute('data-player'));
+      if (!isNaN(playerIdx)) {
+        openPopup(playerIdx);
+      }
+      return;
+    }
+
+    // Delete round buttons
+    const delBtn = e.target.closest('.del-btn');
+    if (delBtn) {
+      e.preventDefault();
+      e.stopPropagation();
+      const roundIdx = parseInt(delBtn.getAttribute('data-round'));
+      if (!isNaN(roundIdx)) {
+        deleteRound(roundIdx);
+      }
+      return;
+    }
+  });
+
+  // Handle Enter key on popup input
+  const popupInput = document.getElementById('popupInput');
+  if (popupInput) {
+    popupInput.addEventListener('keypress', function(e) {
+      if (e.key === 'Enter') {
+        numOK();
+      }
+    });
+  }
 });
 </script>
 
