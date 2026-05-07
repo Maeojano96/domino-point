@@ -2,829 +2,1938 @@
 <html lang="en" dir="ltr" id="htmlRoot">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, viewport-fit=cover">
 <title>Domino Point</title>
 <style>
-*{margin:0;padding:0;box-sizing:border-box;font-family:system-ui,-apple-system,sans-serif}
-body{background:#0f1f0f;color:#e8f5e9;min-height:100vh;overflow-x:hidden}
-.header{background:linear-gradient(135deg,#0d3d18,#1a5f2a);padding:12px 15px;text-align:center;position:sticky;top:0;z-index:100}
-.header h1{font-size:20px;font-weight:800;letter-spacing:2px}
-.header .subtitle{font-size:11px;color:#f4a261;font-weight:600}
-.header-btns{display:flex;justify-content:space-between;align-items:center;padding:0 5px;margin-bottom:4px}
-.header-btn{background:rgba(255,255,255,0.15);border:none;color:white;padding:8px 12px;border-radius:10px;font-size:12px;font-weight:700;cursor:pointer}
-.container{max-width:500px;margin:0 auto;padding:12px}
-.screen{display:none}
-.screen.active{display:block;animation:fadeIn 0.3s ease}
-.card{background:#1a2e1a;border-radius:16px;padding:16px;border:1px solid #2d5a2d;margin-bottom:12px}
-.card h2{font-size:15px;margin-bottom:10px;color:#f4a261}
-.card h3{font-size:15px;margin-bottom:10px;color:#f4a261}
-.mode-sel{display:flex;gap:8px;margin-bottom:10px;flex-wrap:wrap}
-.mode-btn{flex:1;min-width:70px;padding:12px;border:2px solid #2d5a2d;background:#243824;color:#e8f5e9;border-radius:12px;font-size:13px;font-weight:600;cursor:pointer;text-align:center}
-.mode-btn.active{border-color:#f4a261;background:rgba(244,162,97,0.15);color:#f4a261}
-.player-in{display:flex;align-items:center;gap:10px;margin-bottom:8px;width:100%}
-.player-in .icon{width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:14px;flex-shrink:0}
-.player-in input{flex:1;min-width:0;padding:11px 13px;border:2px solid #2d5a2d;background:#0f1f0f;color:#e8f5e9;border-radius:10px;font-size:15px;outline:none}
-.player-in input:focus{border-color:#f4a261}
-.target-quick{display:flex;gap:6px;margin-bottom:10px;overflow-x:auto;padding-bottom:5px}
-.target-quick::-webkit-scrollbar{display:none}
-.target-q-btn{padding:8px 14px;border:2px solid #2d5a2d;background:#243824;color:#e8f5e9;border-radius:20px;font-size:13px;font-weight:600;cursor:pointer;white-space:nowrap}
-.target-q-btn.active{border-color:#f4a261;background:rgba(244,162,97,0.15);color:#f4a261}
-.target-custom{display:flex;gap:8px;align-items:center;margin-top:8px}
-.target-custom label{font-size:13px;color:#8fbc8f}
-.target-custom input{flex:1;padding:10px 12px;border:2px solid #2d5a2d;background:#0f1f0f;color:#e8f5e9;border-radius:10px;font-size:15px;outline:none}
-.target-custom input:focus{border-color:#f4a261}
-.btn-pri{width:100%;padding:15px;background:linear-gradient(135deg,#f4a261,#e76f51);color:white;border:none;border-radius:14px;font-size:17px;font-weight:700;cursor:pointer;margin-bottom:12px}
-.btn-pri:active{transform:scale(0.98)}
-.btn-sec{flex:1;padding:11px;background:#243824;color:#e8f5e9;border:2px solid #2d5a2d;border-radius:12px;font-size:13px;font-weight:600;cursor:pointer}
-.btn-sec.danger{border-color:#c0392b;color:#c0392b}
-.btn-sec:active{transform:scale(0.98)}
-.btn-back{width:100%;padding:13px;background:#243824;color:#e8f5e9;border:2px solid #2d5a2d;border-radius:12px;font-size:15px;font-weight:700;cursor:pointer;margin-top:10px}
-.btn-dang{width:100%;padding:13px;background:#c0392b;color:white;border:none;border-radius:12px;font-size:15px;font-weight:700;cursor:pointer;margin-top:10px}
-.score-b{display:flex;gap:8px;margin-bottom:12px}
-.score-c{flex:1;background:#1a2e1a;border-radius:16px;padding:12px;text-align:center;border:2px solid #2d5a2d;position:relative;overflow:hidden}
-.score-c .tn{font-size:12px;font-weight:600;color:#8fbc8f;margin-bottom:4px}
-.score-c .sc-wrap{display:flex;align-items:baseline;justify-content:center;gap:3px;margin:5px 0}
-.score-c .sc{font-size:38px;font-weight:800;color:#f4a261;line-height:1}
-.score-c .tg{font-size:12px;color:#8fbc8f}
-.score-c .plus-btn{width:36px;height:36px;border-radius:50%;background:rgba(244,162,97,0.2);border:2px solid #f4a261;color:#f4a261;font-size:22px;font-weight:700;display:flex;align-items:center;justify-content:center;margin:8px auto 0;cursor:pointer;transition:all 0.2s}
-.plus-btn:active{background:#f4a261;color:#0f1f0f}
-.score-c .bar{position:absolute;bottom:0;left:0;height:3px;background:#f4a261;transition:width 0.5s}
-.score-c.winner{border-color:#27ae60;box-shadow:0 0 20px rgba(39,174,96,0.3);animation:pulse 1.5s infinite}
-.team-label{font-size:10px;color:#f4a261;font-weight:700;text-transform:uppercase;letter-spacing:1px;margin-bottom:2px}
-.team-a .team-label{color:#4fc3f7}
-.team-b .team-label{color:#ff8a65}
-.hist-sec{background:#1a2e1a;border-radius:16px;padding:16px;border:1px solid #2d5a2d;margin-bottom:12px}
-.hist-list{max-height:200px;overflow-y:auto}
-.hist-item{display:flex;justify-content:space-between;align-items:center;padding:9px 11px;background:#243824;border-radius:10px;margin-bottom:7px;font-size:13px}
-.hist-item .rn{font-weight:700;color:#f4a261;min-width:25px}
-.hist-item .sc-row{display:flex;gap:12px;font-weight:600;flex:1;justify-content:center;flex-wrap:wrap}
-.hist-item .sc-row span{white-space:nowrap;font-size:12px}
-.btn-del-r{background:#c0392b;color:white;border:none;width:26px;height:26px;border-radius:50%;font-size:14px;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0}
-.bt-act{display:flex;gap:8px;margin-top:10px}
-.popup-overlay{display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.9);z-index:300;align-items:center;justify-content:center;flex-direction:column}
-.popup-overlay.show{display:flex}
-.popup-card{background:#1a2e1a;border-radius:20px;padding:20px;text-align:center;border:1px solid #2d5a2d;max-width:340px;width:90%;animation:slideUp 0.3s ease}
-.popup-card .popup-title{font-size:17px;font-weight:700;margin-bottom:4px;color:#f4a261}
-.popup-card .popup-sub{font-size:12px;color:#8fbc8f;margin-bottom:12px}
-.popup-card .popup-num{font-size:52px;font-weight:800;color:white;margin:8px 0;line-height:1;min-height:55px}
-.popup-card .popup-toall{display:flex;align-items:center;justify-content:center;gap:8px;margin-bottom:12px;font-size:13px;color:#8fbc8f;cursor:pointer}
-.popup-card .popup-toall input{width:18px;height:18px;accent-color:#f4a261}
-.numpad{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:12px}
-.numpad-btn{padding:16px 6px;background:#243824;color:white;border:2px solid #2d5a2d;border-radius:12px;font-size:22px;font-weight:700;cursor:pointer;text-align:center;user-select:none}
-.numpad-btn:active{background:#f4a261;color:#0f1f0f;border-color:#f4a261}
-.numpad-btn.wide{grid-column:span 2}
-.numpad-btn.action{background:#c0392b;border-color:#c0392b}
-.numpad-btn.action:active{background:#a93226}
-.numpad-btn.ok{background:#27ae60;border-color:#27ae60;font-size:17px}
-.numpad-btn.ok:active{background:#1e8449}
-.game-ov{display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.85);z-index:200;align-items:center;justify-content:center;flex-direction:column}
-.game-ov.show{display:flex}
-.game-ov-c{background:#1a2e1a;border-radius:24px;padding:35px 25px;text-align:center;border:2px solid #f4a261;max-width:300px;width:90%;animation:slideUp 0.5s ease}
-.game-ov-c .tr{font-size:55px;margin-bottom:12px}
-.game-ov-c h2{font-size:22px;color:#f4a261;margin-bottom:8px}
-.game-ov-c .wn{font-size:18px;font-weight:700;margin-bottom:15px}
-.game-ov-c .fs{font-size:15px;color:#8fbc8f;margin-bottom:20px}
-.btn-ng{width:100%;padding:13px;background:#f4a261;color:white;border:none;border-radius:12px;font-size:15px;font-weight:700;cursor:pointer}
-.set-row{display:flex;justify-content:space-between;align-items:center;padding:12px 0;border-bottom:1px solid #2d5a2d}
-.set-row:last-child{border-bottom:none}
-.set-lb{font-size:14px;font-weight:600}
-.set-dc{font-size:11px;color:#8fbc8f;margin-top:2px}
-.tog-sw{position:relative;width:46px;height:26px;background:#2d5a2d;border-radius:13px;cursor:pointer;transition:background 0.3s;flex-shrink:0}
-.tog-sw.active{background:#27ae60}
-.tog-sw::after{content:'';position:absolute;top:2px;left:2px;width:22px;height:22px;background:white;border-radius:50%;transition:transform 0.3s}
-.tog-sw.active::after{transform:translateX(20px)}
-.set-sel{padding:7px 12px;border:2px solid #2d5a2d;background:#0f1f0f;color:#e8f5e9;border-radius:10px;font-size:13px;outline:none;cursor:pointer}
-.lang-list{display:flex;flex-direction:column;gap:6px}
-.lang-item{display:flex;align-items:center;gap:12px;padding:12px;border:2px solid #2d5a2d;background:#243824;border-radius:12px;cursor:pointer;transition:all 0.2s}
-.lang-item:active{background:#2d5a2d}
-.lang-item.active{border-color:#f4a261;background:rgba(244,162,97,0.1)}
-.lang-flag{font-size:22px}
-.lang-name{font-size:14px;font-weight:600}
-.saved-item{display:flex;justify-content:space-between;align-items:center;padding:10px 11px;background:#243824;border-radius:10px;margin-bottom:7px;font-size:13px;cursor:pointer}
-.saved-item:active{background:#2d5a2d}
-.saved-item .sg-info{flex:1;min-width:0}
-.saved-item .sg-players{font-weight:600;font-size:12px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.saved-item .sg-date{font-size:10px;color:#8fbc8f}
-.saved-item .sg-score{font-weight:700;color:#f4a261;margin-right:6px;flex-shrink:0}
-.team-divider{text-align:center;color:#8fbc8f;font-size:11px;margin:8px 0 4px;font-weight:600}
-@keyframes fadeIn{from{opacity:0}to{opacity:1}}
-@keyframes slideUp{from{transform:translateY(40px);opacity:0}to{transform:translateY(0);opacity:1}}
-@keyframes scorePop{0%{transform:scale(1)}50%{transform:scale(1.3);color:#27ae60}100%{transform:scale(1)}}
-.score-change{animation:scorePop 0.4s ease}
-.hist-list::-webkit-scrollbar{width:3px}
-.hist-list::-webkit-scrollbar-track{background:#0f1f0f}
-.hist-list::-webkit-scrollbar-thumb{background:#2d5a2d;border-radius:2px}
-[dir="rtl"] .player-in{flex-direction:row-reverse}
-[dir="rtl"] .score-b{flex-direction:row-reverse}
-[dir="rtl"] .bt-act{flex-direction:row-reverse}
-[dir="rtl"] .header-btns{flex-direction:row-reverse}
-[dir="rtl"] .set-row{flex-direction:row-reverse}
-[dir="rtl"] .target-custom{flex-direction:row-reverse}
-[dir="rtl"] .target-custom label{margin-left:0;margin-right:8px}
-[dir="rtl"] .saved-item{flex-direction:row-reverse}
-[dir="rtl"] .saved-item .sg-info{text-align:right}
-[dir="rtl"] .hist-item{flex-direction:row-reverse}
-[dir="rtl"] .hist-item .sc-row{flex-direction:row-reverse}
-[dir="rtl"] .lang-item{flex-direction:row-reverse}
-[dir="rtl"] .popup-toall{flex-direction:row-reverse}
-[dir="rtl"] input,[dir="rtl"] select{text-align:right}
+  :root {
+    --bg-primary: #0a0f0a;
+    --bg-secondary: #111a11;
+    --bg-card: #161f16;
+    --bg-input: #0d140d;
+    --border: #1e2e1e;
+    --border-hover: #2a3a2a;
+    --accent: #e8a87c;
+    --accent-light: #f0c4a8;
+    --accent-dark: #c98a5e;
+    --text-primary: #f0f0f0;
+    --text-secondary: #8a9a8a;
+    --text-muted: #5a6a5a;
+    --success: #4ade80;
+    --success-bg: rgba(74, 222, 128, 0.1);
+    --danger: #f87171;
+    --danger-bg: rgba(248, 113, 113, 0.1);
+    --team-a: #60a5fa;
+    --team-b: #fb923c;
+    --shadow: 0 4px 24px rgba(0,0,0,0.4);
+    --shadow-lg: 0 8px 32px rgba(0,0,0,0.5);
+    --radius-sm: 12px;
+    --radius-md: 16px;
+    --radius-lg: 20px;
+    --radius-xl: 24px;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; -webkit-tap-highlight-color: transparent; }
+
+  body {
+    background: var(--bg-primary);
+    color: var(--text-primary);
+    min-height: 100vh;
+    overflow-x: hidden;
+    padding-bottom: 70px;
+  }
+
+  /* ===== HEADER ===== */
+  .header {
+    background: linear-gradient(180deg, #0d1f0d 0%, var(--bg-secondary) 100%);
+    padding: 16px 20px 20px;
+    text-align: center;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .header-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 12px;
+  }
+
+  .header-btn {
+    width: 40px;
+    height: 40px;
+    border-radius: 12px;
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    color: var(--text-secondary);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+
+  .header-btn:active { background: var(--border-hover); transform: scale(0.95); }
+
+  .header-brand {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+  }
+
+  .header-brand .dice {
+    font-size: 28px;
+    filter: drop-shadow(0 2px 4px rgba(0,0,0,0.3));
+  }
+
+  .header-brand h1 {
+    font-size: 22px;
+    font-weight: 800;
+    letter-spacing: 3px;
+    background: linear-gradient(135deg, var(--accent-light), var(--accent));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .header-brand .subtitle {
+    font-size: 11px;
+    color: var(--text-muted);
+    font-weight: 500;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+  }
+
+  /* ===== CONTAINER ===== */
+  .container { max-width: 500px; margin: 0 auto; padding: 16px; }
+
+  /* ===== SCREEN SYSTEM ===== */
+  .screen { display: none; }
+  .screen.active { display: block; animation: fadeIn 0.4s ease; }
+
+  @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+  @keyframes slideUp { from { transform: translateY(30px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+  @keyframes pulse { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.02); } }
+  @keyframes scorePop { 0% { transform: scale(1); } 50% { transform: scale(1.2); } 100% { transform: scale(1); } }
+  @keyframes shimmer { 0% { background-position: -200% 0; } 100% { background-position: 200% 0; } }
+
+  /* ===== CARDS ===== */
+  .card {
+    background: var(--bg-card);
+    border-radius: var(--radius-lg);
+    padding: 20px;
+    border: 1px solid var(--border);
+    margin-bottom: 14px;
+    box-shadow: var(--shadow);
+  }
+
+  .card-title {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 15px;
+    font-weight: 700;
+    color: var(--accent);
+    margin-bottom: 16px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+  }
+
+  .card-title .icon { font-size: 18px; }
+
+  /* ===== GAME MODE SELECTOR ===== */
+  .mode-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+  }
+
+  .mode-btn {
+    padding: 16px 12px;
+    border: 2px solid var(--border);
+    background: var(--bg-secondary);
+    color: var(--text-secondary);
+    border-radius: var(--radius-md);
+    font-size: 13px;
+    font-weight: 700;
+    cursor: pointer;
+    text-align: center;
+    transition: all 0.25s;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .mode-btn::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: linear-gradient(135deg, transparent 40%, rgba(232,168,124,0.05) 100%);
+    opacity: 0;
+    transition: opacity 0.3s;
+  }
+
+  .mode-btn:hover::before, .mode-btn.active::before { opacity: 1; }
+
+  .mode-btn.active {
+    border-color: var(--accent);
+    background: linear-gradient(135deg, rgba(232,168,124,0.15), rgba(232,168,124,0.05));
+    color: var(--accent);
+    box-shadow: 0 0 20px rgba(232,168,124,0.1);
+  }
+
+  .mode-btn:active { transform: scale(0.97); }
+
+  .mode-btn .mode-icon { font-size: 20px; display: block; margin-bottom: 6px; }
+
+  /* ===== PLAYER INPUTS ===== */
+  .player-in {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 10px;
+  }
+
+  .player-in:last-child { margin-bottom: 0; }
+
+  .player-avatar {
+    width: 42px;
+    height: 42px;
+    border-radius: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 800;
+    font-size: 14px;
+    flex-shrink: 0;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+  }
+
+  .player-avatar.p1 { background: linear-gradient(135deg, #3b82f6, #2563eb); }
+  .player-avatar.p2 { background: linear-gradient(135deg, #f97316, #ea580c); }
+  .player-avatar.p3 { background: linear-gradient(135deg, #22c55e, #16a34a); }
+  .player-avatar.p4 { background: linear-gradient(135deg, #a855f7, #9333ea); }
+
+  .player-in input {
+    flex: 1;
+    min-width: 0;
+    padding: 13px 15px;
+    border: 2px solid var(--border);
+    background: var(--bg-input);
+    color: var(--text-primary);
+    border-radius: var(--radius-sm);
+    font-size: 15px;
+    font-weight: 600;
+    outline: none;
+    transition: all 0.2s;
+  }
+
+  .player-in input:focus { border-color: var(--accent); box-shadow: 0 0 0 3px rgba(232,168,124,0.1); }
+
+  .player-in input::placeholder { color: var(--text-muted); }
+
+  /* ===== TARGET SCORE ===== */
+  .target-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 8px;
+    margin-bottom: 12px;
+  }
+
+  .target-btn {
+    padding: 12px 8px;
+    border: 2px solid var(--border);
+    background: var(--bg-secondary);
+    color: var(--text-secondary);
+    border-radius: var(--radius-sm);
+    font-size: 14px;
+    font-weight: 700;
+    cursor: pointer;
+    text-align: center;
+    transition: all 0.2s;
+  }
+
+  .target-btn.active {
+    border-color: var(--accent);
+    background: linear-gradient(135deg, rgba(232,168,124,0.15), rgba(232,168,124,0.05));
+    color: var(--accent);
+  }
+
+  .target-btn:active { transform: scale(0.96); }
+
+  .target-custom-row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding-top: 8px;
+    border-top: 1px solid var(--border);
+  }
+
+  .target-custom-row label {
+    font-size: 13px;
+    color: var(--text-secondary);
+    font-weight: 600;
+    white-space: nowrap;
+  }
+
+  .target-custom-row input {
+    flex: 1;
+    padding: 11px 14px;
+    border: 2px solid var(--border);
+    background: var(--bg-input);
+    color: var(--text-primary);
+    border-radius: var(--radius-sm);
+    font-size: 15px;
+    font-weight: 700;
+    outline: none;
+    transition: all 0.2s;
+  }
+
+  .target-custom-row input:focus { border-color: var(--accent); }
+
+  /* ===== PRIMARY BUTTON ===== */
+  .btn-pri {
+    width: 100%;
+    padding: 18px;
+    background: linear-gradient(135deg, var(--accent), var(--accent-dark));
+    color: #1a1208;
+    border: none;
+    border-radius: var(--radius-lg);
+    font-size: 16px;
+    font-weight: 800;
+    cursor: pointer;
+    margin-bottom: 14px;
+    box-shadow: 0 4px 20px rgba(232,168,124,0.25), 0 2px 8px rgba(0,0,0,0.2);
+    transition: all 0.2s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+  }
+
+  .btn-pri:active { transform: scale(0.98); box-shadow: 0 2px 10px rgba(232,168,124,0.2); }
+
+  .btn-pri .btn-icon { font-size: 20px; }
+
+  /* ===== SCORE BOARD ===== */
+  .score-board {
+    display: grid;
+    grid-template-columns: repeat(var(--cols, 2), 1fr);
+    gap: 12px;
+    margin-bottom: 14px;
+  }
+
+  .score-card {
+    background: var(--bg-card);
+    border-radius: var(--radius-lg);
+    padding: 20px 16px;
+    text-align: center;
+    border: 1px solid var(--border);
+    position: relative;
+    overflow: hidden;
+    transition: all 0.3s;
+  }
+
+  .score-card::after {
+    content: '';
+    position: absolute;
+    bottom: 0; left: 0; right: 0;
+    height: 3px;
+    background: linear-gradient(90deg, var(--accent), var(--accent-dark));
+    transform: scaleX(var(--progress, 0));
+    transform-origin: left;
+    transition: transform 0.5s ease;
+  }
+
+  .score-card.winner {
+    border-color: var(--success);
+    background: linear-gradient(180deg, var(--bg-card), var(--success-bg));
+    animation: pulse 2s infinite;
+  }
+
+  .score-card.winner::after { background: var(--success); }
+
+  .score-card .team-label {
+    font-size: 10px;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    margin-bottom: 6px;
+  }
+
+  .score-card.team-a .team-label { color: var(--team-a); }
+  .score-card.team-b .team-label { color: var(--team-b); }
+
+  .score-card .player-name {
+    font-size: 13px;
+    color: var(--text-secondary);
+    font-weight: 600;
+    margin-bottom: 12px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .score-card .score-wrap {
+    display: flex;
+    align-items: baseline;
+    justify-content: center;
+    gap: 4px;
+    margin: 8px 0;
+  }
+
+  .score-card .score-num {
+    font-size: 42px;
+    font-weight: 800;
+    color: var(--accent);
+    line-height: 1;
+    transition: all 0.3s;
+  }
+
+  .score-card .score-target {
+    font-size: 13px;
+    color: var(--text-muted);
+    font-weight: 600;
+  }
+
+  .score-card .add-btn {
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, rgba(232,168,124,0.2), rgba(232,168,124,0.1));
+    border: 2px solid var(--accent);
+    color: var(--accent);
+    font-size: 24px;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 14px auto 0;
+    cursor: pointer;
+    transition: all 0.2s;
+    box-shadow: 0 2px 12px rgba(232,168,124,0.15);
+  }
+
+  .score-card .add-btn:active {
+    background: var(--accent);
+    color: var(--bg-primary);
+    transform: scale(0.92);
+  }
+
+  .score-change { animation: scorePop 0.4s ease; }
+
+  /* ===== HISTORY ===== */
+  .hist-card { margin-bottom: 14px; }
+
+  .hist-list {
+    max-height: 220px;
+    overflow-y: auto;
+    padding-right: 4px;
+  }
+
+  .hist-list::-webkit-scrollbar { width: 3px; }
+  .hist-list::-webkit-scrollbar-track { background: transparent; }
+  .hist-list::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+
+  .hist-empty {
+    text-align: center;
+    padding: 30px;
+    color: var(--text-muted);
+    font-size: 14px;
+  }
+
+  .hist-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px 14px;
+    background: var(--bg-secondary);
+    border-radius: var(--radius-sm);
+    margin-bottom: 8px;
+    border: 1px solid var(--border);
+    transition: all 0.2s;
+  }
+
+  .hist-item:last-child { margin-bottom: 0; }
+
+  .hist-item .round-num {
+    font-weight: 800;
+    color: var(--accent);
+    font-size: 13px;
+    min-width: 30px;
+  }
+
+  .hist-item .scores-row {
+    display: flex;
+    gap: 16px;
+    font-weight: 700;
+    flex: 1;
+    justify-content: center;
+    flex-wrap: wrap;
+    font-size: 13px;
+  }
+
+  .hist-item .scores-row span { white-space: nowrap; }
+
+  .hist-item .del-btn {
+    background: var(--danger-bg);
+    color: var(--danger);
+    border: none;
+    width: 28px;
+    height: 28px;
+    border-radius: 8px;
+    font-size: 14px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    transition: all 0.2s;
+  }
+
+  .hist-item .del-btn:active { background: var(--danger); color: white; }
+
+  /* ===== ACTION BUTTONS ===== */
+  .action-btns {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
+    margin-top: 10px;
+  }
+
+  .btn-sec {
+    padding: 14px 10px;
+    background: var(--bg-card);
+    color: var(--text-secondary);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    font-size: 13px;
+    font-weight: 700;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    transition: all 0.2s;
+  }
+
+  .btn-sec:active { transform: scale(0.97); background: var(--bg-secondary); }
+
+  .btn-sec.danger {
+    border-color: rgba(248, 113, 113, 0.3);
+    color: var(--danger);
+  }
+
+  .btn-sec.danger:active { background: var(--danger-bg); }
+
+  /* ===== POPUP / NUMPAD ===== */
+  .popup-overlay {
+    display: none;
+    position: fixed;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    background: rgba(0,0,0,0.85);
+    backdrop-filter: blur(8px);
+    z-index: 300;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    padding: 20px;
+  }
+
+  .popup-overlay.show { display: flex; animation: fadeIn 0.2s; }
+
+  .popup-card {
+    background: var(--bg-card);
+    border-radius: var(--radius-xl);
+    padding: 24px;
+    text-align: center;
+    border: 1px solid var(--border);
+    max-width: 360px;
+    width: 100%;
+    animation: slideUp 0.3s ease;
+    box-shadow: var(--shadow-lg);
+  }
+
+  .popup-card .popup-title {
+    font-size: 16px;
+    font-weight: 800;
+    margin-bottom: 4px;
+    color: var(--accent);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+  }
+
+  .popup-card .popup-sub {
+    font-size: 12px;
+    color: var(--text-muted);
+    margin-bottom: 16px;
+  }
+
+  .popup-card .popup-num {
+    font-size: 56px;
+    font-weight: 800;
+    color: var(--text-primary);
+    margin: 12px 0;
+    line-height: 1;
+    min-height: 60px;
+    text-shadow: 0 2px 20px rgba(232,168,124,0.2);
+  }
+
+  .popup-toall {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    margin-bottom: 16px;
+    font-size: 13px;
+    color: var(--text-secondary);
+    cursor: pointer;
+    padding: 8px;
+    border-radius: var(--radius-sm);
+    transition: background 0.2s;
+  }
+
+  .popup-toall:active { background: var(--bg-secondary); }
+
+  .popup-toall input {
+    width: 20px;
+    height: 20px;
+    accent-color: var(--accent);
+    cursor: pointer;
+  }
+
+  .numpad {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 8px;
+    margin-bottom: 12px;
+  }
+
+  .numpad-btn {
+    padding: 18px 6px;
+    background: var(--bg-secondary);
+    color: var(--text-primary);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    font-size: 22px;
+    font-weight: 700;
+    cursor: pointer;
+    text-align: center;
+    user-select: none;
+    transition: all 0.15s;
+  }
+
+  .numpad-btn:active {
+    background: var(--accent);
+    color: var(--bg-primary);
+    border-color: var(--accent);
+    transform: scale(0.95);
+  }
+
+  .numpad-btn.wide { grid-column: span 2; }
+
+  .numpad-btn.action {
+    background: var(--danger-bg);
+    border-color: rgba(248, 113, 113, 0.3);
+    color: var(--danger);
+  }
+
+  .numpad-btn.action:active { background: var(--danger); color: white; }
+
+  .numpad-btn.ok {
+    background: linear-gradient(135deg, var(--success), #22c55e);
+    border-color: var(--success);
+    color: #0a1f0a;
+    font-size: 15px;
+    font-weight: 800;
+  }
+
+  .numpad-btn.ok:active { filter: brightness(0.9); }
+
+  /* ===== GAME OVER ===== */
+  .game-ov {
+    display: none;
+    position: fixed;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    background: rgba(0,0,0,0.9);
+    backdrop-filter: blur(12px);
+    z-index: 200;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    padding: 20px;
+  }
+
+  .game-ov.show { display: flex; animation: fadeIn 0.3s; }
+
+  .game-ov-c {
+    background: var(--bg-card);
+    border-radius: var(--radius-xl);
+    padding: 40px 30px;
+    text-align: center;
+    border: 1px solid var(--accent);
+    max-width: 320px;
+    width: 100%;
+    animation: slideUp 0.5s ease;
+    box-shadow: 0 0 60px rgba(232,168,124,0.15), var(--shadow-lg);
+  }
+
+  .game-ov-c .trophy {
+    font-size: 64px;
+    margin-bottom: 16px;
+    filter: drop-shadow(0 4px 12px rgba(232,168,124,0.3));
+    animation: scorePop 0.6s ease 0.3s both;
+  }
+
+  .game-ov-c h2 {
+    font-size: 20px;
+    color: var(--accent);
+    margin-bottom: 8px;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+  }
+
+  .game-ov-c .winner-name {
+    font-size: 18px;
+    font-weight: 700;
+    margin-bottom: 20px;
+    color: var(--text-primary);
+  }
+
+  .game-ov-c .final-score {
+    font-size: 14px;
+    color: var(--text-secondary);
+    margin-bottom: 24px;
+    line-height: 1.6;
+  }
+
+  .btn-ng {
+    width: 100%;
+    padding: 16px;
+    background: linear-gradient(135deg, var(--accent), var(--accent-dark));
+    color: #1a1208;
+    border: none;
+    border-radius: var(--radius-lg);
+    font-size: 15px;
+    font-weight: 800;
+    cursor: pointer;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    box-shadow: 0 4px 20px rgba(232,168,124,0.25);
+    transition: all 0.2s;
+  }
+
+  .btn-ng:active { transform: scale(0.98); }
+
+  /* ===== SETTINGS ===== */
+  .set-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 14px 0;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .set-row:last-child { border-bottom: none; }
+
+  .set-info { flex: 1; }
+
+  .set-lb {
+    font-size: 15px;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .set-lb .icon { font-size: 18px; }
+
+  .set-dc {
+    font-size: 12px;
+    color: var(--text-muted);
+    margin-top: 3px;
+    margin-left: 28px;
+  }
+
+  .tog-sw {
+    position: relative;
+    width: 50px;
+    height: 28px;
+    background: var(--border);
+    border-radius: 14px;
+    cursor: pointer;
+    transition: background 0.3s;
+    flex-shrink: 0;
+  }
+
+  .tog-sw.active { background: linear-gradient(135deg, var(--success), #22c55e); }
+
+  .tog-sw::after {
+    content: '';
+    position: absolute;
+    top: 2px; left: 2px;
+    width: 24px; height: 24px;
+    background: white;
+    border-radius: 50%;
+    transition: transform 0.3s cubic-bezier(0.4, 0.0, 0.2, 1);
+    box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+  }
+
+  .tog-sw.active::after { transform: translateX(22px); }
+
+  .set-sel {
+    padding: 8px 14px;
+    border: 1px solid var(--border);
+    background: var(--bg-input);
+    color: var(--text-primary);
+    border-radius: var(--radius-sm);
+    font-size: 13px;
+    font-weight: 600;
+    outline: none;
+    cursor: pointer;
+  }
+
+  /* ===== LANGUAGE LIST ===== */
+  .lang-list { display: flex; flex-direction: column; gap: 8px; }
+
+  .lang-item {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 14px;
+    border: 1px solid var(--border);
+    background: var(--bg-secondary);
+    border-radius: var(--radius-md);
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+
+  .lang-item:active { background: var(--bg-input); }
+
+  .lang-item.active {
+    border-color: var(--accent);
+    background: linear-gradient(135deg, rgba(232,168,124,0.1), rgba(232,168,124,0.05));
+  }
+
+  .lang-flag { font-size: 24px; }
+
+  .lang-name { font-size: 15px; font-weight: 700; }
+
+  .lang-code {
+    margin-left: auto;
+    font-size: 12px;
+    color: var(--text-muted);
+    font-weight: 700;
+    background: var(--bg-input);
+    padding: 4px 10px;
+    border-radius: 8px;
+  }
+
+  .lang-item.active .lang-code { color: var(--accent); }
+
+  /* ===== SAVED GAMES ===== */
+  .saved-list { display: flex; flex-direction: column; gap: 8px; }
+
+  .saved-empty {
+    text-align: center;
+    padding: 30px;
+    color: var(--text-muted);
+    font-size: 14px;
+  }
+
+  .saved-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 14px;
+    background: var(--bg-secondary);
+    border-radius: var(--radius-md);
+    border: 1px solid var(--border);
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+
+  .saved-item:active { background: var(--bg-input); border-color: var(--border-hover); }
+
+  .saved-item .sg-info { flex: 1; min-width: 0; }
+
+  .saved-item .sg-players {
+    font-weight: 700;
+    font-size: 13px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    margin-bottom: 4px;
+  }
+
+  .saved-item .sg-date {
+    font-size: 11px;
+    color: var(--text-muted);
+    font-weight: 500;
+  }
+
+  .saved-item .sg-score {
+    font-weight: 800;
+    color: var(--accent);
+    font-size: 15px;
+    margin-right: 8px;
+    flex-shrink: 0;
+  }
+
+  .saved-item .sg-arrow {
+    color: var(--text-muted);
+    font-size: 16px;
+  }
+
+  /* ===== AD BANNER CONTAINER ===== */
+  .ad-banner {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    z-index: 50;
+    background: #000;
+    text-align: center;
+    min-height: 60px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-top: 1px solid var(--border);
+  }
+
+  .ad-banner-placeholder {
+    color: var(--text-muted);
+    font-size: 11px;
+    padding: 8px;
+  }
+
+  /* ===== BACK BUTTON ===== */
+  .btn-back {
+    width: 100%;
+    padding: 16px;
+    background: var(--bg-card);
+    color: var(--text-secondary);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    font-size: 15px;
+    font-weight: 700;
+    cursor: pointer;
+    margin-top: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    transition: all 0.2s;
+  }
+
+  .btn-back:active { background: var(--bg-secondary); transform: scale(0.98); }
+
+  /* ===== DANGER BUTTON ===== */
+  .btn-dang {
+    width: 100%;
+    padding: 16px;
+    background: linear-gradient(135deg, #dc2626, #b91c1c);
+    color: white;
+    border: none;
+    border-radius: var(--radius-lg);
+    font-size: 15px;
+    font-weight: 800;
+    cursor: pointer;
+    margin-top: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    transition: all 0.2s;
+    box-shadow: 0 4px 16px rgba(220, 38, 38, 0.2);
+  }
+
+  .btn-dang:active { transform: scale(0.98); }
+
+  /* ===== TEAM DIVIDER ===== */
+  .team-divider {
+    text-align: center;
+    color: var(--text-muted);
+    font-size: 11px;
+    margin: 10px 0 6px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+  }
+
+  /* ===== SCROLLBAR ===== */
+  ::-webkit-scrollbar { width: 4px; }
+  ::-webkit-scrollbar-track { background: transparent; }
+  ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 2px; }
+
+  /* ===== RESPONSIVE ===== */
+  @media (max-width: 380px) {
+    .mode-grid { grid-template-columns: repeat(2, 1fr); }
+    .target-grid { grid-template-columns: repeat(3, 1fr); }
+    .score-board { --cols: 2 !important; }
+    .numpad-btn { padding: 14px 4px; font-size: 20px; }
+    .score-card .score-num { font-size: 36px; }
+  }
 </style>
-<base target="_blank">
 </head>
 <body>
 
+<!-- ===== HEADER ===== -->
 <div class="header">
-  <div class="header-btns">
-    <button class="header-btn" id="soundBtn" onclick="toggleSound()">🔊</button>
-    <button class="header-btn" id="navBtn" onclick="handleNavBtn()">⚙️</button>
+  <div class="header-top">
+    <button class="header-btn" id="btnSound" onclick="toggleSound()">🔊</button>
+    <div class="header-brand">
+      <span class="dice">🎲</span>
+      <div>
+        <h1>DOMINO POINT</h1>
+        <div class="subtitle">Score Tracker</div>
+      </div>
+    </div>
+    <button class="header-btn" id="btnSettings" onclick="showScreen('settings')">⚙️</button>
   </div>
-  <h1>🎲 DOMINO POINT</h1>
-  <div class="subtitle" id="subtitle">Score Tracker</div>
 </div>
 
 <div class="container">
 
-<div class="screen active" id="setupScreen">
+<!-- ===== SETUP SCREEN ===== -->
+<div id="screen-setup" class="screen active">
   <div class="card">
-    <h2 id="modeTitle">👥 Game Mode</h2>
-    <div class="mode-sel">
-      <button class="mode-btn active" onclick="setMode(2)" id="mode2">2 Players</button>
-      <button class="mode-btn" onclick="setMode(3)" id="mode3">3 Players</button>
-      <button class="mode-btn" onclick="setMode(4)" id="mode4">4 Players</button>
-      <button class="mode-btn" onclick="setMode(22)" id="mode22">2v2 Teams</button>
-    </div>
-    <h2 id="playersTitle">✏️ Player Names</h2>
-    <div id="playerInputs"></div>
-    <h2 id="targetTitle">🎯 Target Score</h2>
-    <div class="target-quick" id="targetQuick">
-      <button class="target-q-btn" onclick="setTarget(100)" data-val="100">100</button>
-      <button class="target-q-btn" onclick="setTarget(120)" data-val="120">120</button>
-      <button class="target-q-btn" onclick="setTarget(150)" data-val="150">150</button>
-      <button class="target-q-btn active" onclick="setTarget(200)" data-val="200">200</button>
-      <button class="target-q-btn" onclick="setTarget(500)" data-val="500">500</button>
-      <button class="target-q-btn" onclick="setTarget('custom')" data-val="custom">⋯</button>
-    </div>
-    <div class="target-custom" id="targetCustom" style="display:none">
-      <label id="customLabel">Custom:</label>
-      <input type="number" id="customTarget" placeholder="Enter score" value="200" onchange="updateCustomTarget()">
+    <div class="card-title"><span class="icon">👥</span> Game Mode</div>
+    <div class="mode-grid">
+      <button class="mode-btn active" onclick="setMode(2,this)"><span class="mode-icon">🎮</span>2 Player</button>
+      <button class="mode-btn" onclick="setMode(3,this)"><span class="mode-icon">🎯</span>3 Player</button>
+      <button class="mode-btn" onclick="setMode(4,this)"><span class="mode-icon">🎲</span>4 Player</button>
+      <button class="mode-btn" onclick="setMode('2v2',this)"><span class="mode-icon">🤝</span>2v2 Team</button>
     </div>
   </div>
-  <button class="btn-pri" id="startBtn" onclick="startGame()">🚀 START GAME</button>
+
   <div class="card">
-    <h3 id="savedTitle">💾 Saved Games</h3>
-    <div id="savedGamesList"><div style="text-align:center;color:#8fbc8f;padding:15px" id="noSaved">No saved games</div></div>
+    <div class="card-title"><span class="icon">✏️</span> Player Names</div>
+    <div id="playerInputs">
+      <div class="player-in"><div class="player-avatar p1">P1</div><input id="p1Name" placeholder="Player 1" value="Player 1"></div>
+      <div class="player-in"><div class="player-avatar p2">P2</div><input id="p2Name" placeholder="Player 2" value="Player 2"></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title"><span class="icon">🎯</span> Target Score</div>
+    <div class="target-grid">
+      <button class="target-btn" onclick="setTarget(100,this)">100</button>
+      <button class="target-btn" onclick="setTarget(120,this)">120</button>
+      <button class="target-btn" onclick="setTarget(150,this)">150</button>
+      <button class="target-btn active" onclick="setTarget(200,this)">200</button>
+      <button class="target-btn" onclick="setTarget(500,this)">500</button>
+      <button class="target-btn" onclick="setTarget('custom',this)">⋯</button>
+    </div>
+    <div class="target-custom-row">
+      <label>🎯 Custom:</label>
+      <input type="number" id="customTarget" value="200" min="10" max="9999" onchange="updateTargetFromInput()">
+    </div>
+  </div>
+
+  <button class="btn-pri" onclick="startGame()"><span class="btn-icon">🚀</span> START GAME</button>
+
+  <div class="card">
+    <div class="card-title"><span class="icon">💾</span> Saved Games</div>
+    <div class="saved-list" id="savedList"><div class="saved-empty">No saved games</div></div>
   </div>
 </div>
 
-<div class="screen" id="gameScreen">
-  <div class="score-b" id="scoreBoard"></div>
-  <div class="hist-sec">
-    <h3 id="historyTitle">📜 History</h3>
-    <div class="hist-list" id="historyList"><div style="text-align:center;color:#8fbc8f;padding:15px" id="noHistory">No rounds yet</div></div>
+<!-- ===== GAME SCREEN ===== -->
+<div id="screen-game" class="screen">
+  <div class="score-board" id="scoreBoard"></div>
+
+  <div class="card hist-card">
+    <div class="card-title"><span class="icon">📜</span> History</div>
+    <div class="hist-list" id="historyList"><div class="hist-empty">No rounds yet</div></div>
   </div>
-  <div class="bt-act">
-    <button class="btn-sec" id="undoBtn" onclick="undoLast()">↩️ Undo</button>
-    <button class="btn-sec" id="saveBtn" onclick="saveGame()">💾 Save</button>
-    <button class="btn-sec danger" id="newBtn" onclick="resetGame()">🔄 New</button>
+
+  <div class="action-btns">
+    <button class="btn-sec" onclick="undoLast()">↩️ Undo</button>
+    <button class="btn-sec" onclick="saveGame()">💾 Save</button>
+    <button class="btn-sec danger" onclick="newGameConfirm()">🔄 New</button>
   </div>
 </div>
 
-<div class="screen" id="settingsScreen">
+<!-- ===== SETTINGS SCREEN ===== -->
+<div id="screen-settings" class="screen">
   <div class="card">
-    <h2 id="settingsTitle">⚙️ Settings</h2>
-    <div class="set-row" onclick="openLangScreen()">
-      <div><div class="set-lb" id="langLabel">🌐 Language</div><div class="set-dc" id="langDesc">Change language</div></div>
-      <button class="header-btn" id="langBtn">EN 🇺🇸</button>
+    <div class="card-title"><span class="icon">⚙️</span> Settings</div>
+    <div class="set-row">
+      <div class="set-info">
+        <div class="set-lb"><span class="icon">🌐</span> Language</div>
+        <div class="set-dc">Change language</div>
+      </div>
+      <button class="set-sel" onclick="showScreen('language')">EN 🇺🇸</button>
     </div>
     <div class="set-row">
-      <div><div class="set-lb" id="soundLabel">🔊 Sound</div><div class="set-dc" id="soundDesc">Game sounds</div></div>
-      <div class="tog-sw active" id="soundToggle" onclick="toggleSound()"></div>
+      <div class="set-info">
+        <div class="set-lb"><span class="icon">🔊</span> Sound</div>
+        <div class="set-dc">Game sounds</div>
+      </div>
+      <div class="tog-sw active" id="togSound" onclick="toggleSetting('sound')"></div>
     </div>
     <div class="set-row">
-      <div><div class="set-lb" id="vibrateLabel">📳 Vibration</div><div class="set-dc" id="vibrateDesc">Haptic feedback</div></div>
-      <div class="tog-sw active" id="vibrateToggle" onclick="toggleVibrate()"></div>
+      <div class="set-info">
+        <div class="set-lb"><span class="icon">📳</span> Vibration</div>
+        <div class="set-dc">Haptic feedback</div>
+      </div>
+      <div class="tog-sw active" id="togVib" onclick="toggleSetting('vib')"></div>
     </div>
     <div class="set-row">
-      <div><div class="set-lb" id="themeLabel">🎨 Theme</div><div class="set-dc" id="themeDesc">Color scheme</div></div>
-      <select class="set-sel" id="themeSelect" onchange="changeTheme(this.value)"><option value="green">Green</option><option value="dark">Dark</option><option value="blue">Blue</option><option value="red">Red</option></select>
+      <div class="set-info">
+        <div class="set-lb"><span class="icon">🎨</span> Theme</div>
+        <div class="set-dc">Color scheme</div>
+      </div>
+      <select class="set-sel" id="themeSel" onchange="changeTheme(this.value)">
+        <option value="green">Green</option>
+        <option value="dark">Dark</option>
+        <option value="blue">Blue</option>
+      </select>
     </div>
   </div>
+
   <div class="card">
-    <h2 id="dataTitle">🗄️ Data</h2>
-    <button class="btn-dang" id="clearBtn" onclick="clearAllData()">🗑️ Clear All Games</button>
+    <div class="card-title"><span class="icon">🗄️</span> Data</div>
+    <button class="btn-dang" onclick="clearAllGames()">🗑️ Clear All Games</button>
   </div>
-  <button class="btn-back" id="backBtn" onclick="closeSettings()">⬅️ Back</button>
+
+  <button class="btn-back" onclick="goBack()">⬅️ Back</button>
 </div>
 
-<div class="screen" id="langScreen">
+<!-- ===== LANGUAGE SCREEN ===== -->
+<div id="screen-language" class="screen">
   <div class="card">
-    <h2 id="langScreenTitle">🌐 Select Language</h2>
+    <div class="card-title"><span class="icon">🌐</span> Select Language</div>
     <div class="lang-list" id="langList"></div>
   </div>
-  <button class="btn-back" id="langBackBtn" onclick="closeLangScreen()">⬅️ Back</button>
+  <button class="btn-back" onclick="showScreen('settings')">⬅️ Back</button>
 </div>
 
 </div>
 
-<div class="popup-overlay" id="pointPopup">
+<!-- ===== AD BANNER (Fixed Bottom) ===== -->
+<div class="ad-banner" id="adBanner">
+  <div class="ad-banner-placeholder">Ad Banner Space (468x60)</div>
+</div>
+
+<!-- ===== POPUP / NUMPAD ===== -->
+<div class="popup-overlay" id="popup">
   <div class="popup-card">
     <div class="popup-title" id="popupTitle">Add Points</div>
-    <div class="popup-sub" id="popupSub">Tap numbers to enter</div>
+    <div class="popup-sub" id="popupSub">Enter score</div>
     <div class="popup-num" id="popupNum">0</div>
-    <div class="popup-toall" id="toAllRow" style="display:none">
-      <input type="checkbox" id="toAllCheck" onchange="toggleToAll()">
-      <label for="toAllCheck" id="toAllLabel">Add to ALL players</label>
+    <div class="popup-toall" id="popupToAll" onclick="toggleToAll()">
+      <input type="checkbox" id="chkToAll"> <label for="chkToAll">Apply to all players</label>
     </div>
     <div class="numpad">
-      <button class="numpad-btn" onclick="numPress(1)">1</button>
-      <button class="numpad-btn" onclick="numPress(2)">2</button>
-      <button class="numpad-btn" onclick="numPress(3)">3</button>
+      <button class="numpad-btn" onclick="numPress('1')">1</button>
+      <button class="numpad-btn" onclick="numPress('2')">2</button>
+      <button class="numpad-btn" onclick="numPress('3')">3</button>
       <button class="numpad-btn action" onclick="numBack()">⌫</button>
-      <button class="numpad-btn" onclick="numPress(4)">4</button>
-      <button class="numpad-btn" onclick="numPress(5)">5</button>
-      <button class="numpad-btn" onclick="numPress(6)">6</button>
-      <button class="numpad-btn" onclick="numClear()">C</button>
-      <button class="numpad-btn" onclick="numPress(7)">7</button>
-      <button class="numpad-btn" onclick="numPress(8)">8</button>
-      <button class="numpad-btn" onclick="numPress(9)">9</button>
-      <button class="numpad-btn" onclick="numPress(0)">0</button>
-      <button class="numpad-btn wide ok" onclick="numOK()">OK</button>
-      <button class="numpad-btn action" onclick="closePopup()">✕</button>
+      <button class="numpad-btn" onclick="numPress('4')">4</button>
+      <button class="numpad-btn" onclick="numPress('5')">5</button>
+      <button class="numpad-btn" onclick="numPress('6')">6</button>
+      <button class="numpad-btn action wide" onclick="numClear()">C</button>
+      <button class="numpad-btn" onclick="numPress('7')">7</button>
+      <button class="numpad-btn" onclick="numPress('8')">8</button>
+      <button class="numpad-btn" onclick="numPress('9')">9</button>
+      <button class="numpad-btn ok" onclick="numOK()">OK ✓</button>
+      <button class="numpad-btn wide" onclick="numPress('0')">0</button>
+      <button class="numpad-btn" onclick="numPress('00')">00</button>
     </div>
   </div>
 </div>
 
+<!-- ===== GAME OVER ===== -->
 <div class="game-ov" id="gameOver">
   <div class="game-ov-c">
-    <div class="tr">🏆</div>
-    <h2 id="gameOverTitle">Game Over!</h2>
-    <div class="wn" id="winnerName">Winner!</div>
-    <div class="fs" id="finalScore">0 - 0</div>
-    <button class="btn-ng" id="newGameBtn" onclick="newGame()">🎮 New Game</button>
+    <div class="trophy">🏆</div>
+    <h2>Game Over!</h2>
+    <div class="winner-name" id="winnerName">Player Wins!</div>
+    <div class="final-score" id="finalScore"></div>
+    <button class="btn-ng" onclick="newGame()">🎮 New Game</button>
   </div>
 </div>
 
 <script>
-// Translations
-var TX = {
-  en:{code:'en',flag:'🇺🇸',name:'English',subtitle:'🎲 Score Tracker',modeTitle:'👥 Game Mode',playersTitle:'✏️ Player Names',targetTitle:'🎯 Target Score',customLabel:'🎯 Custom:',startBtn:'🚀 START GAME',savedTitle:'💾 Saved Games',noSaved:'No saved games',historyTitle:'📜 History',noHistory:'No rounds yet',undoBtn:'↩️ Undo',saveBtn:'💾 Save',newBtn:'🔄 New',gameOverTitle:'🏆 Game Over!',newGameBtn:'🎮 New Game',settingsTitle:'⚙️ Settings',langLabel:'🌐 Language',langDesc:'Change language',soundLabel:'🔊 Sound',soundDesc:'Game sounds',vibrateLabel:'📳 Vibration',vibrateDesc:'Haptic feedback',themeLabel:'🎨 Theme',themeDesc:'Color scheme',dataTitle:'🗄️ Data',clearBtn:'🗑️ Clear All Games',backBtn:'⬅️ Back',langScreenTitle:'🌐 Select Language',player:'Player',teamA:'Team A',teamB:'Team B',winner:' Wins!',soundOn:'🔊',soundOff:'🔇',clearConfirm:'Delete all saved games?',cleared:'All games deleted!',saved:'Game Saved!',popupTitle:'Add Points',popupSub:'Tap numbers to enter',toAllLabel:'Add to ALL players'},
-  ar:{code:'ar',flag:'🇸🇦',name:'العربية',subtitle:'🎲 متتبع النقاط',modeTitle:'👥 وضع اللعبة',playersTitle:'✏️ الأسماء',targetTitle:'🎯 الهدف',customLabel:'🎯 مخصص:',startBtn:'🚀 ابدأ',savedTitle:'💾 المحفوظة',noSaved:'لا توجد ألعاب',historyTitle:'📜 السجل',noHistory:'لا توجد جولات',undoBtn:'↩️ تراجع',saveBtn:'💾 حفظ',newBtn:'🔄 جديد',gameOverTitle:'🏆 انتهت!',newGameBtn:'🎮 جديدة',settingsTitle:'⚙️ الإعدادات',langLabel:'🌐 اللغة',langDesc:'تغيير اللغة',soundLabel:'🔊 الصوت',soundDesc:'أصوات اللعبة',vibrateLabel:'📳 الاهتزاز',vibrateDesc:'ردود فعل لمسية',themeLabel:'🎨 السمة',themeDesc:'نظام الألوان',dataTitle:'🗄️ البيانات',clearBtn:'🗑️ مسح جميع الألعاب',backBtn:'⬅️ رجوع',langScreenTitle:'🌐 اختيار اللغة',player:'اللاعب',teamA:'الفريق أ',teamB:'الفريق ب',winner:' فاز!',soundOn:'🔊',soundOff:'🔇',clearConfirm:'مسح جميع الألعاب؟',cleared:'تم المسح!',saved:'تم الحفظ!',popupTitle:'إضافة نقاط',popupSub:'اضغط الأرقام',toAllLabel:'لجميع اللاعبين'},
-  ku:{code:'ku',flag:'🇮🇶',name:'سۆرانی',subtitle:'🎲 ژمێریاری نمرە',modeTitle:'👥 شێوازی یاری',playersTitle:'✏️ ناوی یاریزانان',targetTitle:'🎯 ئامانجی نمرە',customLabel:'🎯 تایبەت:',startBtn:'🚀 دەستپێکردن',savedTitle:'💾 یاریە پاشەکەوتکراوەکان',noSaved:'هیچ یاریەک پاشەکەوت نەکراوە',historyTitle:'📜 مێژوو',noHistory:'هێشتا هیچ گەڕێک نییە',undoBtn:'↩️ گەڕانەوە',saveBtn:'💾 پاشەکەوت',newBtn:'🔄 یاری نوێ',gameOverTitle:'🏆 یاری تەواو بوو!',newGameBtn:'🎮 یاری نوێ',settingsTitle:'⚙️ ڕێکخستنەکان',langLabel:'🌐 زمان',langDesc:'گۆڕینی زمان',soundLabel:'🔊 دەنگ',soundDesc:'دەنگی یاری',vibrateLabel:'📳 هەژان',vibrateDesc:'هەژان لە کاتی کردارەکان',themeLabel:'🎨 ڕەنگ',themeDesc:'ڕەنگی بەرنامە',dataTitle:'🗄️ زانیاری',clearBtn:'🗑️ سڕینەوەی هەموو یاریەکان',backBtn:'⬅️ گەڕانەوە',langScreenTitle:'🌐 هەڵبژاردنی زمان',player:'یاریزان',teamA:'تێمی ئە',teamB:'تێمی ب',winner:' بردنەوە!',soundOn:'🔊',soundOff:'🔇',clearConfirm:'دڵنیای لە سڕینەوەی هەموو یاریەکان؟',cleared:'هەموو یاریەکان سڕانەوە!',saved:'یاری پاشەکەوت کرا!',popupTitle:'زیادکردنی نمرە',popupSub:'ژمارەکان بنووسە',toAllLabel:'بۆ هەموو یاریزانەکان'},
-  kd:{code:'kd',flag:'🇮🇶',name:'بادینی',subtitle:'🎲 ژمێرەی خاڵ',modeTitle:'👥 شێلێی یاری',playersTitle:'✏️ ناوێ یاریزانێ',targetTitle:'🎯 ئامانجی خاڵ',customLabel:'🎯 تایبەت:',startBtn:'🚀 دەستپێکە',savedTitle:'💾 یاریێ پاشەکەوتکراوێ',noSaved:'هیچ یاریێ پاشەکەوت نەکراوە',historyTitle:'📜 مێژو',noHistory:'هێشتا هیچ گەڕێ نینە',undoBtn:'↩️ گەڕینەوە',saveBtn:'💾 پاشکەوتی',newBtn:'🔄 یاریێ نە',gameOverTitle:'🏆 یاری تەواوە!',newGameBtn:'🎮 یاریێ نە',settingsTitle:'⚙️ ڕێکخستنێ',langLabel:'🌐 زمانە',langDesc:'گۆرینی زمانە',soundLabel:'🔊 دەنگە',soundDesc:'دەنگی یاری',vibrateLabel:'📳 هەژانە',vibrateDesc:'هەژان ل کاتی کردارێن',themeLabel:'🎨 ڕەنگە',themeDesc:'ڕەنگی بەرنامە',dataTitle:'🗄️ زانیاریێ',clearBtn:'🗑️ سڕینەوەی هەموو یاریێن',backBtn:'⬅️ گەڕینەوە',langScreenTitle:'🌐 هەڵبژارتنی زمانە',player:'یاریزان',teamA:'تیمێ ئە',teamB:'تیمێ ب',winner:' بردنەوە!',soundOn:'🔊',soundOff:'🔇',clearConfirm:'دڵنیای ل سڕینەوەی هەموو یاریێن؟',cleared:'هەموو یاریێن سڕانەوە!',saved:'یاری پاشکەوتی کرا!',popupTitle:'زیادکردنی خاڵ',popupSub:'ژمارێ بنووسە',toAllLabel:'بۆ هەموو یاریزانێن'},
-  es:{code:'es',flag:'🇪🇸',name:'Español',subtitle:'🎲 Rastreador de Puntos',modeTitle:'👥 Modo de Juego',playersTitle:'✏️ Nombres',targetTitle:'🎯 Puntaje Objetivo',customLabel:'🎯 Personalizado:',startBtn:'🚀 INICIAR',savedTitle:'💾 Partidas Guardadas',noSaved:'No hay partidas',historyTitle:'📜 Historial',noHistory:'Sin rondas aún',undoBtn:'↩️ Deshacer',saveBtn:'💾 Guardar',newBtn:'🔄 Nuevo',gameOverTitle:'🏆 ¡Juego Terminado!',newGameBtn:'🎮 Nuevo Juego',settingsTitle:'⚙️ Ajustes',langLabel:'🌐 Idioma',langDesc:'Cambiar idioma',soundLabel:'🔊 Sonido',soundDesc:'Sonidos del juego',vibrateLabel:'📳 Vibración',vibrateDesc:'Retroalimentación háptica',themeLabel:'🎨 Tema',themeDesc:'Esquema de colores',dataTitle:'🗄️ Datos',clearBtn:'🗑️ Borrar Todo',backBtn:'⬅️ Atrás',langScreenTitle:'🌐 Seleccionar Idioma',player:'Jugador',teamA:'Equipo A',teamB:'Equipo B',winner:' ¡Gana!',soundOn:'🔊',soundOff:'🔇',clearConfirm:'¿Borrar todas las partidas?',cleared:'¡Todo borrado!',saved:'¡Partida guardada!',popupTitle:'Añadir Puntos',popupSub:'Toca números',toAllLabel:'Añadir a TODOS'},
-  fr:{code:'fr',flag:'🇫🇷',name:'Français',subtitle:'🎲 Suivi de Score',modeTitle:'👥 Mode de Jeu',playersTitle:'✏️ Noms',targetTitle:'🎯 Score Cible',customLabel:'🎯 Personnalisé:',startBtn:'🚀 DÉMARRER',savedTitle:'💾 Parties Sauv.',noSaved:'Aucune partie',historyTitle:'📜 Historique',noHistory:'Aucun tour',undoBtn:'↩️ Annuler',saveBtn:'💾 Sauver',newBtn:'🔄 Nouveau',gameOverTitle:'🏆 Fin du Jeu!',newGameBtn:'🎮 Nouvelle Partie',settingsTitle:'⚙️ Paramètres',langLabel:'🌐 Langue',langDesc:'Changer la langue',soundLabel:'🔊 Son',soundDesc:'Sons du jeu',vibrateLabel:'📳 Vibration',vibrateDesc:'Retour haptique',themeLabel:'🎨 Thème',themeDesc:'Palette de couleurs',dataTitle:'🗄️ Données',clearBtn:'🗑️ Tout Effacer',backBtn:'⬅️ Retour',langScreenTitle:'🌐 Choisir Langue',player:'Joueur',teamA:'Équipe A',teamB:'Équipe B',winner:' Gagne!',soundOn:'🔊',soundOff:'🔇',clearConfirm:'Effacer toutes les parties?',cleared:'Tout effacé!',saved:'Partie sauv.!',popupTitle:'Ajouter Points',popupSub:'Tapez les chiffres',toAllLabel:'Ajouter à TOUS'},
-  de:{code:'de',flag:'🇩🇪',name:'Deutsch',subtitle:'🎲 Punkte Tracker',modeTitle:'👥 Spielmodus',playersTitle:'✏️ Spielernamen',targetTitle:'🎯 Zielpunkte',customLabel:'🎯 Benutzerdef.:',startBtn:'🚀 STARTEN',savedTitle:'💾 Gespeichert',noSaved:'Keine Spiele',historyTitle:'📜 Verlauf',noHistory:'Noch keine Runden',undoBtn:'↩️ Rückgängig',saveBtn:'💾 Speichern',newBtn:'🔄 Neu',gameOverTitle:'🏆 Spiel Ende!',newGameBtn:'🎮 Neues Spiel',settingsTitle:'⚙️ Einstellungen',langLabel:'🌐 Sprache',langDesc:'Sprache ändern',soundLabel:'🔊 Ton',soundDesc:'Spielgeräusche',vibrateLabel:'📳 Vibration',vibrateDesc:'Haptisches Feedback',themeLabel:'🎨 Design',themeDesc:'Farbschema',dataTitle:'🗄️ Daten',clearBtn:'🗑️ Alles Löschen',backBtn:'⬅️ Zurück',langScreenTitle:'🌐 Sprache Wählen',player:'Spieler',teamA:'Team A',teamB:'Team B',winner:' Gewinnt!',soundOn:'🔊',soundOff:'🔇',clearConfirm:'Alle Spiele löschen?',cleared:'Alles gelöscht!',saved:'Spiel gespeichert!',popupTitle:'Punkte Hinzuf.',popupSub:'Zahlen tippen',toAllLabel:'Für ALLE Spieler'},
-  pt:{code:'pt',flag:'🇧🇷',name:'Português',subtitle:'🎲 Rastreador',modeTitle:'👥 Modo',playersTitle:'✏️ Nomes',targetTitle:'🎯 Meta',customLabel:'🎯 Personalizado:',startBtn:'🚀 COMEÇAR',savedTitle:'💾 Salvos',noSaved:'Sem jogos',historyTitle:'📜 Histórico',noHistory:'Sem rodadas',undoBtn:'↩️ Desfazer',saveBtn:'💾 Salvar',newBtn:'🔄 Novo',gameOverTitle:'🏆 Fim!',newGameBtn:'🎮 Novo Jogo',settingsTitle:'⚙️ Config.',langLabel:'🌐 Idioma',langDesc:'Mudar idioma',soundLabel:'🔊 Som',soundDesc:'Sons do jogo',vibrateLabel:'📳 Vibração',vibrateDesc:'Feedback tátil',themeLabel:'🎨 Tema',themeDesc:'Esquema de cores',dataTitle:'🗄️ Dados',clearBtn:'🗑️ Limpar Tudo',backBtn:'⬅️ Voltar',langScreenTitle:'🌐 Escolher Idioma',player:'Jogador',teamA:'Time A',teamB:'Time B',winner:' Vence!',soundOn:'🔊',soundOff:'🔇',clearConfirm:'Limpar todos os jogos?',cleared:'Tudo limpo!',saved:'Jogo salvo!',popupTitle:'Add Pontos',popupSub:'Toque os números',toAllLabel:'Add a TODOS'},
-  ru:{code:'ru',flag:'🇷🇺',name:'Русский',subtitle:'🎲 Счётчик Очков',modeTitle:'👥 Режим',playersTitle:'✏️ Имена',targetTitle:'🎯 Цель',customLabel:'🎯 Свой:',startBtn:'🚀 СТАРТ',savedTitle:'💾 Сохранённые',noSaved:'Нет игр',historyTitle:'📜 История',noHistory:'Нет раундов',undoBtn:'↩️ Отмена',saveBtn:'💾 Сохр.',newBtn:'🔄 Новая',gameOverTitle:'🏆 Конец!',newGameBtn:'🎮 Новая Игра',settingsTitle:'⚙️ Настройки',langLabel:'🌐 Язык',langDesc:'Сменить язык',soundLabel:'🔊 Звук',soundDesc:'Звуки игры',vibrateLabel:'📳 Вибрация',vibrateDesc:'Тактильный отклик',themeLabel:'🎨 Тема',themeDesc:'Цветовая схема',dataTitle:'🗄️ Данные',clearBtn:'🗑️ Очистить Всё',backBtn:'⬅️ Назад',langScreenTitle:'🌐 Выбор Языка',player:'Игрок',teamA:'Команда А',teamB:'Команда Б',winner:' Победил!',soundOn:'🔊',soundOff:'🔇',clearConfirm:'Удалить все игры?',cleared:'Всё удалено!',saved:'Игра сохранена!',popupTitle:'Добавить Очки',popupSub:'Нажмите цифры',toAllLabel:'Всем игрокам'},
-  zh:{code:'zh',flag:'🇨🇳',name:'中文',subtitle:'🎲 记分器',modeTitle:'👥 游戏模式',playersTitle:'✏️ 玩家名称',targetTitle:'🎯 目标分数',customLabel:'🎯 自定义:',startBtn:'🚀 开始游戏',savedTitle:'💾 已保存',noSaved:'没有保存的游戏',historyTitle:'📜 历史记录',noHistory:'暂无回合',undoBtn:'↩️ 撤销',saveBtn:'💾 保存',newBtn:'🔄 新建',gameOverTitle:'🏆 游戏结束!',newGameBtn:'🎮 新游戏',settingsTitle:'⚙️ 设置',langLabel:'🌐 语言',langDesc:'切换语言',soundLabel:'🔊 声音',soundDesc:'游戏音效',vibrateLabel:'📳 震动',vibrateDesc:'触觉反馈',themeLabel:'🎨 主题',themeDesc:'配色方案',dataTitle:'🗄️ 数据',clearBtn:'🗑️ 清空全部',backBtn:'⬅️ 返回',langScreenTitle:'🌐 选择语言',player:'玩家',teamA:'A队',teamB:'B队',winner:' 获胜!',soundOn:'🔊',soundOff:'🔇',clearConfirm:'删除所有游戏?',cleared:'全部清空!',saved:'游戏已保存!',popupTitle:'添加分数',popupSub:'点击数字输入',toAllLabel:'给所有玩家添加'},
-  tr:{code:'tr',flag:'🇹🇷',name:'Türkçe',subtitle:'🎲 Puan Takibi',modeTitle:'👥 Oyun Modu',playersTitle:'✏️ Oyuncu Adları',targetTitle:'🎯 Hedef Puan',customLabel:'🎯 Özel:',startBtn:'🚀 BAŞLA',savedTitle:'💾 Kayıtlı',noSaved:'Kayıtlı oyun yok',historyTitle:'📜 Geçmiş',noHistory:'Henüz tur yok',undoBtn:'↩️ Geri Al',saveBtn:'💾 Kaydet',newBtn:'🔄 Yeni',gameOverTitle:'🏆 Oyun Bitti!',newGameBtn:'🎮 Yeni Oyun',settingsTitle:'⚙️ Ayarlar',langLabel:'🌐 Dil',langDesc:'Dili değiştir',soundLabel:'🔊 Ses',soundDesc:'Oyun sesleri',vibrateLabel:'📳 Titreşim',vibrateDesc:'Dokunsal geri bildirim',themeLabel:'🎨 Tema',themeDesc:'Renk şeması',dataTitle:'🗄️ Veri',clearBtn:'🗑️ Tümünü Sil',backBtn:'⬅️ Geri',langScreenTitle:'🌐 Dil Seç',player:'Oyuncu',teamA:'Takım A',teamB:'Takım B',winner:' Kazandı!',soundOn:'🔊',soundOff:'🔇',clearConfirm:'Tüm oyunları sil?',cleared:'Tümü silindi!',saved:'Oyun kaydedildi!',popupTitle:'Puan Ekle',popupSub:'Sayılara dokun',toAllLabel:'TÜM oyunculara ekle'},
-  hi:{code:'hi',flag:'🇮🇳',name:'हिन्दी',subtitle:'🎲 स्कोर ट्रैकर',modeTitle:'👥 गेम मोड',playersTitle:'✏️ खिलाड़ी नाम',targetTitle:'🎯 लक्ष्य स्कोर',customLabel:'🎯 कस्टम:',startBtn:'🚀 शुरू करें',savedTitle:'💾 सेव्ड गेम्स',noSaved:'कोई गेम नहीं',historyTitle:'📜 इतिहास',noHistory:'अभी तक कोई राउंड नहीं',undoBtn:'↩️ पूर्ववत',saveBtn:'💾 सेव करें',newBtn:'🔄 नया',gameOverTitle:'🏆 गेम खत्म!',newGameBtn:'🎮 नया गेम',settingsTitle:'⚙️ सेटिंग्स',langLabel:'🌐 भाषा',langDesc:'भाषा बदलें',soundLabel:'🔊 आवाज़',soundDesc:'गेम की आवाज़ें',vibrateLabel:'📳 कंपन',vibrateDesc:'स्पर्श प्रतिक्रिया',themeLabel:'🎨 थीम',themeDesc:'रंग योजना',dataTitle:'🗄️ डेटा',clearBtn:'🗑️ सब हटाएँ',backBtn:'⬅️ वापस',langScreenTitle:'🌐 भाषा चुनें',player:'खिलाड़ी',teamA:'टीम A',teamB:'टीम B',winner:' जीता!',soundOn:'🔊',soundOff:'🔇',clearConfirm:'सभी गेम हटाएँ?',cleared:'सब हटा दिया!',saved:'गेम सेव हो गया!',popupTitle:'अंक जोड़ें',popupSub:'नंबर दबाएँ',toAllLabel:'सभी खिलाड़ियों को जोड़ें'}
+// ===== STATE =====
+let gameMode = 2, targetScore = 200, players = [], scores = [], history = [], currentPopupPlayer = -1, popupValue = '', toAll = false;
+let soundOn = true, vibOn = true, lang = 'en';
+
+// ===== TRANSLATIONS =====
+const I18N = {
+  en: {
+    gameMode: 'Game Mode', playerNames: 'Player Names', targetScore: 'Target Score',
+    custom: 'Custom', startGame: 'START GAME', savedGames: 'Saved Games',
+    noSavedGames: 'No saved games', history: 'History', noRounds: 'No rounds yet',
+    round: 'R', undo: 'Undo', save: 'Save', newGame: 'New', newGameBtn: '🎮 New Game',
+    gameOver: 'Game Over!', wins: 'Wins!', addPoints: 'Add Points', enterScore: 'Enter score',
+    applyToAll: 'Apply to all players', teamA: 'Team A', teamB: 'Team B',
+    settings: 'Settings', language: 'Language', changeLanguage: 'Change language',
+    sound: 'Sound', gameSounds: 'Game sounds', vibration: 'Vibration',
+    hapticFeedback: 'Haptic feedback', theme: 'Theme', colorScheme: 'Color scheme',
+    data: 'Data', clearAllGames: '🗑️ Clear All Games', back: '⬅️ Back',
+    selectLanguage: 'Select Language', player: 'Player', player1: 'Player 1',
+    player2: 'Player 2', player3: 'Player 3', player4: 'Player 4',
+    twoPlayer: '2 Player', threePlayer: '3 Player', fourPlayer: '4 Player',
+    team2v2: '2v2 Team', scoreTracker: 'Score Tracker', confirmNew: 'Start a new game? Current progress will be lost.',
+    confirmClear: 'Delete all saved games? This cannot be undone.', saved: 'Game saved!',
+    cleared: 'All saved games cleared!', teamADiv: 'Team A: P1 + P2  |  Team B: P3 + P4'
+  },
+  ar: {
+    gameMode: 'وضع اللعبة', playerNames: 'أسماء اللاعبين', targetScore: 'الهدف',
+    custom: 'مخصص', startGame: 'ابدأ اللعبة', savedGames: 'الألعاب المحفوظة',
+    noSavedGames: 'لا توجد ألعاب محفوظة', history: 'التاريخ', noRounds: 'لا توجد جولات',
+    round: 'ج', undo: 'تراجع', save: 'حفظ', newGame: 'جديد', newGameBtn: '🎮 لعبة جديدة',
+    gameOver: 'انتهت اللعبة!', wins: 'يفوز!', addPoints: 'إضافة نقاط', enterScore: 'أدخل النتيجة',
+    applyToAll: 'تطبيق على جميع اللاعبين', teamA: 'الفريق أ', teamB: 'الفريق ب',
+    settings: 'الإعدادات', language: 'اللغة', changeLanguage: 'تغيير اللغة',
+    sound: 'الصوت', gameSounds: 'أصوات اللعبة', vibration: 'الاهتزاز',
+    hapticFeedback: 'الاهتزاز', theme: 'السمة', colorScheme: 'نظام الألوان',
+    data: 'البيانات', clearAllGames: '🗑️ مسح جميع الألعاب', back: '⬅️ رجوع',
+    selectLanguage: 'اختر اللغة', player: 'لاعب', player1: 'لاعب 1',
+    player2: 'لاعب 2', player3: 'لاعب 3', player4: 'لاعب 4',
+    twoPlayer: 'لاعبان', threePlayer: '3 لاعبين', fourPlayer: '4 لاعبين',
+    team2v2: 'فريق 2 ضد 2', scoreTracker: 'متتبع النقاط',
+    confirmNew: 'بدء لعبة جديدة؟ سيتم فقدان التقدم الحالي.',
+    confirmClear: 'حذف جميع الألعاب المحفوظة؟ لا يمكن التراجع عن هذا.', saved: 'تم حفظ اللعبة!',
+    cleared: 'تم مسح جميع الألعاب!', teamADiv: 'الفريق أ: ل1 + ل2  |  الفريق ب: ل3 + ل4'
+  },
+  ckb: {
+    gameMode: 'شێوازی یاری', playerNames: 'ناوی یاریزانان', targetScore: 'ئامانج',
+    custom: 'تایبەت', startGame: 'دەستپێکی یاری', savedGames: 'یاریە پاشەکەوتکراوەکان',
+    noSavedGames: 'هیچ یاریەک پاشەکەوت نەکراوە', history: 'مێژوو', noRounds: 'هیچ خولەکێک نییە',
+    round: 'خ', undo: 'پاشگەز', save: 'پاشەکەوت', newGame: 'نوێ', newGameBtn: '🎮 یاری نوێ',
+    gameOver: 'یاری تەواو بوو!', wins: 'بردنەوە!', addPoints: 'زیادکردنی خاڵ',
+    enterScore: 'خاڵ بنووسە', applyToAll: 'بۆ هەموو یاریزانان جێبەجێ بکە',
+    teamA: 'تیم ئە', teamB: 'تیم بێ',
+    settings: 'ڕێکخستن', language: 'زمان', changeLanguage: 'گۆڕینی زمان',
+    sound: 'دەنگ', gameSounds: 'دەنگی یاری', vibration: 'ئەلەktronیکی',
+    hapticFeedback: 'فیدباکی لمس', theme: 'ڕووکار', colorScheme: 'ڕەنگەکان',
+    data: 'داتا', clearAllGames: '🗑️ سڕینەوەی هەموو یاریەکان', back: '⬅️ گەڕانەوە',
+    selectLanguage: 'هەڵبژاردنی زمان', player: 'یاریزان', player1: 'یاریزان 1',
+    player2: 'یاریزان 2', player3: 'یاریزان 3', player4: 'یاریزان 4',
+    twoPlayer: '2 یاریزان', threePlayer: '3 یاریزان', fourPlayer: '4 یاریزان',
+    team2v2: 'تیم 2 دژی 2', scoreTracker: 'شیکاری خاڵ',
+    confirmNew: 'دەستپێکی یاری نوێ؟ پێشکەوتنی ئێستا لەدەست دەچێت.',
+    confirmClear: 'سڕینەوەی هەموو یاریە پاشەکەوتکراوەکان؟ ناتوانرێت پاشگەز بکرێت.', saved: 'یاری پاشەکەوت کرا!',
+    cleared: 'هەموو یاریەکان سڕانەوە!', teamADiv: 'تیم ئە: ی1 + ی2  |  تیم بێ: ی3 + ی4'
+  },
+  tr: {
+    gameMode: 'Oyun Modu', playerNames: 'Oyuncu İsimleri', targetScore: 'Hedef Skor',
+    custom: 'Özel', startGame: 'OYUNA BAŞLA', savedGames: 'Kayıtlı Oyunlar',
+    noSavedGames: 'Kayıtlı oyun yok', history: 'Geçmiş', noRounds: 'Henüz tur yok',
+    round: 'T', undo: 'Geri', save: 'Kaydet', newGame: 'Yeni', newGameBtn: '🎮 Yeni Oyun',
+    gameOver: 'Oyun Bitti!', wins: 'Kazandı!', addPoints: 'Puan Ekle', enterScore: 'Skor girin',
+    applyToAll: 'Tüm oyunculara uygula', teamA: 'Takım A', teamB: 'Takım B',
+    settings: 'Ayarlar', language: 'Dil', changeLanguage: 'Dili değiştir',
+    sound: 'Ses', gameSounds: 'Oyun sesleri', vibration: 'Titreşim',
+    hapticFeedback: 'Dokunsal geri bildirim', theme: 'Tema', colorScheme: 'Renk şeması',
+    data: 'Veri', clearAllGames: '🗑️ Tüm Oyunları Sil', back: '⬅️ Geri',
+    selectLanguage: 'Dil Seç', player: 'Oyuncu', player1: 'Oyuncu 1',
+    player2: 'Oyuncu 2', player3: 'Oyuncu 3', player4: 'Oyuncu 4',
+    twoPlayer: '2 Oyuncu', threePlayer: '3 Oyuncu', fourPlayer: '4 Oyuncu',
+    team2v2: '2ye2 Takım', scoreTracker: 'Skor Takibi',
+    confirmNew: 'Yeni oyuna başla? Mevcut ilerleme kaybolacak.',
+    confirmClear: 'Tüm kayıtlı oyunları sil? Bu geri alınamaz.', saved: 'Oyun kaydedildi!',
+    cleared: 'Tüm oyunlar silindi!', teamADiv: 'Takım A: O1 + O2  |  Takım B: O3 + O4'
+  },
+  fa: {
+    gameMode: 'حالت بازی', playerNames: 'نام بازیکنان', targetScore: 'هدف',
+    custom: 'سفارشی', startGame: 'شروع بازی', savedGames: 'بازی‌های ذخیره شده',
+    noSavedGames: 'بازی ذخیره شده‌ای وجود ندارد', history: 'تاریخچه', noRounds: 'هنوز دور‌ای نیست',
+    round: 'د', undo: 'واگرد', save: 'ذخیره', newGame: 'جدید', newGameBtn: '🎮 بازی جدید',
+    gameOver: 'بازی تمام شد!', wins: 'برنده شد!', addPoints: 'اضافه کردن امتیاز',
+    enterScore: 'امتیاز وارد کنید', applyToAll: 'اعمال به همه بازیکنان',
+    teamA: 'تیم الف', teamB: 'تیم ب',
+    settings: 'تنظیمات', language: 'زبان', changeLanguage: 'تغییر زبان',
+    sound: 'صدا', gameSounds: 'صداهای بازی', vibration: 'لرزش',
+    hapticFeedback: 'بازخورد لمسی', theme: 'تم', colorScheme: 'طرح رنگ',
+    data: 'داده', clearAllGames: '🗑️ پاک کردن همه بازی‌ها', back: '⬅️ بازگشت',
+    selectLanguage: 'انتخاب زبان', player: 'بازیکن', player1: 'بازیکن 1',
+    player2: 'بازیکن 2', player3: 'بازیکن 3', player4: 'بازیکن 4',
+    twoPlayer: '۲ نفره', threePlayer: '۳ نفره', fourPlayer: '۴ نفره',
+    team2v2: 'تیم ۲ به ۲', scoreTracker: 'ردیاب امتیاز',
+    confirmNew: 'شروع بازی جدید؟ پیشرفت فعلی از بین خواهد رفت.',
+    confirmClear: 'حذف همه بازی‌های ذخیره شده؟ این قابل بازگشت نیست.', saved: 'بازی ذخیره شد!',
+    cleared: 'همه بازی‌ها پاک شدند!', teamADiv: 'تیم الف: ب۱ + ب۲  |  تیم ب: ب۳ + ب۴'
+  },
+  fr: {
+    gameMode: 'Mode de Jeu', playerNames: 'Noms des Joueurs', targetScore: 'Score Cible',
+    custom: 'Personnalisé', startGame: 'COMMENCER', savedGames: 'Parties Sauvegardées',
+    noSavedGames: 'Aucune partie sauvegardée', history: 'Historique', noRounds: 'Aucun tour',
+    round: 'T', undo: 'Annuler', save: 'Sauver', newGame: 'Nouveau', newGameBtn: '🎮 Nouvelle Partie',
+    gameOver: 'Partie Terminée!', wins: 'Gagne!', addPoints: 'Ajouter Points',
+    enterScore: 'Entrez le score', applyToAll: 'Appliquer à tous',
+    teamA: 'Équipe A', teamB: 'Équipe B',
+    settings: 'Paramètres', language: 'Langue', changeLanguage: 'Changer la langue',
+    sound: 'Son', gameSounds: 'Sons du jeu', vibration: 'Vibration',
+    hapticFeedback: 'Retour haptique', theme: 'Thème', colorScheme: 'Palette',
+    data: 'Données', clearAllGames: '🗑️ Tout Supprimer', back: '⬅️ Retour',
+    selectLanguage: 'Choisir la Langue', player: 'Joueur', player1: 'Joueur 1',
+    player2: 'Joueur 2', player3: 'Joueur 3', player4: 'Joueur 4',
+    twoPlayer: '2 Joueurs', threePlayer: '3 Joueurs', fourPlayer: '4 Joueurs',
+    team2v2: '2c2 Équipe', scoreTracker: 'Suivi des Scores',
+    confirmNew: 'Nouvelle partie? La progression actuelle sera perdue.',
+    confirmClear: 'Supprimer toutes les parties? Irréversible.', saved: 'Partie sauvegardée!',
+    cleared: 'Toutes les parties supprimées!', teamADiv: 'Équipe A: J1 + J2  |  Équipe B: J3 + J4'
+  },
+  es: {
+    gameMode: 'Modo de Juego', playerNames: 'Nombres', targetScore: 'Objetivo',
+    custom: 'Personalizado', startGame: 'INICIAR', savedGames: 'Partidas Guardadas',
+    noSavedGames: 'Sin partidas guardadas', history: 'Historial', noRounds: 'Sin rondas',
+    round: 'R', undo: 'Deshacer', save: 'Guardar', newGame: 'Nuevo', newGameBtn: '🎮 Nueva Partida',
+    gameOver: '¡Juego Terminado!', wins: '¡Gana!', addPoints: 'Añadir Puntos',
+    enterScore: 'Ingresa puntos', applyToAll: 'Aplicar a todos',
+    teamA: 'Equipo A', teamB: 'Equipo B',
+    settings: 'Ajustes', language: 'Idioma', changeLanguage: 'Cambiar idioma',
+    sound: 'Sonido', gameSounds: 'Sonidos', vibration: 'Vibración',
+    hapticFeedback: 'Retroalimentación', theme: 'Tema', colorScheme: 'Esquema de color',
+    data: 'Datos', clearAllGames: '🗑️ Borrar Todo', back: '⬅️ Atrás',
+    selectLanguage: 'Seleccionar Idioma', player: 'Jugador', player1: 'Jugador 1',
+    player2: 'Jugador 2', player3: 'Jugador 3', player4: 'Jugador 4',
+    twoPlayer: '2 Jugadores', threePlayer: '3 Jugadores', fourPlayer: '4 Jugadores',
+    team2v2: '2vs2 Equipo', scoreTracker: 'Marcador',
+    confirmNew: '¿Nueva partida? Se perderá el progreso.',
+    confirmClear: '¿Borrar todas las partidas? No se puede deshacer.', saved: '¡Partida guardada!',
+    cleared: '¡Todas las partidas borradas!', teamADiv: 'Equipo A: J1 + J2  |  Equipo B: J3 + J4'
+  },
+  de: {
+    gameMode: 'Spielmodus', playerNames: 'Spielernamen', targetScore: 'Zielpunktzahl',
+    custom: 'Benutzerdefiniert', startGame: 'SPIEL STARTEN', savedGames: 'Gespeicherte Spiele',
+    noSavedGames: 'Keine gespeicherten Spiele', history: 'Verlauf', noRounds: 'Keine Runden',
+    round: 'R', undo: 'Rückgängig', save: 'Speichern', newGame: 'Neu', newGameBtn: '🎮 Neues Spiel',
+    gameOver: 'Spiel Vorbei!', wins: 'Gewinnt!', addPoints: 'Punkte Hinzufügen',
+    enterScore: 'Punkte eingeben', applyToAll: 'Für alle anwenden',
+    teamA: 'Team A', teamB: 'Team B',
+    settings: 'Einstellungen', language: 'Sprache', changeLanguage: 'Sprache ändern',
+    sound: 'Ton', gameSounds: 'Spielgeräusche', vibration: 'Vibration',
+    hapticFeedback: 'Haptisches Feedback', theme: 'Design', colorScheme: 'Farbschema',
+    data: 'Daten', clearAllGames: '🗑️ Alle Löschen', back: '⬅️ Zurück',
+    selectLanguage: 'Sprache Wählen', player: 'Spieler', player1: 'Spieler 1',
+    player2: 'Spieler 2', player3: 'Spieler 3', player4: 'Spieler 4',
+    twoPlayer: '2 Spieler', threePlayer: '3 Spieler', fourPlayer: '4 Spieler',
+    team2v2: '2ge2 Team', scoreTracker: 'Punktezähler',
+    confirmNew: 'Neues Spiel? Aktueller Fortschritt geht verloren.',
+    confirmClear: 'Alle Spiele löschen? Kann nicht rückgängig gemacht werden.', saved: 'Spiel gespeichert!',
+    cleared: 'Alle Spiele gelöscht!', teamADiv: 'Team A: S1 + S2  |  Team B: S3 + S4'
+  },
+  ru: {
+    gameMode: 'Режим Игры', playerNames: 'Имена Игроков', targetScore: 'Цель',
+    custom: 'Свой', startGame: 'НАЧАТЬ', savedGames: 'Сохранённые Игры',
+    noSavedGames: 'Нет сохранённых игр', history: 'История', noRounds: 'Нет раундов',
+    round: 'Р', undo: 'Отмена', save: 'Сохранить', newGame: 'Новая', newGameBtn: '🎮 Новая Игра',
+    gameOver: 'Игра Окончена!', wins: 'Побеждает!', addPoints: 'Добавить Очки',
+    enterScore: 'Введите счёт', applyToAll: 'Применить ко всем',
+    teamA: 'Команда А', teamB: 'Команда Б',
+    settings: 'Настройки', language: 'Язык', changeLanguage: 'Сменить язык',
+    sound: 'Звук', gameSounds: 'Звуки игры', vibration: 'Вибрация',
+    hapticFeedback: 'Тактильная отдача', theme: 'Тема', colorScheme: 'Цветовая схема',
+    data: 'Данные', clearAllGames: '🗑️ Очистить Всё', back: '⬅️ Назад',
+    selectLanguage: 'Выбор Языка', player: 'Игрок', player1: 'Игрок 1',
+    player2: 'Игрок 2', player3: 'Игрок 3', player4: 'Игрок 4',
+    twoPlayer: '2 Игрока', threePlayer: '3 Игрока', fourPlayer: '4 Игрока',
+    team2v2: '2на2 Команда', scoreTracker: 'Счётчик',
+    confirmNew: 'Новая игра? Текущий прогресс будет потерян.',
+    confirmClear: 'Удалить все игры? Нельзя отменить.', saved: 'Игра сохранена!',
+    cleared: 'Все игры удалены!', teamADiv: 'Команда А: И1 + И2  |  Команда Б: И3 + И4'
+  },
+  pt: {
+    gameMode: 'Modo de Jogo', playerNames: 'Nomes', targetScore: 'Objetivo',
+    custom: 'Personalizado', startGame: 'COMEÇAR', savedGames: 'Jogos Salvos',
+    noSavedGames: 'Sem jogos salvos', history: 'Histórico', noRounds: 'Sem rodadas',
+    round: 'R', undo: 'Desfazer', save: 'Salvar', newGame: 'Novo', newGameBtn: '🎮 Novo Jogo',
+    gameOver: 'Fim de Jogo!', wins: 'Vence!', addPoints: 'Adicionar Pontos',
+    enterScore: 'Digite a pontuação', applyToAll: 'Aplicar a todos',
+    teamA: 'Equipe A', teamB: 'Equipe B',
+    settings: 'Configurações', language: 'Idioma', changeLanguage: 'Mudar idioma',
+    sound: 'Som', gameSounds: 'Sons do jogo', vibration: 'Vibração',
+    hapticFeedback: 'Feedback tátil', theme: 'Tema', colorScheme: 'Esquema de cores',
+    data: 'Dados', clearAllGames: '🗑️ Limpar Tudo', back: '⬅️ Voltar',
+    selectLanguage: 'Selecionar Idioma', player: 'Jogador', player1: 'Jogador 1',
+    player2: 'Jogador 2', player3: 'Jogador 3', player4: 'Jogador 4',
+    twoPlayer: '2 Jogadores', threePlayer: '3 Jogadores', fourPlayer: '4 Jogadores',
+    team2v2: '2x2 Equipe', scoreTracker: 'Contador',
+    confirmNew: 'Novo jogo? O progresso atual será perdido.',
+    confirmClear: 'Apagar todos os jogos? Não pode ser desfeito.', saved: 'Jogo salvo!',
+    cleared: 'Todos os jogos apagados!', teamADiv: 'Equipe A: J1 + J2  |  Equipe B: J3 + J4'
+  },
+  it: {
+    gameMode: 'Modalità', playerNames: 'Nomi Giocatori', targetScore: 'Obiettivo',
+    custom: 'Personalizzato', startGame: 'INIZIA', savedGames: 'Partite Salvate',
+    noSavedGames: 'Nessuna partita salvata', history: 'Cronologia', noRounds: 'Nessun turno',
+    round: 'T', undo: 'Annulla', save: 'Salva', newGame: 'Nuova', newGameBtn: '🎮 Nuova Partita',
+    gameOver: 'Fine Partita!', wins: 'Vince!', addPoints: 'Aggiungi Punti',
+    enterScore: 'Inserisci punteggio', applyToAll: 'Applica a tutti',
+    teamA: 'Squadra A', teamB: 'Squadra B',
+    settings: 'Impostazioni', language: 'Lingua', changeLanguage: 'Cambia lingua',
+    sound: 'Suono', gameSounds: 'Suoni di gioco', vibration: 'Vibrazione',
+    hapticFeedback: 'Feedback aptico', theme: 'Tema', colorScheme: 'Schema colori',
+    data: 'Dati', clearAllGames: '🗑️ Cancella Tutto', back: '⬅️ Indietro',
+    selectLanguage: 'Seleziona Lingua', player: 'Giocatore', player1: 'Giocatore 1',
+    player2: 'Giocatore 2', player3: 'Giocatore 3', player4: 'Giocatore 4',
+    twoPlayer: '2 Giocatori', threePlayer: '3 Giocatori', fourPlayer: '4 Giocatori',
+    team2v2: '2vs2 Squadra', scoreTracker: 'Segnapunti',
+    confirmNew: 'Nuova partita? Il progresso attuale andrà perso.',
+    confirmClear: 'Cancellare tutte le partite? Irreversibile.', saved: 'Partita salvata!',
+    cleared: 'Tutte le partite cancellate!', teamADiv: 'Squadra A: G1 + G2  |  Squadra B: G3 + G4'
+  }
 };
 
-// Themes
-var TH = {green:'#0f1f0f',dark:'#121212',blue:'#0a1929',red:'#1a0a0a'};
+function t(key) {
+  const l = I18N[lang] || I18N['en'];
+  return l[key] || I18N['en'][key] || key;
+}
 
-// State
-var SOUND = localStorage.getItem('dp_sound') !== 'false';
-var VIBRATE = localStorage.getItem('dp_vibrate') !== 'false';
-var THEME = localStorage.getItem('dp_theme') || 'green';
-var MODE = 2;
-var PLAYERS = [];
-var SCORES = [];
-var TARGET = 200;
-var ROUNDS = [];
-var GAME_OVER = false;
-var POPUP_PLAYER = -1;
-var POPUP_VALUE = 0;
-var POPUP_TOALL = false;
-var TEAM_MODE = false;
-var PREV_SCREEN = 'setup';
+const LANGS = {
+  en:{name:'English',flag:'🇺🇸',code:'EN'},
+  ar:{name:'العربية',flag:'🇸🇦',code:'AR'},
+  ckb:{name:'کوردی',flag:'🇮🇶',code:'KU'},
+  tr:{name:'Türkçe',flag:'🇹🇷',code:'TR'},
+  fa:{name:'فارسی',flag:'🇮🇷',code:'FA'},
+  fr:{name:'Français',flag:'🇫🇷',code:'FR'},
+  es:{name:'Español',flag:'🇪🇸',code:'ES'},
+  de:{name:'Deutsch',flag:'🇩🇪',code:'DE'},
+  ru:{name:'Русский',flag:'🇷🇺',code:'RU'},
+  pt:{name:'Português',flag:'🇵🇹',code:'PT'},
+  it:{name:'Italiano',flag:'🇮🇹',code:'IT'}
+};
 
-// Helpers
-function getLang() { return localStorage.getItem('dp_lang') || 'en'; }
-function setLang(code) { localStorage.setItem('dp_lang', code); }
-function txt() { return TX[getLang()] || TX['en']; }
-
-function playBeep(freq, dur, vol) {
-  if (!SOUND) return;
+// ===== ADMOB INTERSTITIAL =====
+function showInterstitialAd() {
+  // Median.co bridge - calls native interstitial
+  if (window.median && window.median.interstitial) {
+    window.median.interstitial.show();
+  } else if (window.android && window.android.showInterstitialAd) {
+    window.android.showInterstitialAd();
+  } else if (window.webkit && window.webkit.messageHandlers && window.webkit.messageHandlers.median) {
+    window.webkit.messageHandlers.median.postMessage({action:'showInterstitialAd'});
+  }
+  // Fallback: try standard AdMob JS if available
   try {
-    var ctx = new (window.AudioContext || window.webkitAudioContext)();
-    var osc = ctx.createOscillator();
-    var gain = ctx.createGain();
-    osc.connect(gain);
-    gain.connect(ctx.destination);
-    osc.frequency.value = freq;
-    gain.gain.value = vol || 0.1;
-    osc.start();
-    osc.stop(ctx.currentTime + dur);
-  } catch(e) {}
+    if (typeof admob !== 'undefined' && admob.InterstitialAd) {
+      const interstitial = new admob.InterstitialAd({ adUnitId: 'ca-app-pub-8317507117916852/4184874358' });
+      interstitial.load().then(() => interstitial.show());
+    }
+  } catch(e) { console.log('Interstitial not available'); }
 }
 
-function playSound(type) {
-  if (type === 'add') playBeep(600, 0.1, 0.12);
-  else if (type === 'win') { playBeep(523, 0.2, 0.15); setTimeout(function(){playBeep(784, 0.2, 0.15);}, 150); setTimeout(function(){playBeep(1047, 0.3, 0.15);}, 300); }
-  else if (type === 'undo') playBeep(350, 0.08, 0.1);
-  else if (type === 'err') playBeep(180, 0.15, 0.12);
+// ===== SCREEN NAVIGATION =====
+function showScreen(id) {
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  document.getElementById('screen-' + id).classList.add('active');
+  if (id === 'language') renderLangList();
+  if (id === 'setup') loadSaves();
 }
 
-function doVibrate(p) { if (VIBRATE && navigator.vibrate) navigator.vibrate(p); }
-
-function applyTheme(n) { document.body.style.background = TH[n] || TH.green; }
-
-function updateDir() {
-  var code = getLang();
-  var htmlEl = document.getElementById('htmlRoot');
-  if (htmlEl) htmlEl.dir = (code === 'ar' || code === 'ku' || code === 'kd' || code === 'he') ? 'rtl' : 'ltr';
-}
-
-function showScreen(name) {
-  var current = document.querySelector('.screen.active');
-  if (current && current.id && current.id.indexOf('settings') === -1 && current.id.indexOf('lang') === -1) {
-    PREV_SCREEN = current.id.replace('Screen', '');
-  }
-  document.querySelectorAll('.screen').forEach(function(s) { s.classList.remove('active'); });
-  var target = document.getElementById(name + 'Screen');
-  if (target) target.classList.add('active');
-  updateNavBtn();
-}
-
-function handleNavBtn() {
-  if (document.getElementById('langScreen').classList.contains('active')) { closeLangScreen(); return; }
-  if (document.getElementById('settingsScreen').classList.contains('active')) { closeSettings(); return; }
-  openSettings();
-}
-
-function updateNavBtn() {
-  var btn = document.getElementById('navBtn');
-  if (!btn) return;
-  var isLang = document.getElementById('langScreen').classList.contains('active');
-  var isSet = document.getElementById('settingsScreen').classList.contains('active');
-  btn.textContent = (isLang || isSet) ? '⬅️' : '⚙️';
-}
-
-function updateAllText() {
-  var tx = txt();
-  var ids = {
-    subtitle: tx.subtitle, modeTitle: tx.modeTitle, playersTitle: tx.playersTitle,
-    targetTitle: tx.targetTitle, customLabel: tx.customLabel, startBtn: tx.startBtn,
-    savedTitle: tx.savedTitle, historyTitle: tx.historyTitle, undoBtn: tx.undoBtn,
-    saveBtn: tx.saveBtn, newBtn: tx.newBtn, settingsTitle: tx.settingsTitle,
-    langLabel: tx.langLabel, langDesc: tx.langDesc, soundLabel: tx.soundLabel,
-    soundDesc: tx.soundDesc, vibrateLabel: tx.vibrateLabel, vibrateDesc: tx.vibrateDesc,
-    themeLabel: tx.themeLabel, themeDesc: tx.themeDesc, dataTitle: tx.dataTitle,
-    clearBtn: tx.clearBtn, backBtn: tx.backBtn, langScreenTitle: tx.langScreenTitle,
-    langBackBtn: tx.backBtn, popupTitle: tx.popupTitle, popupSub: tx.popupSub,
-    toAllLabel: tx.toAllLabel, gameOverTitle: tx.gameOverTitle, newGameBtn: tx.newGameBtn,
-    mode2: '2 ' + tx.player, mode3: '3 ' + tx.player, mode4: '4 ' + tx.player,
-    mode22: '2v2 ' + tx.teamA + '/' + tx.teamB, noSaved: tx.noSaved, noHistory: tx.noHistory
-  };
-  for (var key in ids) {
-    var el = document.getElementById(key);
-    if (el) el.textContent = ids[key];
-  }
-}
-
-function updateUI() {
-  var tx = txt();
-  var sb = document.getElementById('soundBtn');
-  var st = document.getElementById('soundToggle');
-  var vt = document.getElementById('vibrateToggle');
-  var lb = document.getElementById('langBtn');
-  if (sb) sb.textContent = SOUND ? tx.soundOn : tx.soundOff;
-  if (st) st.classList.toggle('active', SOUND);
-  if (vt) vt.classList.toggle('active', VIBRATE);
-  if (lb) lb.textContent = tx.code.toUpperCase() + ' ' + tx.flag;
-}
-
-function openSettings() {
-  showScreen('settings');
-  var ts = document.getElementById('themeSelect');
-  if (ts) ts.value = THEME;
-  updateAllText();
-  updateUI();
-  updateNavBtn();
-}
-
-function closeSettings() {
-  if (PREV_SCREEN === 'game' && PLAYERS.length > 0) {
-    showScreen('game');
+function goBack() {
+  if (document.getElementById('screen-game').classList.contains('active')) {
+    showScreen('setup');
   } else {
     showScreen('setup');
-    loadSaves();
   }
-  updateNavBtn();
 }
 
-function openLangScreen() {
-  showScreen('lang');
-  buildLangList();
-  updateAllText();
-  updateUI();
-  updateNavBtn();
-}
-
-function closeLangScreen() {
-  showScreen('settings');
-  updateAllText();
-  updateUI();
-  updateNavBtn();
-}
-
-function selectLang(code) {
-  setLang(code);
-  updateDir();
-  updateAllText();
-  updateUI();
-  buildLangList();
-  if (document.getElementById('setupScreen').classList.contains('active')) loadSaves();
-  updateNavBtn();
-}
-
-function buildLangList() {
-  var list = document.getElementById('langList');
-  if (!list) return;
-  var currentLang = getLang();
-  var h = '';
-  for (var key in TX) {
-    var lang = TX[key];
-    var isActive = lang.code === currentLang;
-    h += '<div class="lang-item ' + (isActive ? 'active' : '') + '" onclick="selectLang(&quot;' + lang.code + '&quot;)"><span class="lang-flag">' + lang.flag + '</span><span class="lang-name">' + lang.name + '</span></div>';
+// ===== MODE SETUP =====
+function setMode(mode, btn) {
+  gameMode = mode;
+  document.querySelectorAll('.mode-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  const container = document.getElementById('playerInputs');
+  container.innerHTML = '';
+  const count = mode === '2v2' ? 4 : mode;
+  const colors = ['p1','p2','p3','p4'];
+  for (let i = 0; i < count; i++) {
+    container.innerHTML += `<div class="player-in"><div class="player-avatar ${colors[i]}">P${i+1}</div><input id="p${i+1}Name" placeholder="${t('player') + ' ' + (i+1)}" value="${t('player') + ' ' + (i+1)}"></div>`;
   }
-  list.innerHTML = h;
-}
-
-function setMode(m) {
-  MODE = m;
-  TEAM_MODE = (m === 22);
-  document.querySelectorAll('.mode-btn').forEach(function(b) { b.classList.remove('active'); });
-  var btn = document.getElementById('mode' + m);
-  if (btn) btn.classList.add('active');
-  refreshPlayerInputs();
-}
-
-function refreshPlayerInputs() {
-  var c = document.getElementById('playerInputs');
-  if (!c) return;
-  var tx = txt();
-  var h = '';
-  if (TEAM_MODE) {
-    h += '<div class="team-divider" style="color:#4fc3f7;font-weight:700;margin-top:4px;">' + tx.teamA + '</div>';
-    h += '<div class="player-in"><div class="icon" style="background:#4fc3f7;color:#000">P1</div><input type="text" id="p1" value="' + tx.player + ' 1"></div>';
-    h += '<div class="player-in"><div class="icon" style="background:#ff8a65;color:#000">P2</div><input type="text" id="p2" value="' + tx.player + ' 2"></div>';
-    h += '<div class="team-divider" style="color:#ff8a65;font-weight:700;margin-top:4px;">' + tx.teamB + '</div>';
-    h += '<div class="player-in"><div class="icon" style="background:#81c784;color:#000">P3</div><input type="text" id="p3" value="' + tx.player + ' 3"></div>';
-    h += '<div class="player-in"><div class="icon" style="background:#ba68c8;color:#fff">P4</div><input type="text" id="p4" value="' + tx.player + ' 4"></div>';
-  } else {
-    var colors = ['#4fc3f7', '#ff8a65', '#81c784', '#ba68c8'];
-    for (var i = 1; i <= MODE; i++) {
-      var tc = (i === 4) ? '#fff' : '#000';
-      h += '<div class="player-in"><div class="icon" style="background:' + colors[i - 1] + ';color:' + tc + '">P' + i + '</div><input type="text" id="p' + i + '" value="' + tx.player + ' ' + i + '"></div>';
-    }
+  if (mode === '2v2') {
+    container.innerHTML += `<div class="team-divider">Team A: P1 + P2  |  Team B: P3 + P4</div>`;
   }
-  c.innerHTML = h;
 }
 
-function setTarget(val) {
-  document.querySelectorAll('.target-q-btn').forEach(function(b) { b.classList.remove('active'); });
+function setTarget(val, btn) {
   if (val === 'custom') {
-    var tc = document.getElementById('targetCustom');
-    var cb = document.querySelector('.target-q-btn[data-val="custom"]');
-    if (tc) tc.style.display = 'flex';
-    if (cb) cb.classList.add('active');
-    var cti = document.getElementById('customTarget');
-    TARGET = cti ? (parseInt(cti.value) || 200) : 200;
+    targetScore = parseInt(document.getElementById('customTarget').value) || 200;
   } else {
-    TARGET = val;
-    document.querySelectorAll('.target-q-btn').forEach(function(b) {
-      if (parseInt(b.getAttribute('data-val')) === val) b.classList.add('active');
-    });
-    var tc = document.getElementById('targetCustom');
-    if (tc) tc.style.display = 'none';
+    targetScore = val;
+    document.getElementById('customTarget').value = val;
   }
+  document.querySelectorAll('.target-btn').forEach(b => b.classList.remove('active'));
+  if (btn) btn.classList.add('active');
 }
 
-function updateCustomTarget() { TARGET = parseInt(document.getElementById('customTarget').value) || 200; }
+function updateTargetFromInput() {
+  targetScore = parseInt(document.getElementById('customTarget').value) || 200;
+  document.querySelectorAll('.target-btn').forEach(b => b.classList.remove('active'));
+}
 
+// ===== GAME LOGIC =====
 function startGame() {
-  PLAYERS = [];
-  var tx = txt();
-  var count = TEAM_MODE ? 4 : MODE;
-  for (var i = 1; i <= count; i++) {
-    var inp = document.getElementById('p' + i);
-    var val = inp ? inp.value.trim() : '';
-    PLAYERS.push(val || tx.player + ' ' + i);
+  players = [];
+  const count = gameMode === '2v2' ? 4 : gameMode;
+  for (let i = 0; i < count; i++) {
+    const val = document.getElementById('p' + (i+1) + 'Name').value;
+    players.push(val || t('player') + ' ' + (i+1));
   }
-  SCORES = new Array(TEAM_MODE ? 2 : MODE).fill(0);
-  ROUNDS = [];
-  GAME_OVER = false;
+  scores = new Array(count).fill(0);
+  history = [];
+  renderGame();
   showScreen('game');
-  buildScoreBoard();
-  updateDisp();
-  playSound('add');
-  doVibrate(30);
-  updateNavBtn();
 }
 
-function buildScoreBoard() {
-  var b = document.getElementById('scoreBoard');
-  if (!b) return;
-  var h = '';
-  var tx = txt();
-  if (TEAM_MODE) {
-    h += '<div class="score-c team-a" id="card0"><div class="team-label">' + tx.teamA + '</div><div class="tn" id="teamName0">' + PLAYERS[0] + ' & ' + PLAYERS[1] + '</div><div class="sc-wrap"><div class="sc" id="score0">0</div><div class="tg" id="target0">/' + TARGET + '</div></div><div class="plus-btn" onclick="openPopup(0)">+</div><div class="bar" id="bar0" style="width:0%"></div></div>';
-    h += '<div class="score-c team-b" id="card1"><div class="team-label">' + tx.teamB + '</div><div class="tn" id="teamName1">' + PLAYERS[2] + ' & ' + PLAYERS[3] + '</div><div class="sc-wrap"><div class="sc" id="score1">0</div><div class="tg" id="target1">/' + TARGET + '</div></div><div class="plus-btn" onclick="openPopup(1)">+</div><div class="bar" id="bar1" style="width:0%"></div></div>';
+function renderGame() {
+  const board = document.getElementById('scoreBoard');
+  const count = players.length;
+  const isTeam = gameMode === '2v2';
+  board.style.setProperty('--cols', isTeam ? 2 : (count <= 2 ? 2 : 2));
+
+  let html = '';
+  if (isTeam) {
+    const teamAScore = scores[0];
+    const teamBScore = scores[2];
+    const teamAWon = teamAScore >= targetScore;
+    const teamBWon = teamBScore >= targetScore;
+
+    html += `<div class="score-card team-a ${teamAWon ? 'winner' : ''}" style="--progress:${Math.min(teamAScore/targetScore,1)}">
+      <div class="team-label">Team A</div>
+      <div class="player-name">${players[0]} & ${players[1]}</div>
+      <div class="score-wrap"><span class="score-num" id="sc0">${scores[0]}</span><span class="score-target">/${targetScore}</span></div>
+      <button class="add-btn" onclick="openPopup(0)">+</button>
+    </div>`;
+
+    html += `<div class="score-card team-b ${teamBWon ? 'winner' : ''}" style="--progress:${Math.min(teamBScore/targetScore,1)}">
+      <div class="team-label">Team B</div>
+      <div class="player-name">${players[2]} & ${players[3]}</div>
+      <div class="score-wrap"><span class="score-num" id="sc1">${scores[2]}</span><span class="score-target">/${targetScore}</span></div>
+      <button class="add-btn" onclick="openPopup(2)">+</button>
+    </div>`;
   } else {
-    for (var i = 0; i < MODE; i++) {
-      h += '<div class="score-c" id="card' + i + '"><div class="tn" id="teamName' + i + '">' + PLAYERS[i] + '</div><div class="sc-wrap"><div class="sc" id="score' + i + '">0</div><div class="tg" id="target' + i + '">/' + TARGET + '</div></div><div class="plus-btn" onclick="openPopup(' + i + ')">+</div><div class="bar" id="bar' + i + '" style="width:0%"></div></div>';
+    for (let i = 0; i < count; i++) {
+      const won = scores[i] >= targetScore;
+      html += `<div class="score-card ${won ? 'winner' : ''}" style="--progress:${Math.min(scores[i]/targetScore,1)}">
+        <div class="player-name">${players[i]}</div>
+        <div class="score-wrap"><span class="score-num" id="sc${i}">${scores[i]}</span><span class="score-target">/${targetScore}</span></div>
+        <button class="add-btn" onclick="openPopup(${i})">+</button>
+      </div>`;
     }
   }
-  b.innerHTML = h;
+  board.innerHTML = html;
+  renderHistory();
 }
 
-function openPopup(p) {
-  if (GAME_OVER) return;
-  POPUP_PLAYER = p;
-  POPUP_VALUE = 0;
-  POPUP_TOALL = false;
-  document.getElementById('popupNum').textContent = '0';
-  document.getElementById('pointPopup').classList.add('show');
-  document.getElementById('toAllRow').style.display = (MODE > 2 && !TEAM_MODE) ? 'flex' : 'none';
-  document.getElementById('toAllCheck').checked = false;
-  playSound('add');
-}
-
-function closePopup() {
-  document.getElementById('pointPopup').classList.remove('show');
-  POPUP_VALUE = 0;
-}
-
-function numPress(n) {
-  if (POPUP_VALUE < 9999) { POPUP_VALUE = POPUP_VALUE * 10 + n; document.getElementById('popupNum').textContent = POPUP_VALUE; }
-  playSound('add');
-}
-
-function numBack() {
-  POPUP_VALUE = Math.floor(POPUP_VALUE / 10);
-  document.getElementById('popupNum').textContent = POPUP_VALUE || '0';
-  playSound('undo');
-}
-
-function numClear() {
-  POPUP_VALUE = 0;
-  document.getElementById('popupNum').textContent = '0';
-  playSound('undo');
-}
-
-function toggleToAll() { POPUP_TOALL = document.getElementById('toAllCheck').checked; }
-
-function numOK() {
-  if (POPUP_VALUE === 0) { playSound('err'); doVibrate([50, 30, 50]); return; }
-  var round = {};
-  if (TEAM_MODE) {
-    SCORES[POPUP_PLAYER] += POPUP_VALUE;
-    round['t' + POPUP_PLAYER] = POPUP_VALUE;
-  } else {
-    for (var i = 0; i < MODE; i++) {
-      var val = (POPUP_TOALL || i === POPUP_PLAYER) ? POPUP_VALUE : 0;
-      SCORES[i] += val;
-      round['p' + i] = val;
-    }
-  }
-  ROUNDS.push(round);
-  closePopup();
-  updateDisp();
-  playSound('add');
-  doVibrate(20);
-  checkWin();
-}
-
-function updateDisp() {
-  var count = TEAM_MODE ? 2 : MODE;
-  for (var i = 0; i < count; i++) {
-    var el = document.getElementById('score' + i);
-    var bar = document.getElementById('bar' + i);
-    if (el) {
-      el.textContent = SCORES[i];
-      if (bar) bar.style.width = Math.min((SCORES[i] / TARGET) * 100, 100) + '%';
-      el.classList.remove('score-change');
-      void el.offsetWidth;
-      el.classList.add('score-change');
-      setTimeout(function(e) { return function() { e.classList.remove('score-change'); }; }(el), 400);
-    }
-  }
-  renderHist();
-}
-
-function renderHist() {
-  var list = document.getElementById('historyList');
-  var tx = txt();
-  if (ROUNDS.length === 0) {
-    list.innerHTML = '<div id="noHistory" style="text-align:center;color:#8fbc8f;padding:15px">' + tx.noHistory + '</div>';
-    return;
-  }
-  var h = '';
-  for (var i = 0; i < ROUNDS.length; i++) {
-    var scoresHtml = '';
-    if (TEAM_MODE) {
-      scoresHtml = '<span>' + tx.teamA + ': +' + (ROUNDS[i]['t0'] || 0) + '</span><span>' + tx.teamB + ': +' + (ROUNDS[i]['t1'] || 0) + '</span>';
+function renderHistory() {
+  const list = document.getElementById('historyList');
+  if (history.length === 0) { list.innerHTML = '<div class="hist-empty">No rounds yet</div>'; return; }
+  let html = '';
+  history.forEach((h, idx) => {
+    if (gameMode === '2v2') {
+      html += `<div class="hist-item">
+        <span class="round-num">R${idx+1}</span>
+        <span class="scores-row">
+          <span>Team A: <b style="color:var(--team-a)">${h[0]}</b></span>
+          <span>Team B: <b style="color:var(--team-b)">${h[2]}</b></span>
+        </span>
+        <button class="del-btn" onclick="deleteRound(${idx})">×</button>
+      </div>`;
     } else {
-      for (var j = 0; j < MODE; j++) {
-        scoresHtml += '<span>' + PLAYERS[j] + ': +' + ROUNDS[i]['p' + j] + '</span>';
-      }
+      html += `<div class="hist-item">
+        <span class="round-num">R${idx+1}</span>
+        <span class="scores-row">${h.map((s,i) => `<span>${players[i]}: <b style="color:var(--accent)">${s}</b></span>`).join('')}</span>
+        <button class="del-btn" onclick="deleteRound(${idx})">×</button>
+      </div>`;
     }
-    h += '<div class="hist-item"><span class="rn">#' + (i + 1) + '</span><div class="sc-row">' + scoresHtml + '</div><button class="btn-del-r" onclick="delRound(' + i + ')">×</button></div>';
-  }
-  list.innerHTML = h;
+  });
+  list.innerHTML = html;
   list.scrollTop = list.scrollHeight;
 }
 
-function delRound(i) {
-  if (GAME_OVER) return;
-  var round = ROUNDS[i];
-  if (TEAM_MODE) {
-    SCORES[0] -= round['t0'] || 0;
-    SCORES[1] -= round['t1'] || 0;
+// ===== POPUP / NUMPAD =====
+function openPopup(playerIdx) {
+  currentPopupPlayer = playerIdx;
+  popupValue = '';
+  toAll = false;
+  document.getElementById('popupNum').textContent = '0';
+  document.getElementById('chkToAll').checked = false;
+  document.getElementById('popupToAll').style.display = (gameMode === '2v2' || players.length === 1) ? 'none' : 'flex';
+  document.getElementById('popupTitle').textContent = t('addPoints');
+  if (gameMode === '2v2') {
+    document.getElementById('popupSub').textContent = playerIdx === 0 ? t('teamA') : t('teamB');
   } else {
-    for (var j = 0; j < MODE; j++) { SCORES[j] -= round['p' + j]; }
+    document.getElementById('popupSub').textContent = players[playerIdx];
   }
-  ROUNDS.splice(i, 1);
-  updateDisp();
-  playSound('undo');
-  doVibrate(30);
+  document.getElementById('popup').classList.add('show');
 }
 
-function undoLast() {
-  if (ROUNDS.length === 0 || GAME_OVER) return;
-  var last = ROUNDS.pop();
-  if (TEAM_MODE) {
-    SCORES[0] -= last['t0'] || 0;
-    SCORES[1] -= last['t1'] || 0;
+function toggleToAll() {
+  toAll = document.getElementById('chkToAll').checked;
+}
+
+function numPress(n) {
+  if (popupValue.length < 4) { popupValue += n; }
+  document.getElementById('popupNum').textContent = popupValue || '0';
+}
+
+function numBack() {
+  popupValue = popupValue.slice(0, -1);
+  document.getElementById('popupNum').textContent = popupValue || '0';
+}
+
+function numClear() {
+  popupValue = '';
+  document.getElementById('popupNum').textContent = '0';
+}
+
+function numOK() {
+  const val = parseInt(popupValue) || 0;
+  if (val === 0) { closePopup(); return; }
+
+  if (gameMode === '2v2') {
+    if (currentPopupPlayer === 0) { scores[0] += val; }
+    else { scores[2] += val; }
+    history.push([scores[0], 0, scores[2], 0]);
+  } else if (toAll) {
+    for (let i = 0; i < scores.length; i++) scores[i] += val;
+    history.push([...scores]);
   } else {
-    for (var j = 0; j < MODE; j++) { SCORES[j] -= last['p' + j]; }
+    scores[currentPopupPlayer] += val;
+    history.push([...scores]);
   }
-  updateDisp();
-  playSound('undo');
-  doVibrate(30);
+
+  closePopup();
+  renderGame();
+  checkWin();
+  if (vibOn && navigator.vibrate) navigator.vibrate(30);
 }
 
-function saveGame() {
-  var saves = JSON.parse(localStorage.getItem('dominoSaves') || '[]');
-  var tx = txt();
-  saves.unshift({
-    id: Date.now(), date: new Date().toLocaleString(), mode: MODE, players: PLAYERS,
-    scores: SCORES, target: TARGET, rounds: ROUNDS, lang: getLang(), teamMode: TEAM_MODE
-  });
-  if (saves.length > 10) saves.pop();
-  localStorage.setItem('dominoSaves', JSON.stringify(saves));
-  playSound('add');
-  doVibrate([20, 40, 20]);
-  alert(tx.saved);
+function closePopup() {
+  document.getElementById('popup').classList.remove('show');
 }
 
-function loadSaves() {
-  var saves = JSON.parse(localStorage.getItem('dominoSaves') || '[]');
-  var c = document.getElementById('savedGamesList');
-  var tx = txt();
-  if (saves.length === 0) {
-    c.innerHTML = '<div id="noSaved" style="text-align:center;color:#8fbc8f;padding:15px">' + tx.noSaved + '</div>';
-    return;
-  }
-  var h = '';
-  for (var i = 0; i < saves.length; i++) {
-    var save = saves[i];
-    var pt = save.players.join(' · ');
-    h += '<div class="saved-item" onclick="loadGame(' + i + ')"><div class="sg-info"><div class="sg-players">' + pt + '</div><div class="sg-date">' + save.date + '</div></div><span class="sg-score">' + save.scores.join('-') + '</span><button class="btn-del-r" onclick="event.stopPropagation();delSave(' + i + ')">×</button></div>';
-  }
-  c.innerHTML = h;
-}
-
-function loadGame(idx) {
-  var saves = JSON.parse(localStorage.getItem('dominoSaves') || '[]');
-  var save = saves[idx];
-  if (!save) return;
-  MODE = save.mode;
-  TEAM_MODE = save.teamMode || false;
-  PLAYERS = save.players;
-  SCORES = save.scores.slice();
-  TARGET = save.target;
-  ROUNDS = JSON.parse(JSON.stringify(save.rounds));
-  GAME_OVER = false;
-  if (save.lang && TX[save.lang]) setLang(save.lang);
-  updateDir();
-  showScreen('game');
-  buildScoreBoard();
-  updateDisp();
-  updateAllText();
-  updateUI();
-  updateNavBtn();
-  playSound('add');
-  doVibrate(30);
-}
-
-function delSave(idx) {
-  var saves = JSON.parse(localStorage.getItem('dominoSaves') || '[]');
-  saves.splice(idx, 1);
-  localStorage.setItem('dominoSaves', JSON.stringify(saves));
-  loadSaves();
-  playSound('undo');
-  doVibrate(30);
-}
-
-function clearAllData() {
-  var tx = txt();
-  if (confirm(tx.clearConfirm)) {
-    localStorage.removeItem('dominoSaves');
-    loadSaves();
-    playSound('undo');
-    doVibrate([50, 30, 50]);
-    alert(tx.cleared);
-  }
-}
-
+// ===== WIN CHECK =====
 function checkWin() {
-  var winners = [];
-  var count = TEAM_MODE ? 2 : MODE;
-  for (var i = 0; i < count; i++) { if (SCORES[i] >= TARGET) winners.push(i); }
-  if (winners.length > 0) {
-    GAME_OVER = true;
-    for (var w = 0; w < winners.length; w++) {
-      var c = document.getElementById('card' + winners[w]);
-      if (c) c.classList.add('winner');
+  let winner = -1, winnerName = '';
+  if (gameMode === '2v2') {
+    const teamA = scores[0];
+    const teamB = scores[2];
+    if (teamA >= targetScore) { winner = 0; winnerName = 'Team A (' + players[0] + ' & ' + players[1] + ')'; }
+    else if (teamB >= targetScore) { winner = 1; winnerName = 'Team B (' + players[2] + ' & ' + players[3] + ')'; }
+  } else {
+    for (let i = 0; i < scores.length; i++) {
+      if (scores[i] >= targetScore) { winner = i; winnerName = players[i]; break; }
     }
-    var tx = txt();
-    var wn = '';
-    if (TEAM_MODE) {
-      if (winners.length === 1) wn = (winners[0] === 0 ? tx.teamA : tx.teamB) + tx.winner;
-      else wn = tx.teamA + ' & ' + tx.teamB + tx.winner;
+  }
+  if (winner !== -1) {
+    document.getElementById('winnerName').textContent = winnerName + ' ' + t('wins');
+    let fs = '';
+    if (gameMode === '2v2') {
+      fs = 'Team A: ' + scores[0] + ' | Team B: ' + scores[2];
     } else {
-      if (winners.length === 1) wn = PLAYERS[winners[0]] + tx.winner;
-      else wn = winners.map(function(w) { return PLAYERS[w]; }).join(' & ') + tx.winner;
+      fs = players.map((p,i) => p + ': ' + scores[i]).join(' | ');
     }
-    document.getElementById('winnerName').textContent = wn;
-    document.getElementById('finalScore').textContent = SCORES.join(' - ');
-    playSound('win');
-    doVibrate([100, 50, 100, 50, 200]);
-    
-     setTimeout(function() { document.getElementById('gameOver').classList.add('show'); }, 1200);
+    document.getElementById('finalScore').textContent = fs;
+    document.getElementById('gameOver').classList.add('show');
+    // Show interstitial ad when game ends
+    setTimeout(() => { showInterstitialAd(); }, 800);
+    if (soundOn) playWinSound();
+    if (vibOn && navigator.vibrate) navigator.vibrate([50, 100, 50, 100, 200]);
   }
 }
 
 function newGame() {
   document.getElementById('gameOver').classList.remove('show');
-  var count = TEAM_MODE ? 2 : MODE;
-  for (var i = 0; i < count; i++) {
-    var c = document.getElementById('card' + i);
-    if (c) c.classList.remove('winner');
-  }
-  resetGame();
+  showScreen('setup');
 }
 
-function resetGame() {
-  showScreen('setup');
-  var count = TEAM_MODE ? 2 : MODE;
-  for (var i = 0; i < count; i++) {
-    var c = document.getElementById('card' + i);
-    if (c) c.classList.remove('winner');
+function newGameConfirm() {
+  if (confirm(t('confirmNew'))) {
+    showScreen('setup');
   }
-  SCORES = [];
-  ROUNDS = [];
-  GAME_OVER = false;
-  updateNavBtn();
+}
+
+// ===== UNDO / SAVE =====
+function undoLast() {
+  if (history.length === 0) return;
+  history.pop();
+  if (history.length > 0) {
+    scores = [...history[history.length - 1]];
+  } else {
+    scores = new Array(players.length).fill(0);
+  }
+  renderGame();
+}
+
+function saveGame() {
+  const saves = JSON.parse(localStorage.getItem('dominoSaves') || '[]');
+  const save = {
+    id: Date.now(),
+    date: new Date().toLocaleString(),
+    mode: gameMode,
+    players: [...players],
+    scores: [...scores],
+    history: [...history],
+    target: targetScore
+  };
+  saves.unshift(save);
+  if (saves.length > 20) saves.pop();
+  localStorage.setItem('dominoSaves', JSON.stringify(saves));
+  alert(t('saved'));
   loadSaves();
+}
+
+function loadSaves() {
+  const saves = JSON.parse(localStorage.getItem('dominoSaves') || '[]');
+  const list = document.getElementById('savedList');
+  if (saves.length === 0) { list.innerHTML = '<div class="saved-empty">No saved games</div>'; return; }
+  let html = '';
+  saves.forEach(s => {
+    const scoreStr = s.mode === '2v2'
+      ? `A:${s.scores[0]+s.scores[1]} B:${s.scores[2]+s.scores[3]}`
+      : s.scores.join(' - ');
+    html += `<div class="saved-item" onclick="loadSave(${s.id})">
+      <div class="sg-info">
+        <div class="sg-players">${s.players.join(', ')}</div>
+        <div class="sg-date">${s.date}</div>
+      </div>
+      <span class="sg-score">${scoreStr}</span>
+      <span class="sg-arrow">›</span>
+    </div>`;
+  });
+  list.innerHTML = html;
+}
+
+function loadSave(id) {
+  const saves = JSON.parse(localStorage.getItem('dominoSaves') || '[]');
+  const s = saves.find(x => x.id === id);
+  if (!s) return;
+  gameMode = s.mode;
+  players = [...s.players];
+  scores = [...s.scores];
+  history = [...s.history];
+  targetScore = s.target;
+  renderGame();
+  showScreen('game');
+}
+
+function deleteRound(idx) {
+  history.splice(idx, 1);
+  if (history.length > 0) {
+    scores = [...history[history.length - 1]];
+  } else {
+    scores = new Array(players.length).fill(0);
+  }
+  renderGame();
+}
+
+function clearAllGames() {
+  if (confirm(t('confirmClear'))) {
+    localStorage.removeItem('dominoSaves');
+    loadSaves();
+    alert(t('cleared'));
+  }
+}
+
+// ===== SETTINGS =====
+function toggleSetting(key) {
+  if (key === 'sound') { soundOn = !soundOn; document.getElementById('togSound').classList.toggle('active', soundOn); document.getElementById('btnSound').textContent = soundOn ? '🔊' : '🔇'; }
+  if (key === 'vib') { vibOn = !vibOn; document.getElementById('togVib').classList.toggle('active', vibOn); }
 }
 
 function toggleSound() {
-  SOUND = !SOUND;
-  localStorage.setItem('dp_sound', SOUND);
-  updateUI();
-  playSound('add');
+  toggleSetting('sound');
 }
 
-function toggleVibrate() {
-  VIBRATE = !VIBRATE;
-  localStorage.setItem('dp_vibrate', VIBRATE);
-  updateUI();
-  doVibrate(50);
+function changeTheme(t) {
+  const root = document.documentElement;
+  if (t === 'dark') {
+    root.style.setProperty('--bg-primary', '#0a0a0f');
+    root.style.setProperty('--bg-secondary', '#111118');
+    root.style.setProperty('--bg-card', '#16161f');
+    root.style.setProperty('--border', '#1e1e2e');
+  } else if (t === 'blue') {
+    root.style.setProperty('--bg-primary', '#0a0f1a');
+    root.style.setProperty('--bg-secondary', '#111a2a');
+    root.style.setProperty('--bg-card', '#161f2f');
+    root.style.setProperty('--border', '#1e2e3e');
+  } else {
+    root.style.setProperty('--bg-primary', '#0a0f0a');
+    root.style.setProperty('--bg-secondary', '#111a11');
+    root.style.setProperty('--bg-card', '#161f16');
+    root.style.setProperty('--border', '#1e2e1e');
+  }
 }
 
-function changeTheme(v) {
-  THEME = v;
-  localStorage.setItem('dp_theme', v);
-  applyTheme(v);
+// ===== LANGUAGE =====
+
+function applyLanguage() {
+  // Update all static text elements
+  const els = document.querySelectorAll('[data-i18n]');
+  els.forEach(el => {
+    const key = el.getAttribute('data-i18n');
+    if (el.tagName === 'INPUT') {
+      el.placeholder = t(key);
+    } else {
+      el.textContent = t(key);
+    }
+  });
+
+  // Update card titles
+  document.querySelectorAll('.card-title').forEach(el => {
+    const icon = el.querySelector('.icon');
+    const text = el.childNodes[el.childNodes.length - 1];
+    if (text && text.nodeType === 3) {
+      const txt = text.textContent.trim();
+      if (txt === 'Game Mode') text.textContent = ' ' + t('gameMode');
+      else if (txt === 'Player Names') text.textContent = ' ' + t('playerNames');
+      else if (txt === 'Target Score') text.textContent = ' ' + t('targetScore');
+      else if (txt === 'Saved Games') text.textContent = ' ' + t('savedGames');
+      else if (txt === 'History') text.textContent = ' ' + t('history');
+      else if (txt === 'Settings') text.textContent = ' ' + t('settings');
+      else if (txt === 'Select Language') text.textContent = ' ' + t('selectLanguage');
+      else if (txt === 'Data') text.textContent = ' ' + t('data');
+    }
+  });
+
+  // Update buttons
+  const startBtn = document.querySelector('.btn-pri');
+  if (startBtn) startBtn.innerHTML = '<span class="btn-icon">🚀</span> ' + t('startGame');
+
+  const backBtns = document.querySelectorAll('.btn-back');
+  backBtns.forEach(btn => btn.textContent = t('back'));
+
+  const clearBtn = document.querySelector('.btn-dang');
+  if (clearBtn) clearBtn.textContent = t('clearAllGames');
+
+  // Update mode buttons
+  const modeBtns = document.querySelectorAll('.mode-btn');
+  if (modeBtns.length >= 4) {
+    modeBtns[0].innerHTML = '<span class="mode-icon">🎮</span>' + t('twoPlayer');
+    modeBtns[1].innerHTML = '<span class="mode-icon">🎯</span>' + t('threePlayer');
+    modeBtns[2].innerHTML = '<span class="mode-icon">🎲</span>' + t('fourPlayer');
+    modeBtns[3].innerHTML = '<span class="mode-icon">🤝</span>' + t('team2v2');
+  }
+
+  // Update target label
+  const targetLabel = document.querySelector('.target-custom-row label');
+  if (targetLabel) targetLabel.textContent = '🎯 ' + t('custom') + ':';
+
+  // Update action buttons
+  const actionBtns = document.querySelectorAll('.action-btns .btn-sec');
+  if (actionBtns.length >= 3) {
+    actionBtns[0].innerHTML = '↩️ ' + t('undo');
+    actionBtns[1].innerHTML = '💾 ' + t('save');
+    actionBtns[2].innerHTML = '🔄 ' + t('newGame');
+  }
+
+  // Update settings labels
+  const setRows = document.querySelectorAll('.set-row');
+  if (setRows.length >= 4) {
+    setRows[0].querySelector('.set-lb').innerHTML = '<span class="icon">🌐</span> ' + t('language');
+    setRows[0].querySelector('.set-dc').textContent = t('changeLanguage');
+    setRows[1].querySelector('.set-lb').innerHTML = '<span class="icon">🔊</span> ' + t('sound');
+    setRows[1].querySelector('.set-dc').textContent = t('gameSounds');
+    setRows[2].querySelector('.set-lb').innerHTML = '<span class="icon">📳</span> ' + t('vibration');
+    setRows[2].querySelector('.set-dc').textContent = t('hapticFeedback');
+    setRows[3].querySelector('.set-lb').innerHTML = '<span class="icon">🎨</span> ' + t('theme');
+    setRows[3].querySelector('.set-dc').textContent = t('colorScheme');
+  }
+
+  // Update empty states
+  const savedEmpty = document.querySelector('#savedList .saved-empty');
+  if (savedEmpty) savedEmpty.textContent = t('noSavedGames');
+
+  const histEmpty = document.querySelector('#historyList .hist-empty');
+  if (histEmpty) histEmpty.textContent = t('noRounds');
+
+  // Update popup
+  document.getElementById('popupTitle').textContent = t('addPoints');
+  document.getElementById('popupSub').textContent = t('enterScore');
+  document.querySelector('.popup-toall label').textContent = t('applyToAll');
+
+  // Update game over
+  document.querySelector('.game-ov-c h2').textContent = t('gameOver');
+  document.querySelector('.btn-ng').textContent = '🎮 ' + t('newGameBtn');
+
+  // Update player placeholders
+  for (let i = 1; i <= 4; i++) {
+    const inp = document.getElementById('p' + i + 'Name');
+    if (inp) inp.placeholder = t('player') + ' ' + i;
+  }
+
+  // Update subtitle
+  const subtitle = document.querySelector('.header-brand .subtitle');
+  if (subtitle) subtitle.textContent = t('scoreTracker');
+
+  // Update team divider if visible
+  const teamDiv = document.querySelector('.team-divider');
+  if (teamDiv) teamDiv.textContent = t('teamADiv');
 }
 
-// Initialize
-document.addEventListener('DOMContentLoaded', function() {
-  applyTheme(THEME);
-  updateDir();
-  updateAllText();
-  updateUI();
-  updateNavBtn();
-  setMode(2);
-  setTarget(200);
-  loadSaves();
-  showScreen('setup');
-});
+function renderLangList() {
+  const list = document.getElementById('langList');
+  let html = '';
+  Object.entries(LANGS).forEach(([code, info]) => {
+    html += `<div class="lang-item ${code === lang ? 'active' : ''}" onclick="setLang('${code}')">
+      <span class="lang-flag">${info.flag}</span>
+      <span class="lang-name">${info.name}</span>
+      <span class="lang-code">${info.code}</span>
+    </div>`;
+  });
+  list.innerHTML = html;
+}
+
+function setLang(code) {
+  lang = code;
+  localStorage.setItem('dominoLang', code);
+  renderLangList();
+  applyLanguage();
+  // Update settings button text
+  const info = LANGS[code];
+  if (info) {
+    document.querySelector('#screen-settings .set-sel').textContent = info.code + ' ' + info.flag;
+  }
+}
+
+// ===== SOUND =====
+function playWinSound() {
+  try {
+    const ctx = new (window.AudioContext || window.webkitAudioContext)();
+    const notes = [523, 659, 784, 1047];
+    notes.forEach((freq, i) => {
+      const osc = ctx.createOscillator();
+      const gain = ctx.createGain();
+      osc.connect(gain);
+      gain.connect(ctx.destination);
+      osc.frequency.value = freq;
+      osc.type = 'sine';
+      gain.gain.setValueAtTime(0.1, ctx.currentTime + i * 0.15);
+      gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + i * 0.15 + 0.4);
+      osc.start(ctx.currentTime + i * 0.15);
+      osc.stop(ctx.currentTime + i * 0.15 + 0.4);
+    });
+  } catch(e) {}
+}
+
+// ===== INIT =====
+const savedLang = localStorage.getItem('dominoLang');
+if (savedLang && LANGS[savedLang]) {
+  lang = savedLang;
+  const info = LANGS[lang];
+  if (info) {
+    document.querySelector('#screen-settings .set-sel').textContent = info.code + ' ' + info.flag;
+  }
+}
+loadSaves();
+// Apply language after a short delay to ensure DOM is ready
+setTimeout(applyLanguage, 100);
 </script>
+
 </body>
-</html>
+    </html>
