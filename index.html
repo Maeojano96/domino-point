@@ -1,0 +1,765 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="theme-color" content="#0a0a0c">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<title>Domino Pro | Coming Soon | The Ultimate Domino Score Tracker</title>
+<meta name="description" content="Domino Pro - The ultimate domino score tracker is coming soon. Track scores digitally with ease. Supports multiple players, teams, and game modes.">
+<style>
+:root {
+  --bg-void: #050508;
+  --bg-base: #0a0a0f;
+  --bg-surface: #12121a;
+  --bg-raised: #1a1a24;
+  --primary: #6366f1;
+  --primary-soft: #818cf8;
+  --primary-glow: rgba(99, 102, 241, 0.4);
+  --accent: #f43f5e;
+  --accent-soft: #fb7185;
+  --success: #10b981;
+  --text-primary: #f8fafc;
+  --text-secondary: #94a3b8;
+  --text-muted: #64748b;
+  --border-subtle: rgba(255,255,255,0.03);
+  --font: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Roboto, sans-serif;
+}
+* { margin:0; padding:0; box-sizing:border-box; font-family:var(--font); -webkit-tap-highlight-color:transparent; }
+html { scroll-behavior:smooth; }
+body { background:var(--bg-void); color:var(--text-primary); min-height:100vh; -webkit-font-smoothing:antialiased; overflow-x:hidden; }
+
+/* Animated Background */
+.bg-mesh {
+  position:fixed; inset:0; z-index:0; pointer-events:none; overflow:hidden;
+}
+.bg-mesh::before {
+  content:''; position:absolute; inset:0;
+  background: 
+    radial-gradient(ellipse at 15% 50%, rgba(99,102,241,0.08) 0%, transparent 50%),
+    radial-gradient(ellipse at 85% 30%, rgba(244,63,94,0.06) 0%, transparent 50%),
+    radial-gradient(ellipse at 50% 80%, rgba(16,185,129,0.04) 0%, transparent 50%);
+}
+.grid-overlay {
+  position:fixed; inset:0; z-index:0; pointer-events:none;
+  background-image: 
+    linear-gradient(rgba(255,255,255,0.015) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,0.015) 1px, transparent 1px);
+  background-size: 60px 60px;
+  mask-image: radial-gradient(ellipse at center, black 30%, transparent 70%);
+  -webkit-mask-image: radial-gradient(ellipse at center, black 30%, transparent 70%);
+}
+.floating-orb {
+  position:absolute; border-radius:50%; filter:blur(80px);
+  animation: floatOrb 20s ease-in-out infinite;
+}
+.orb-1 { width:300px; height:300px; background:rgba(99,102,241,0.15); top:10%; left:10%; animation-delay:0s; }
+.orb-2 { width:250px; height:250px; background:rgba(244,63,94,0.1); top:60%; right:15%; animation-delay:-7s; }
+.orb-3 { width:200px; height:200px; background:rgba(16,185,129,0.08); bottom:20%; left:40%; animation-delay:-14s; }
+@keyframes floatOrb {
+  0%, 100% { transform: translate(0,0) scale(1); }
+  33% { transform: translate(30px, -40px) scale(1.1); }
+  66% { transform: translate(-20px, 30px) scale(0.9); }
+}
+
+/* Container */
+.container { max-width:1100px; margin:0 auto; padding:0 24px; position:relative; z-index:1; }
+
+/* Navigation */
+.nav {
+  display:flex; align-items:center; justify-content:space-between;
+  padding: 24px 0;
+  position:sticky; top:0; z-index:100;
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+}
+.nav-logo {
+  display:flex; align-items:center; gap:12px;
+}
+.nav-logo-icon {
+  width:40px; height:40px;
+  border-radius: 12px;
+  background: linear-gradient(135deg, var(--primary), #4f46e5);
+  display:flex; align-items:center; justify-content:center;
+  font-size:20px;
+  box-shadow: 0 4px 20px rgba(99,102,241,0.3);
+}
+.nav-logo-text {
+  font-size:18px; font-weight:900;
+  letter-spacing:1px;
+  background: linear-gradient(135deg, #fff, var(--primary-soft));
+  -webkit-background-clip:text; -webkit-text-fill-color:transparent;
+}
+.nav-links { display:flex; gap:32px; }
+.nav-links a {
+  color:var(--text-secondary); text-decoration:none;
+  font-size:14px; font-weight:600;
+  transition: color 0.2s;
+}
+.nav-links a:hover { color:var(--text-primary); }
+
+/* Hero Section */
+.hero {
+  text-align:center;
+  padding: 80px 20px 60px;
+  position:relative;
+}
+.hero-badge {
+  display:inline-flex; align-items:center; gap:8px;
+  padding: 8px 20px;
+  background: rgba(99,102,241,0.1);
+  border: 1px solid rgba(99,102,241,0.2);
+  border-radius: 999px;
+  font-size:13px; font-weight:700;
+  color: var(--primary-soft);
+  margin-bottom: 32px;
+  animation: pulseBadge 2s ease infinite;
+}
+@keyframes pulseBadge {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(99,102,241,0.2); }
+  50% { box-shadow: 0 0 20px 5px rgba(99,102,241,0.1); }
+}
+.hero-badge .dot {
+  width:8px; height:8px;
+  background: var(--accent);
+  border-radius:50%;
+  animation: blink 1.5s ease infinite;
+}
+@keyframes blink {
+  0%, 100% { opacity:1; }
+  50% { opacity:0.3; }
+}
+.hero h1 {
+  font-size: clamp(40px, 8vw, 72px);
+  font-weight:900;
+  line-height:1.1;
+  letter-spacing:-2px;
+  margin-bottom:20px;
+}
+.hero h1 .gradient {
+  background: linear-gradient(135deg, var(--primary-soft), var(--accent-soft));
+  -webkit-background-clip:text; -webkit-text-fill-color:transparent;
+  background-clip:text;
+}
+.hero-subtitle {
+  font-size: clamp(16px, 3vw, 20px);
+  color:var(--text-secondary);
+  max-width:600px;
+  margin: 0 auto 40px;
+  line-height:1.6;
+}
+
+/* Countdown */
+.countdown-wrap {
+  display:flex; justify-content:center; gap:16px;
+  margin-bottom:48px;
+  flex-wrap:wrap;
+}
+.countdown-item {
+  background: var(--bg-surface);
+  border: 1px solid var(--border-subtle);
+  border-radius: 20px;
+  padding: 20px 28px;
+  text-align:center;
+  min-width:90px;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.3);
+}
+.countdown-num {
+  font-size:36px; font-weight:900;
+  color:var(--text-primary);
+  line-height:1;
+  font-variant-numeric: tabular-nums;
+}
+.countdown-label {
+  font-size:11px; font-weight:700;
+  color:var(--text-muted);
+  text-transform:uppercase;
+  letter-spacing:2px;
+  margin-top:6px;
+}
+
+/* Notify Form */
+.notify-section {
+  max-width:480px;
+  margin: 0 auto 60px;
+}
+.notify-form {
+  display:flex; gap:12px;
+  background: var(--bg-surface);
+  border: 1px solid var(--border-subtle);
+  border-radius: 16px;
+  padding: 8px;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.3);
+}
+.notify-input {
+  flex:1;
+  padding: 14px 18px;
+  background: transparent;
+  border: none;
+  color: var(--text-primary);
+  font-size:15px; font-weight:600;
+  outline:none;
+}
+.notify-input::placeholder { color:var(--text-muted); }
+.notify-btn {
+  padding: 14px 28px;
+  background: linear-gradient(135deg, var(--primary), #4f46e5);
+  color: white;
+  border: none;
+  border-radius: 12px;
+  font-size:14px; font-weight:800;
+  cursor:pointer;
+  white-space:nowrap;
+  box-shadow: 0 4px 20px rgba(99,102,241,0.3);
+  transition: all 0.3s ease;
+}
+.notify-btn:hover { transform: translateY(-2px); box-shadow: 0 8px 30px rgba(99,102,241,0.4); }
+.notify-btn:active { transform: scale(0.98); }
+.notify-hint {
+  text-align:center;
+  margin-top:12px;
+  font-size:12px; color:var(--text-muted);
+}
+
+/* Phone Showcase */
+.showcase-section { margin: 40px 0 80px; }
+.phone-row {
+  display:flex; justify-content:center;
+  gap: 40px;
+  flex-wrap:wrap;
+}
+.phone-mockup {
+  width:280px;
+  background: var(--bg-surface);
+  border-radius: 40px;
+  padding: 12px;
+  border: 1px solid var(--border-subtle);
+  box-shadow: 0 25px 80px rgba(0,0,0,0.5), 0 0 0 1px rgba(255,255,255,0.03);
+  transform: rotate(-3deg);
+  transition: transform 0.4s ease;
+}
+.phone-mockup:hover { transform: rotate(0deg) translateY(-10px); }
+.phone-mockup.right { transform: rotate(3deg); }
+.phone-mockup.right:hover { transform: rotate(0deg) translateY(-10px); }
+.phone-inner {
+  background: var(--bg-void);
+  border-radius: 32px;
+  overflow:hidden;
+  aspect-ratio: 9/18;
+  position:relative;
+}
+.phone-notch {
+  position:absolute; top:0; left:50%; transform:translateX(-50%);
+  width:120px; height:28px;
+  background: var(--bg-surface);
+  border-radius: 0 0 20px 20px;
+  z-index:10;
+}
+.phone-content {
+  padding: 40px 16px 20px;
+  height:100%;
+  display:flex; flex-direction:column;
+}
+.phone-header-mini {
+  display:flex; align-items:center; gap:10px;
+  margin-bottom:16px;
+}
+.phone-logo-mini {
+  width:32px; height:32px;
+  border-radius:10px;
+  background: linear-gradient(135deg, var(--primary), #4f46e5);
+  display:flex; align-items:center; justify-content:center;
+  font-size:16px;
+}
+.phone-title-mini { font-size:13px; font-weight:800; letter-spacing:1px; }
+.phone-card-mini {
+  background: var(--bg-raised);
+  border-radius: 14px;
+  padding: 12px;
+  margin-bottom:8px;
+  border: 1px solid var(--border-subtle);
+}
+.phone-card-title-mini {
+  font-size:8px; font-weight:800; text-transform:uppercase; letter-spacing:2px;
+  color:var(--text-muted); margin-bottom:6px;
+}
+.phone-mode-row { display:flex; gap:4px; }
+.phone-mode-pill {
+  flex:1; padding:8px 2px;
+  border-radius:8px;
+  background: var(--bg-surface);
+  border: 1px solid var(--border-subtle);
+  color:var(--text-muted);
+  font-size:9px; font-weight:700;
+  text-align:center;
+}
+.phone-mode-pill.active {
+  border-color: var(--primary);
+  color: var(--primary-soft);
+  background: rgba(99,102,241,0.1);
+}
+.phone-scores { display:flex; gap:8px; margin-top:4px; }
+.phone-score-box {
+  flex:1; background: var(--bg-raised);
+  border-radius: 12px; padding: 12px 6px;
+  text-align:center; border: 1px solid var(--border-subtle);
+}
+.phone-score-name { font-size:8px; color:var(--text-muted); margin-bottom:2px; }
+.phone-score-val { font-size:24px; font-weight:900; color:var(--text-primary); }
+.phone-bar {
+  height:3px; background: var(--bg-surface);
+  border-radius: 999px; margin-top:6px; overflow:hidden;
+}
+.phone-bar-fill {
+  height:100%; border-radius:999px;
+  background: linear-gradient(90deg, var(--primary), var(--accent));
+}
+.phone-btn-mini {
+  margin-top:auto;
+  padding:12px;
+  background: linear-gradient(135deg, var(--primary), #4f46e5);
+  color:white; border:none;
+  border-radius: 12px;
+  font-size:11px; font-weight:900;
+  letter-spacing:1px; text-transform:uppercase;
+  text-align:center;
+}
+
+/* Features Grid */
+.features-section { padding: 60px 0; }
+.section-header {
+  text-align:center;
+  margin-bottom: 48px;
+}
+.section-tag {
+  display:inline-block;
+  padding: 6px 16px;
+  background: rgba(99,102,241,0.1);
+  border: 1px solid rgba(99,102,241,0.15);
+  border-radius: 999px;
+  font-size:12px; font-weight:700;
+  color: var(--primary-soft);
+  text-transform:uppercase;
+  letter-spacing:2px;
+  margin-bottom: 16px;
+}
+.section-title {
+  font-size: clamp(28px, 5vw, 40px);
+  font-weight:900;
+  margin-bottom: 12px;
+  background: linear-gradient(135deg, #fff, var(--primary-soft));
+  -webkit-background-clip:text; -webkit-text-fill-color:transparent;
+  background-clip:text;
+}
+.section-desc {
+  font-size:16px; color:var(--text-secondary);
+  max-width:500px; margin: 0 auto;
+  line-height:1.6;
+}
+.features-grid {
+  display:grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 20px;
+}
+.feature-card {
+  background: var(--bg-surface);
+  border: 1px solid var(--border-subtle);
+  border-radius: 24px;
+  padding: 32px;
+  transition: all 0.4s cubic-bezier(0.16,1,0.3,1);
+  position:relative;
+  overflow:hidden;
+}
+.feature-card::before {
+  content:''; position:absolute; top:0; left:0; right:0; height:1px;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.08), transparent);
+}
+.feature-card:hover {
+  transform: translateY(-6px);
+  border-color: rgba(99,102,241,0.2);
+  box-shadow: 0 20px 60px rgba(0,0,0,0.4), 0 0 40px rgba(99,102,241,0.08);
+}
+.feature-icon-wrap {
+  width:52px; height:52px;
+  border-radius: 16px;
+  background: linear-gradient(135deg, rgba(99,102,241,0.15), rgba(244,63,94,0.08));
+  display:flex; align-items:center; justify-content:center;
+  font-size:24px;
+  margin-bottom:20px;
+  border: 1px solid rgba(99,102,241,0.1);
+}
+.feature-title { font-size:18px; font-weight:800; margin-bottom:10px; }
+.feature-desc { font-size:14px; color:var(--text-secondary); line-height:1.7; }
+
+/* Stats Bar */
+.stats-bar {
+  display:grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1px;
+  background: var(--border-subtle);
+  border-radius: 24px;
+  overflow:hidden;
+  margin: 60px 0;
+  border: 1px solid var(--border-subtle);
+}
+.stat-item {
+  background: var(--bg-surface);
+  padding: 40px 20px;
+  text-align:center;
+}
+.stat-number {
+  font-size: 40px; font-weight:900;
+  background: linear-gradient(135deg, var(--primary-soft), var(--accent-soft));
+  -webkit-background-clip:text; -webkit-text-fill-color:transparent;
+  background-clip:text;
+  margin-bottom: 6px;
+}
+.stat-text { font-size:13px; color:var(--text-muted); font-weight:700; text-transform:uppercase; letter-spacing:1px; }
+
+/* CTA Section */
+.cta-section {
+  background: linear-gradient(135deg, rgba(99,102,241,0.08), rgba(244,63,94,0.04));
+  border: 1px solid rgba(99,102,241,0.1);
+  border-radius: 32px;
+  padding: 80px 40px;
+  text-align:center;
+  margin: 80px 0;
+  position:relative;
+  overflow:hidden;
+}
+.cta-section::before {
+  content:''; position:absolute; top:-50%; left:-50%; width:200%; height:200%;
+  background: radial-gradient(circle, rgba(99,102,241,0.05) 0%, transparent 60%);
+  animation: rotate 30s linear infinite;
+}
+@keyframes rotate { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+.cta-content { position:relative; z-index:1; }
+.cta-title { font-size: clamp(24px, 4vw, 36px); font-weight:900; margin-bottom: 16px; }
+.cta-desc { font-size:17px; color:var(--text-secondary); margin-bottom: 32px; max-width:500px; margin-left:auto; margin-right:auto; }
+.cta-btn-main {
+  display:inline-flex; align-items:center; gap:12px;
+  padding: 18px 40px;
+  background: linear-gradient(135deg, var(--primary), #4f46e5);
+  color: white;
+  border-radius: 16px;
+  font-size:16px; font-weight:900;
+  letter-spacing:1px;
+  text-decoration:none;
+  box-shadow: 0 8px 30px rgba(99,102,241,0.4);
+  transition: all 0.3s ease;
+  border: none;
+  cursor:pointer;
+}
+.cta-btn-main:hover { transform: translateY(-3px); box-shadow: 0 12px 40px rgba(99,102,241,0.5); }
+.cta-btn-main:active { transform: scale(0.98); }
+
+/* Footer */
+.footer {
+  border-top: 1px solid var(--border-subtle);
+  padding: 48px 0 60px;
+  text-align:center;
+}
+.footer-logo {
+  display:flex; align-items:center; justify-content:center; gap:10px;
+  margin-bottom: 24px;
+}
+.footer-logo-icon {
+  width:36px; height:36px;
+  border-radius: 10px;
+  background: linear-gradient(135deg, var(--primary), #4f46e5);
+  display:flex; align-items:center; justify-content:center;
+  font-size:18px;
+}
+.footer-logo-text { font-size:16px; font-weight:900; letter-spacing:1px; }
+.footer-links { display:flex; gap:28px; justify-content:center; margin-bottom:24px; flex-wrap:wrap; }
+.footer-links a {
+  color:var(--text-muted); text-decoration:none;
+  font-size:13px; font-weight:700;
+  transition: color 0.2s;
+}
+.footer-links a:hover { color:var(--primary-soft); }
+.footer-copy { font-size:12px; color:var(--text-muted); }
+
+/* Responsive */
+@media (max-width: 768px) {
+  .nav-links { display:none; }
+  .hero { padding: 60px 16px 40px; }
+  .countdown-item { padding: 16px 20px; min-width:70px; }
+  .countdown-num { font-size:28px; }
+  .phone-row { gap: 20px; }
+  .phone-mockup { width:240px; }
+  .stats-bar { grid-template-columns: 1fr; }
+  .cta-section { padding: 60px 24px; }
+  .notify-form { flex-direction:column; }
+  .notify-btn { width:100%; }
+}
+
+/* Scroll Animations */
+.reveal {
+  opacity:1; transform: translateY(0);
+  transition: all 0.8s cubic-bezier(0.16,1,0.3,1);
+}
+.reveal.visible { opacity:1; transform: translateY(0); }
+</style>
+</head>
+<body>
+
+<div class="bg-mesh">
+  <div class="floating-orb orb-1"></div>
+  <div class="floating-orb orb-2"></div>
+  <div class="floating-orb orb-3"></div>
+</div>
+<div class="grid-overlay"></div>
+
+<div class="container">
+
+  <!-- Navigation -->
+  <nav class="nav">
+    <div class="nav-logo">
+      <div class="nav-logo-icon">&#127922;</div>
+      <div class="nav-logo-text">DOMINO PRO</div>
+    </div>
+    <div class="nav-links">
+      <a href="#features">Features</a>
+      <a href="#showcase">Preview</a>
+      <a href="/privacy-policy.html">Privacy</a>
+    </div>
+  </nav>
+
+  <!-- Hero -->
+  <section class="hero">
+    <div class="hero-badge">
+      <span class="dot"></span>
+      <span>Coming Soon</span>
+    </div>
+
+    <h1>
+      The Ultimate<br>
+      <span class="gradient">Domino Score Tracker</span>
+    </h1>
+
+    <p class="hero-subtitle">
+      Track scores digitally with ease. Support for multiple players, teams, and game modes. 
+      Never lose track of your domino games again.
+    </p>
+
+    <!-- Countdown -->
+    <div class="countdown-wrap" id="countdown">
+      <div class="countdown-item">
+        <div class="countdown-num" id="days">00</div>
+        <div class="countdown-label">Days</div>
+      </div>
+      <div class="countdown-item">
+        <div class="countdown-num" id="hours">00</div>
+        <div class="countdown-label">Hours</div>
+      </div>
+      <div class="countdown-item">
+        <div class="countdown-num" id="minutes">00</div>
+        <div class="countdown-label">Minutes</div>
+      </div>
+      <div class="countdown-item">
+        <div class="countdown-num" id="seconds">00</div>
+        <div class="countdown-label">Seconds</div>
+      </div>
+    </div>
+
+    <!-- Notify Form -->
+    <div class="notify-section">
+      <form name="notify" method="POST" data-netlify="true" class="notify-form" style="flex-direction:column; gap:12px;">
+        <input type="hidden" name="form-name" value="notify">
+        <input type="email" name="email" class="notify-input" placeholder="Enter your email" required style="width:100%; text-align:center;">
+        <button type="submit" class="notify-btn" style="width:100%;">Notify Me</button>
+      </form>
+      <p class="notify-hint">Be the first to know when Domino Pro launches</p>
+    </div>
+  </section>
+
+  <!-- Phone Showcase -->
+  <section class="showcase-section" id="showcase">
+    <div class="phone-row">
+      <div class="phone-mockup">
+        <div class="phone-inner">
+          <div class="phone-notch"></div>
+          <div class="phone-content">
+            <div class="phone-header-mini">
+              <div class="phone-logo-mini">&#127922;</div>
+              <div class="phone-title-mini">DOMINO PRO</div>
+            </div>
+            <div class="phone-card-mini">
+              <div class="phone-card-title-mini">Game Mode</div>
+              <div class="phone-mode-row">
+                <div class="phone-mode-pill active">2P</div>
+                <div class="phone-mode-pill">3P</div>
+                <div class="phone-mode-pill">4P</div>
+                <div class="phone-mode-pill">2v2</div>
+              </div>
+            </div>
+            <div class="phone-card-mini">
+              <div class="phone-card-title-mini">Players</div>
+              <div style="font-size:10px; color:var(--text-muted); margin-bottom:4px;">Player 1</div>
+              <div style="font-size:10px; color:var(--text-muted);">Player 2</div>
+            </div>
+            <div class="phone-btn-mini">Start Game</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="phone-mockup right">
+        <div class="phone-inner">
+          <div class="phone-notch"></div>
+          <div class="phone-content">
+            <div class="phone-header-mini">
+              <div class="phone-logo-mini">&#127922;</div>
+              <div class="phone-title-mini">DOMINO PRO</div>
+            </div>
+            <div class="phone-card-mini">
+              <div class="phone-card-title-mini">Live Scores</div>
+              <div class="phone-scores">
+                <div class="phone-score-box">
+                  <div class="phone-score-name">Player 1</div>
+                  <div class="phone-score-val">145</div>
+                  <div class="phone-bar"><div class="phone-bar-fill" style="width:72%"></div></div>
+                </div>
+                <div class="phone-score-box">
+                  <div class="phone-score-name">Player 2</div>
+                  <div class="phone-score-val">120</div>
+                  <div class="phone-bar"><div class="phone-bar-fill" style="width:60%"></div></div>
+                </div>
+              </div>
+            </div>
+            <div class="phone-card-mini">
+              <div class="phone-card-title-mini">History</div>
+              <div style="font-size:9px; color:var(--text-muted);">Round #1: +25 pts</div>
+            </div>
+            <div class="phone-btn-mini">+ Add Points</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Stats -->
+  <div class="stats-bar reveal">
+    <div class="stat-item">
+      <div class="stat-number">12</div>
+      <div class="stat-text">Languages</div>
+    </div>
+    <div class="stat-item">
+      <div class="stat-number">4</div>
+      <div class="stat-text">Game Modes</div>
+    </div>
+    <div class="stat-item">
+      <div class="stat-number">∞</div>
+      <div class="stat-text">Score Targets</div>
+    </div>
+  </div>
+
+  <!-- Features -->
+  <section class="features-section" id="features">
+    <div class="section-header">
+      <div class="section-tag">Features</div>
+      <h2 class="section-title">Everything You Need</h2>
+      <p class="section-desc">A complete score tracking solution designed for domino enthusiasts.</p>
+    </div>
+
+    <div class="features-grid">
+      <div class="feature-card reveal">
+        <div class="feature-icon-wrap">&#9889;</div>
+        <div class="feature-title">Lightning Fast</div>
+        <div class="feature-desc">No more pen and paper. Track scores in seconds with our intuitive interface designed for speed.</div>
+      </div>
+
+      <div class="feature-card reveal">
+        <div class="feature-icon-wrap">&#127919;</div>
+        <div class="feature-title">Multiple Modes</div>
+        <div class="feature-desc">Support for 2-4 players and 2v2 team mode. Customize target scores from 100 to 500+ points.</div>
+      </div>
+
+      <div class="feature-card reveal">
+        <div class="feature-icon-wrap">&#128202;</div>
+        <div class="feature-title">Visual Progress</div>
+        <div class="feature-desc">Real-time progress bars and animated score updates. See who's winning at a glance.</div>
+      </div>
+
+      <div class="feature-card reveal">
+        <div class="feature-icon-wrap">&#128220;</div>
+        <div class="feature-title">Full History</div>
+        <div class="feature-desc">Complete round-by-round breakdown. Save games, undo mistakes, and resume anytime.</div>
+      </div>
+
+      <div class="feature-card reveal">
+        <div class="feature-icon-wrap">&#127760;</div>
+        <div class="feature-title">Global Support</div>
+        <div class="feature-desc">Available in 12 languages: English, Arabic, Kurdish, Spanish, French, German, Portuguese, Russian, Chinese, Turkish, and Hindi.</div>
+      </div>
+
+      <div class="feature-card reveal">
+        <div class="feature-icon-wrap">&#127912;</div>
+        <div class="feature-title">Premium Design</div>
+        <div class="feature-desc">Dark neomorphism theme with customizable colors. Blue, Green, Red, and White themes available.</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <section class="cta-section">
+    <div class="cta-content">
+      <h2 class="cta-title">Ready to Level Up?</h2>
+      <p class="cta-desc">Join thousands of domino players waiting for the ultimate score tracking experience.</p>
+      <button class="cta-btn-main" onclick="document.getElementById('emailInput').focus()">
+        <span>&#9993;</span>
+        <span>Get Early Access</span>
+      </button>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="footer-logo">
+      <div class="footer-logo-icon">&#127922;</div>
+      <div class="footer-logo-text">DOMINO PRO</div>
+    </div>
+    <div class="footer-links">
+      <a href="/privacy-policy.html">Privacy Policy</a>
+      <a href="#">Terms of Service</a>
+      <a href="#">Contact</a>
+      <a href="#">Support</a>
+    </div>
+    <p class="footer-copy">© 2026 Domino Pro. All rights reserved. Coming Soon.</p>
+  </footer>
+
+</div>
+
+<script>
+// Countdown Timer - Set to 30 days from now
+var launchDate = new Date();
+launchDate.setDate(launchDate.getDate() + 30);
+
+function updateCountdown() {
+  var now = new Date().getTime();
+  var distance = launchDate - now;
+
+  var days = Math.floor(distance / (1000 * 60 * 60 * 24));
+  var hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+  var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+  var seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+  document.getElementById('days').textContent = String(days).padStart(2, '0');
+  document.getElementById('hours').textContent = String(hours).padStart(2, '0');
+  document.getElementById('minutes').textContent = String(minutes).padStart(2, '0');
+  document.getElementById('seconds').textContent = String(seconds).padStart(2, '0');
+}
+setInterval(updateCountdown, 1000);
+updateCountdown();
+
+// Form handled by Netlify Forms - no JS needed
+
+// Scroll Reveal Animation (disabled - cards visible immediately)
+document.querySelectorAll('.reveal').forEach(function(el) {
+  el.classList.add('visible');
+});
+</script>
+
+</body>
+</html>

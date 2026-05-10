@@ -1,0 +1,353 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="theme-color" content="#050508">
+<title>Privacy Policy - Domino Pro</title>
+<meta name="description" content="Privacy Policy for Domino Pro - The ultimate domino score tracker app.">
+<style>
+:root {
+  --bg-void: #050508;
+  --bg-base: #0a0a0f;
+  --bg-surface: #12121a;
+  --bg-raised: #1a1a24;
+  --primary: #6366f1;
+  --primary-soft: #818cf8;
+  --primary-glow: rgba(99, 102, 241, 0.3);
+  --accent: #f43f5e;
+  --text-primary: #f8fafc;
+  --text-secondary: #94a3b8;
+  --text-muted: #64748b;
+  --border-subtle: rgba(255,255,255,0.03);
+  --font: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Roboto, sans-serif;
+}
+* { margin:0; padding:0; box-sizing:border-box; font-family:var(--font); -webkit-tap-highlight-color:transparent; }
+html { scroll-behavior:smooth; }
+body { background:var(--bg-void); color:var(--text-primary); min-height:100vh; -webkit-font-smoothing:antialiased; overflow-x:hidden; }
+
+/* Background */
+.bg-mesh {
+  position:fixed; inset:0; z-index:0; pointer-events:none;
+  background: radial-gradient(ellipse at 20% 20%, rgba(99,102,241,0.05) 0%, transparent 50%),
+              radial-gradient(ellipse at 80% 80%, rgba(244,63,94,0.03) 0%, transparent 50%);
+}
+
+/* Container */
+.container { max-width:800px; margin:0 auto; padding:0 24px; position:relative; z-index:1; }
+
+/* Navigation */
+.nav {
+  display:flex; align-items:center; justify-content:space-between;
+  padding: 24px 0;
+}
+.nav-logo {
+  display:flex; align-items:center; gap:12px;
+  text-decoration:none;
+}
+.nav-logo-icon {
+  width:40px; height:40px;
+  border-radius: 12px;
+  background: linear-gradient(135deg, var(--primary), #4f46e5);
+  display:flex; align-items:center; justify-content:center;
+  font-size:20px;
+  box-shadow: 0 4px 20px rgba(99,102,241,0.3);
+}
+.nav-logo-text {
+  font-size:18px; font-weight:900;
+  letter-spacing:1px;
+  color:var(--text-primary);
+}
+.nav-back {
+  display:flex; align-items:center; gap:8px;
+  padding: 10px 20px;
+  background: var(--bg-surface);
+  border: 1px solid var(--border-subtle);
+  border-radius: 12px;
+  color: var(--text-secondary);
+  text-decoration:none;
+  font-size:14px; font-weight:700;
+  transition: all 0.2s ease;
+}
+.nav-back:hover { background: var(--bg-raised); color: var(--text-primary); }
+
+/* Header */
+.header {
+  text-align:center;
+  padding: 40px 0 50px;
+}
+.header-badge {
+  display:inline-block;
+  padding: 6px 16px;
+  background: rgba(99,102,241,0.1);
+  border: 1px solid rgba(99,102,241,0.15);
+  border-radius: 999px;
+  font-size:12px; font-weight:700;
+  color: var(--primary-soft);
+  text-transform:uppercase;
+  letter-spacing:2px;
+  margin-bottom: 20px;
+}
+.header h1 {
+  font-size: clamp(32px, 6vw, 48px);
+  font-weight:900;
+  letter-spacing:-1px;
+  margin-bottom: 12px;
+  background: linear-gradient(135deg, #fff, var(--primary-soft));
+  -webkit-background-clip:text; -webkit-text-fill-color:transparent;
+  background-clip:text;
+}
+.header-date {
+  font-size:14px; color:var(--text-muted);
+  font-weight:600;
+}
+
+/* Policy Cards */
+.policy-card {
+  background: var(--bg-surface);
+  border: 1px solid var(--border-subtle);
+  border-radius: 24px;
+  padding: 32px;
+  margin-bottom: 20px;
+  transition: all 0.3s ease;
+}
+.policy-card:hover {
+  border-color: rgba(99,102,241,0.1);
+  box-shadow: 0 8px 32px rgba(0,0,0,0.3);
+}
+.policy-card h2 {
+  font-size:20px; font-weight:800;
+  margin-bottom: 16px;
+  display:flex; align-items:center; gap:12px;
+}
+.policy-card .section-num {
+  width:36px; height:36px;
+  border-radius: 10px;
+  background: linear-gradient(135deg, var(--primary), #4f46e5);
+  color: white;
+  display:flex; align-items:center; justify-content:center;
+  font-size:14px; font-weight:900;
+  flex-shrink:0;
+}
+.policy-card p, .policy-card li {
+  font-size:15px; line-height:1.8;
+  color:var(--text-secondary);
+}
+.policy-card ul { margin: 12px 0 12px 24px; }
+.policy-card li { margin-bottom: 8px; }
+.policy-card strong { color:var(--text-primary); font-weight:700; }
+.policy-card a {
+  color:var(--primary-soft); text-decoration:none;
+  font-weight:600;
+  border-bottom: 1px solid rgba(99,102,241,0.2);
+  transition: border-color 0.2s;
+}
+.policy-card a:hover { border-color: var(--primary-soft); }
+
+/* Contact Box */
+.contact-box {
+  background: linear-gradient(135deg, rgba(99,102,241,0.08), rgba(244,63,94,0.04));
+  border: 1px solid rgba(99,102,241,0.1);
+  border-radius: 24px;
+  padding: 40px;
+  text-align:center;
+  margin: 40px 0;
+}
+.contact-box h3 {
+  font-size:24px; font-weight:900;
+  margin-bottom: 12px;
+}
+.contact-box p {
+  font-size:16px; color:var(--text-secondary);
+  margin-bottom: 24px;
+}
+.contact-btn {
+  display:inline-flex; align-items:center; gap:10px;
+  padding: 14px 32px;
+  background: linear-gradient(135deg, var(--primary), #4f46e5);
+  color: white;
+  border-radius: 12px;
+  font-size:15px; font-weight:800;
+  text-decoration:none;
+  box-shadow: 0 4px 20px rgba(99,102,241,0.3);
+  transition: all 0.3s ease;
+}
+.contact-btn:hover { transform: translateY(-2px); box-shadow: 0 8px 30px rgba(99,102,241,0.4); }
+
+/* Footer */
+.footer {
+  border-top: 1px solid var(--border-subtle);
+  padding: 40px 0 60px;
+  text-align:center;
+}
+.footer-logo {
+  display:flex; align-items:center; justify-content:center; gap:10px;
+  margin-bottom: 20px;
+}
+.footer-logo-icon {
+  width:36px; height:36px;
+  border-radius: 10px;
+  background: linear-gradient(135deg, var(--primary), #4f46e5);
+  display:flex; align-items:center; justify-content:center;
+  font-size:18px;
+}
+.footer-logo-text { font-size:16px; font-weight:900; letter-spacing:1px; }
+.footer-links { display:flex; gap:28px; justify-content:center; margin-bottom:20px; flex-wrap:wrap; }
+.footer-links a {
+  color:var(--text-muted); text-decoration:none;
+  font-size:13px; font-weight:700;
+  transition: color 0.2s;
+}
+.footer-links a:hover { color:var(--primary-soft); }
+.footer-copy { font-size:12px; color:var(--text-muted); }
+
+/* Responsive */
+@media (max-width: 640px) {
+  .policy-card { padding: 24px; }
+  .contact-box { padding: 30px 20px; }
+  .nav-back span { display:none; }
+}
+</style>
+</head>
+<body>
+
+<div class="bg-mesh"></div>
+
+<div class="container">
+
+  <!-- Navigation -->
+  <nav class="nav">
+    <a href="/" class="nav-logo">
+      <div class="nav-logo-icon">&#127922;</div>
+      <div class="nav-logo-text">DOMINO PRO</div>
+    </a>
+    <a href="/" class="nav-back">
+      <span>&#8592;</span>
+      <span>Back to Home</span>
+    </a>
+  </nav>
+
+  <!-- Header -->
+  <header class="header">
+    <div class="header-badge">Legal</div>
+    <h1>Privacy Policy</h1>
+    <p class="header-date">Last Updated: May 10, 2026</p>
+  </header>
+
+  <!-- Section 1 -->
+  <div class="policy-card">
+    <h2><span class="section-num">1</span> Introduction</h2>
+    <p>Domino Pro ("we", "our", or "us") respects your privacy. This Privacy Policy explains how we collect, use, and protect your information when you use our score tracking application.</p>
+  </div>
+
+  <!-- Section 2 -->
+  <div class="policy-card">
+    <h2><span class="section-num">2</span> Information We Collect</h2>
+    <p><strong>Personal Information:</strong></p>
+    <ul>
+      <li>Player names you enter (stored locally on your device)</li>
+      <li>Game scores and history (stored locally)</li>
+      <li>Language preference</li>
+      <li>Theme settings</li>
+    </ul>
+    <p><strong>Automatically Collected:</strong></p>
+    <ul>
+      <li>Device information (model, OS version)</li>
+      <li>App usage statistics</li>
+      <li>Crash reports</li>
+      <li>Advertising ID (for AdMob ads)</li>
+    </ul>
+  </div>
+
+  <!-- Section 3 -->
+  <div class="policy-card">
+    <h2><span class="section-num">3</span> How We Use Your Information</h2>
+    <ul>
+      <li>To provide score tracking functionality</li>
+      <li>To save your game progress locally</li>
+      <li>To display personalized advertisements via Google AdMob</li>
+      <li>To improve app performance and fix bugs</li>
+    </ul>
+  </div>
+
+  <!-- Section 4 -->
+  <div class="policy-card">
+    <h2><span class="section-num">4</span> Advertising</h2>
+    <p>We use Google AdMob to display ads. AdMob may collect:</p>
+    <ul>
+      <li>Device advertising identifier</li>
+      <li>IP address</li>
+      <li>App interaction data</li>
+    </ul>
+    <p>For more info: <a href="https://policies.google.com/privacy" target="_blank" rel="noopener">Google Privacy Policy</a></p>
+  </div>
+
+  <!-- Section 5 -->
+  <div class="policy-card">
+    <h2><span class="section-num">5</span> Data Storage</h2>
+    <p>All game data (scores, player names, history) is stored <strong>locally on your device</strong> using LocalStorage. We do not store this data on our servers. This app is hosted on <strong>Netlify</strong>.</p>
+  </div>
+
+  <!-- Section 6 -->
+  <div class="policy-card">
+    <h2><span class="section-num">6</span> Your Rights</h2>
+    <p>You can:</p>
+    <ul>
+      <li>Clear all data via Settings → Clear All Games</li>
+      <li>Disable ads by purchasing premium (if available)</li>
+      <li>Request data deletion by contacting us</li>
+    </ul>
+  </div>
+
+  <!-- Section 7 -->
+  <div class="policy-card">
+    <h2><span class="section-num">7</span> Children Privacy</h2>
+    <p>This app is not intended for children under 13. We do not knowingly collect data from children.</p>
+  </div>
+
+  <!-- Section 8 -->
+  <div class="policy-card">
+    <h2><span class="section-num">8</span> Changes</h2>
+    <p>We may update this policy. Changes will be posted here with a new date.</p>
+  </div>
+
+  <!-- Section 9 -->
+  <div class="policy-card">
+    <h2><span class="section-num">9</span> Contact</h2>
+    <p>For questions about this app, please contact the app developer directly.</p>
+  </div>
+
+  <!-- Section 10 -->
+  <div class="policy-card">
+    <h2><span class="section-num">10</span> Consent</h2>
+    <p>By using Domino Pro, you consent to this Privacy Policy and our data practices.</p>
+  </div>
+
+  <!-- Contact Box -->
+  <div class="contact-box">
+    <h3>Questions?</h3>
+    <p>If you have any questions about this Privacy Policy, feel free to reach out.</p>
+    <a href="mailto:contact@dominopro.app" class="contact-btn">
+      <span>&#9993;</span>
+      <span>Contact Us</span>
+    </a>
+  </div>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="footer-logo">
+      <div class="footer-logo-icon">&#127922;</div>
+      <div class="footer-logo-text">DOMINO PRO</div>
+    </div>
+    <div class="footer-links">
+      <a href="/">Home</a>
+      <a href="/privacy-policy.html">Privacy Policy</a>
+      <a href="#">Terms of Service</a>
+    </div>
+    <p class="footer-copy">&copy; 2026 Domino Pro. All rights reserved.</p>
+  </footer>
+
+</div>
+
+</body>
+</html>
