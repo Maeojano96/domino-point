@@ -1,0 +1,459 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="theme-color" content="#050508">
+<title>Support - Domino Point</title>
+<meta name="description" content="Get help and support for Domino Point - The ultimate domino score tracker app.">
+<style>
+:root {
+  --bg-void: #050508;
+  --bg-base: #0a0a0f;
+  --bg-surface: #12121a;
+  --bg-raised: #1a1a24;
+  --primary: #6366f1;
+  --primary-soft: #818cf8;
+  --primary-glow: rgba(99, 102, 241, 0.3);
+  --accent: #f43f5e;
+  --success: #10b981;
+  --warning: #f59e0b;
+  --text-primary: #f8fafc;
+  --text-secondary: #94a3b8;
+  --text-muted: #64748b;
+  --border-subtle: rgba(255,255,255,0.03);
+  --font: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Roboto, sans-serif;
+}
+* { margin:0; padding:0; box-sizing:border-box; font-family:var(--font); -webkit-tap-highlight-color:transparent; }
+html { scroll-behavior:smooth; }
+body { background:var(--bg-void); color:var(--text-primary); min-height:100vh; -webkit-font-smoothing:antialiased; overflow-x:hidden; }
+
+/* Background */
+.bg-mesh {
+  position:fixed; inset:0; z-index:0; pointer-events:none;
+  background: radial-gradient(ellipse at 20% 20%, rgba(99,102,241,0.05) 0%, transparent 50%),
+              radial-gradient(ellipse at 80% 80%, rgba(244,63,94,0.03) 0%, transparent 50%);
+}
+
+/* Container */
+.container { max-width:800px; margin:0 auto; padding:0 24px; position:relative; z-index:1; }
+
+/* Navigation */
+.nav {
+  display:flex; align-items:center; justify-content:space-between;
+  padding: 24px 0;
+}
+.nav-logo {
+  display:flex; align-items:center; gap:12px;
+  text-decoration:none;
+}
+.nav-logo-icon {
+  width:40px; height:40px;
+  border-radius: 12px;
+  background: linear-gradient(135deg, var(--primary), #4f46e5);
+  display:flex; align-items:center; justify-content:center;
+  font-size:20px;
+  box-shadow: 0 4px 20px rgba(99,102,241,0.3);
+}
+.nav-logo-text {
+  font-size:18px; font-weight:900;
+  letter-spacing:1px;
+  color:var(--text-primary);
+}
+.nav-back {
+  display:flex; align-items:center; gap:8px;
+  padding: 12px 24px;
+  background: linear-gradient(135deg, var(--primary), #4f46e5);
+  border: none;
+  border-radius: 12px;
+  color: white;
+  text-decoration:none;
+  font-size:14px; font-weight:800;
+  transition: all 0.2s ease;
+  box-shadow: 0 4px 20px rgba(99,102,241,0.3);
+}
+.nav-back:hover { transform: translateY(-2px); box-shadow: 0 8px 30px rgba(99,102,241,0.4); }
+
+/* Header */
+.header {
+  text-align:center;
+  padding: 40px 0 50px;
+}
+.header-badge {
+  display:inline-block;
+  padding: 6px 16px;
+  background: rgba(99,102,241,0.1);
+  border: 1px solid rgba(99,102,241,0.15);
+  border-radius: 999px;
+  font-size:12px; font-weight:700;
+  color: var(--primary-soft);
+  text-transform:uppercase;
+  letter-spacing:2px;
+  margin-bottom: 20px;
+}
+.header h1 {
+  font-size: clamp(32px, 6vw, 48px);
+  font-weight:900;
+  letter-spacing:-1px;
+  margin-bottom: 12px;
+  background: linear-gradient(135deg, #fff, var(--primary-soft));
+  -webkit-background-clip:text; -webkit-text-fill-color:transparent;
+  background-clip:text;
+}
+.header-subtitle {
+  font-size:16px; color:var(--text-secondary);
+  max-width:500px; margin: 0 auto;
+  line-height:1.6;
+}
+
+/* Contact Methods */
+.contact-grid {
+  display:grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 16px;
+  margin-bottom: 40px;
+}
+.contact-card {
+  background: var(--bg-surface);
+  border: 1px solid var(--border-subtle);
+  border-radius: 20px;
+  padding: 28px 24px;
+  text-align:center;
+  transition: all 0.3s ease;
+  text-decoration:none;
+  color: var(--text-primary);
+}
+.contact-card:hover {
+  transform: translateY(-4px);
+  border-color: rgba(99,102,241,0.2);
+  box-shadow: 0 12px 40px rgba(0,0,0,0.3);
+}
+.contact-icon {
+  width:56px; height:56px;
+  border-radius: 16px;
+  background: linear-gradient(135deg, rgba(99,102,241,0.15), rgba(244,63,94,0.08));
+  display:flex; align-items:center; justify-content:center;
+  font-size:28px;
+  margin: 0 auto 16px;
+  border: 1px solid rgba(99,102,241,0.1);
+}
+.contact-title { font-size:16px; font-weight:800; margin-bottom:6px; }
+.contact-desc { font-size:13px; color:var(--text-secondary); }
+
+/* FAQ Section */
+.faq-section { margin: 60px 0; }
+.section-header {
+  text-align:center;
+  margin-bottom: 32px;
+}
+.section-tag {
+  display:inline-block;
+  padding: 6px 16px;
+  background: rgba(99,102,241,0.1);
+  border: 1px solid rgba(99,102,241,0.15);
+  border-radius: 999px;
+  font-size:12px; font-weight:700;
+  color: var(--primary-soft);
+  text-transform:uppercase;
+  letter-spacing:2px;
+  margin-bottom: 12px;
+}
+.section-title {
+  font-size: clamp(24px, 4vw, 32px);
+  font-weight:900;
+  margin-bottom: 8px;
+}
+.faq-item {
+  background: var(--bg-surface);
+  border: 1px solid var(--border-subtle);
+  border-radius: 16px;
+  margin-bottom: 12px;
+  overflow:hidden;
+}
+.faq-question {
+  padding: 20px 24px;
+  display:flex; justify-content:space-between; align-items:center;
+  cursor:pointer;
+  font-size:15px; font-weight:700;
+  color:var(--text-primary);
+  transition: background 0.2s;
+}
+.faq-question:hover { background: var(--bg-raised); }
+.faq-question .icon { font-size:20px; color:var(--text-muted); transition: transform 0.3s; }
+.faq-question.active .icon { transform: rotate(180deg); }
+.faq-answer {
+  padding: 0 24px;
+  max-height:0;
+  overflow:hidden;
+  transition: all 0.3s ease;
+}
+.faq-answer.open {
+  padding: 0 24px 20px;
+  max-height: 500px;
+}
+.faq-answer p {
+  font-size:14px; color:var(--text-secondary);
+  line-height:1.7;
+}
+
+/* Troubleshooting */
+.trouble-section { margin: 40px 0 60px; }
+.trouble-card {
+  background: var(--bg-surface);
+  border: 1px solid var(--border-subtle);
+  border-radius: 20px;
+  padding: 24px;
+  margin-bottom: 16px;
+}
+.trouble-card h3 {
+  font-size:16px; font-weight:800;
+  margin-bottom: 12px;
+  display:flex; align-items:center; gap:10px;
+}
+.trouble-card h3 .icon {
+  width:32px; height:32px;
+  border-radius: 8px;
+  background: rgba(245,158,11,0.1);
+  display:flex; align-items:center; justify-content:center;
+  font-size:16px;
+}
+.trouble-card p, .trouble-card li {
+  font-size:14px; color:var(--text-secondary);
+  line-height:1.7;
+}
+.trouble-card ul { margin: 8px 0 8px 20px; }
+.trouble-card li { margin-bottom: 6px; }
+
+/* Footer */
+.footer {
+  border-top: 1px solid var(--border-subtle);
+  padding: 40px 0 60px;
+  text-align:center;
+}
+.footer-logo {
+  display:flex; align-items:center; justify-content:center; gap:10px;
+  margin-bottom: 20px;
+}
+.footer-logo-icon {
+  width:36px; height:36px;
+  border-radius: 10px;
+  background: linear-gradient(135deg, var(--primary), #4f46e5);
+  display:flex; align-items:center; justify-content:center;
+  font-size:18px;
+}
+.footer-logo-text { font-size:16px; font-weight:900; letter-spacing:1px; }
+.footer-links { display:flex; gap:28px; justify-content:center; margin-bottom:20px; flex-wrap:wrap; }
+.footer-links a {
+  color:var(--text-muted); text-decoration:none;
+  font-size:13px; font-weight:700;
+  transition: color 0.2s;
+}
+.footer-links a:hover { color:var(--primary-soft); }
+.footer-copy { font-size:12px; color:var(--text-muted); }
+
+/* Responsive */
+@media (max-width: 640px) {
+  .contact-grid { grid-template-columns: 1fr; }
+  .faq-question { padding: 16px 20px; }
+  .faq-answer.open { padding: 0 20px 16px; }
+  /* nav-back always visible */
+}
+</style>
+</head>
+<body>
+
+<div class="bg-mesh"></div>
+
+<div class="container">
+
+  <!-- Navigation -->
+  <nav class="nav">
+    <a href="/" class="nav-logo">
+      <div class="nav-logo-icon">&#127922;</div>
+      <div class="nav-logo-text">DOMINO POINT</div>
+    </a>
+    <a href="/" class="nav-back">
+      <span>&#8592;</span>
+      <span>Back to Home</span>
+    </a>
+  </nav>
+
+  <!-- Header -->
+  <header class="header">
+    <div class="header-badge">Help Center</div>
+    <h1>Support</h1>
+    <p class="header-subtitle">Need help with Domino Point? We're here to assist you. Find answers below or contact us directly.</p>
+  </header>
+
+  <!-- Contact Methods -->
+  <div class="contact-grid">
+    <a href="mailto:contact@dominopoint.app" class="contact-card">
+      <div class="contact-icon">&#9993;</div>
+      <div class="contact-title">Email Us</div>
+      <div class="contact-desc">contact@dominopoint.app</div>
+    </a>
+    <a href="#faq" class="contact-card">
+      <div class="contact-icon">&#128172;</div>
+      <div class="contact-title">FAQ</div>
+      <div class="contact-desc">Common questions answered</div>
+    </a>
+    <a href="#troubleshooting" class="contact-card">
+      <div class="contact-icon">&#128295;</div>
+      <div class="contact-title">Troubleshooting</div>
+      <div class="contact-desc">Fix common issues</div>
+    </a>
+  </div>
+
+  <!-- FAQ Section -->
+  <div class="faq-section" id="faq">
+    <div class="section-header">
+      <div class="section-tag">FAQ</div>
+      <h2 class="section-title">Frequently Asked Questions</h2>
+    </div>
+
+    <div class="faq-item">
+      <div class="faq-question" onclick="toggleFaq(this)">
+        <span>How do I start a new game?</span>
+        <span class="icon">&#9662;</span>
+      </div>
+      <div class="faq-answer">
+        <p>Open the app, select your game mode (2 Players, 3 Players, 4 Players, or 2v2 Teams), enter player names, set your target score, and tap "🚀 START GAME".</p>
+      </div>
+    </div>
+
+    <div class="faq-item">
+      <div class="faq-question" onclick="toggleFaq(this)">
+        <span>Can I save my game progress?</span>
+        <span class="icon">&#9662;</span>
+      </div>
+      <div class="faq-answer">
+        <p>Yes! During gameplay, tap the "💾 Save" button to save your current game. You can load saved games from the main screen under "💾 Saved Games".</p>
+      </div>
+    </div>
+
+    <div class="faq-item">
+      <div class="faq-question" onclick="toggleFaq(this)">
+        <span>How do I change the language?</span>
+        <span class="icon">&#9662;</span>
+      </div>
+      <div class="faq-answer">
+        <p>Go to ⚙️ Settings → 🌐 Language. Domino Point supports 12 languages including English, Arabic, Kurdish, Spanish, French, German, Portuguese, Russian, Chinese, Turkish, and Hindi.</p>
+      </div>
+    </div>
+
+    <div class="faq-item">
+      <div class="faq-question" onclick="toggleFaq(this)">
+        <span>Can I customize the score target?</span>
+        <span class="icon">&#9662;</span>
+      </div>
+      <div class="faq-answer">
+        <p>Yes! On the setup screen, tap "🎯 Target Score" and choose from preset values (100, 120, 150, 200, 500) or enter a custom target up to 1000 points.</p>
+      </div>
+    </div>
+
+    <div class="faq-item">
+      <div class="faq-question" onclick="toggleFaq(this)">
+        <span>How do team modes work?</span>
+        <span class="icon">&#9662;</span>
+      </div>
+      <div class="faq-answer">
+        <p>Select "🤝 2v2 Teams" mode. Players 1 & 2 form Team A, Players 3 & 4 form Team B. Scores are combined per team, and the team reaching the target score first wins!</p>
+      </div>
+    </div>
+
+    <div class="faq-item">
+      <div class="faq-question" onclick="toggleFaq(this)">
+        <span>Is my data stored online?</span>
+        <span class="icon">&#9662;</span>
+      </div>
+      <div class="faq-answer">
+        <p>No. All game data is stored locally on your device using LocalStorage. We do not store any data on our servers. Your privacy is important to us.</p>
+      </div>
+    </div>
+
+    <div class="faq-item">
+      <div class="faq-question" onclick="toggleFaq(this)">
+        <span>How do I clear all my data?</span>
+        <span class="icon">&#9662;</span>
+      </div>
+      <div class="faq-answer">
+        <p>Go to ⚙️ Settings → 🗑️ Data → "🗑️ Clear All Games". This will delete all saved games and history from your device.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Troubleshooting -->
+  <div class="trouble-section" id="troubleshooting">
+    <div class="section-header">
+      <div class="section-tag">Help</div>
+      <h2 class="section-title">Troubleshooting</h2>
+    </div>
+
+    <div class="trouble-card">
+      <h3><span class="icon">&#128267;</span> App not loading</h3>
+      <ul>
+        <li>Refresh the page (pull down on mobile)</li>
+        <li>Clear browser cache and cookies</li>
+        <li>Try a different browser (Chrome, Safari, Firefox)</li>
+        <li>Check your internet connection</li>
+      </ul>
+    </div>
+
+    <div class="trouble-card">
+      <h3><span class="icon">&#128241;</span> Scores not saving</h3>
+      <ul>
+        <li>Ensure LocalStorage is enabled in your browser</li>
+        <li>Don't use private/incognito mode (data won't persist)</li>
+        <li>Check if your device has storage space available</li>
+        <li>Try manually saving with the "💾 Save" button</li>
+      </ul>
+    </div>
+
+    <div class="trouble-card">
+      <h3><span class="icon">&#127912;</span> Display issues</h3>
+      <ul>
+        <li>Update your browser to the latest version</li>
+        <li>Disable dark mode extensions that might conflict</li>
+        <li>Zoom out if the layout looks broken (Ctrl+0 or Cmd+0)</li>
+        <li>Try rotating your device if on mobile</li>
+      </ul>
+    </div>
+
+    <div class="trouble-card">
+      <h3><span class="icon">&#128266;</span> Sound not working</h3>
+      <ul>
+        <li>Check if your device is on silent mode</li>
+        <li>Ensure volume is turned up</li>
+        <li>Toggle sound in ⚙️ Settings → 🔊 Sound</li>
+        <li>Some browsers block audio until user interaction</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="footer-logo">
+      <div class="footer-logo-icon">&#127922;</div>
+      <div class="footer-logo-text">DOMINO POINT</div>
+    </div>
+    <div class="footer-links">
+      <a href="/">Home</a>
+      <a href="/privacy-policy.html">Privacy Policy</a>
+      <a href="/terms-of-service.html">Terms of Service</a>
+      <a href="/support.html">Support</a>
+    </div>
+    <p class="footer-copy">&copy; 2026 Domino Point. All rights reserved.</p>
+  </footer>
+
+</div>
+
+<script>
+function toggleFaq(element) {
+  element.classList.toggle('active');
+  var answer = element.nextElementSibling;
+  answer.classList.toggle('open');
+}
+</script>
+
+</body>
+</html>
